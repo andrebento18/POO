@@ -1,6 +1,7 @@
 #pragma once
 #include "sala.h"
 class Nave {
+	//NAVE INICIAL
 	string nome;
 	Sala *salas[3][5];
 	int distancia; // Distância percorrida
