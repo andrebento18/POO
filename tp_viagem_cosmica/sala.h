@@ -5,7 +5,7 @@ class Sala {
 	string tipo;
 	int id_sala;
 	int integridade;
-	int oxigenio;
+	int oxigenio; //OXIGENIO
 public:
 	Sala(string tipo, int id_sala);
 	~Sala();
