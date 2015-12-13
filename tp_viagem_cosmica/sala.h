@@ -16,10 +16,11 @@ public:
 	string toString()const;
 };
 
-// classes derivadas
+//classes derivadas
 class SalaPropulsor: public Sala {
 	int dist_propulsao;
 public:
 	SalaPropulsor(string tipo, int id_sala, int propulsao);
 	int getPropulsao()const;
 };
+

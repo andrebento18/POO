@@ -7,11 +7,12 @@ using namespace std;
 
 Nave::Nave() {
 	cout << "Nave criada" << endl;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 5; j++) {
+
+	for (int i = 0; i <= 2; i++) {
+		for (int j = 0; j <= 4; j++) {
 			if (i == 0 && j == 0 || i == 2 && j == 0) {
 				contador += 1;
-				salas[i][j] = new SalaPropulsor("Propulsor", contador, salas[i][j]->getIntegridade()); //Sala("Propulsor", contador);
+				salas[i][j] = new SalaPropulsor("Propulsor", contador, salas[i][j]->getIntegridade());
 			}
 			else if (i == 0 && j == 4 || i == 1 && j == 0 || i == 2 && j == 4) {
 				salas[i][j] = NULL;
@@ -38,6 +39,7 @@ Nave::Nave() {
 				cout << "Tipo de sala a adicionar com id " << contador << " : ";
 				cin >> tipo_sala;
 				salas[i][j] = new Sala(tipo_sala, contador);
+
 			}
 		}
 	}
@@ -66,7 +68,7 @@ int Nave::getDistancia()const {
 }
 
 void Nave::setDistancia(int dist_somar) {
-	int dist_percor; // distancia feita pelos propulsores
+	//int dist_percor; // distancia feita pelos propulsores
 	//for (int i = 0; i < 3; i++)
 		//for (int j = 0; j < 5; j++) {
 		//	if (salas[i][j]->getTipo() == "Propulsor")
@@ -87,3 +89,73 @@ string Nave::getSalas()const {
 	}
 	return os.str();
 }
+
+Sala * Nave::mover_para_sala(string com, int  id) 
+{
+	for (int i = 0; i <= 2; i++)
+	{
+		for (int j = 0; j <= 4; j++) 
+		{
+			if (salas[i][j]->getID() == id)
+			{
+				if (com == "cima")
+				{
+					if (i == 0) {
+						return salas[i][j];
+					}
+					else
+					{
+						int movimento = 0;
+						movimento = i;
+						movimento--;
+						return salas[movimento][j];
+					}
+
+				}
+				if (com == "baixo")
+				{
+					if (i == 2) {
+						return salas[i][j];
+					}
+					else
+					{
+						int movimento = 0;
+						movimento = i;
+						movimento++;
+						return salas[movimento][j];
+					}
+
+				}
+				if (com == "direita")
+				{
+					if (i == 4) {
+						return salas[i][j];
+					}
+					else
+					{
+						int movimento = 0;
+						movimento = j;
+						movimento++;
+						return salas[i][movimento];
+					}
+
+				}
+				if (com == "esquerda")
+				{
+					if (i == 0) {
+						return salas[i][j];
+					}
+					else
+					{
+						int movimento = 0;
+						movimento = j;
+						movimento--;
+						return salas[i][movimento];
+					}
+
+				}
+			}
+		}
+	}
+}
+

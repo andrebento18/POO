@@ -58,6 +58,18 @@ void viagem(Nave *nave, int *nvl) {
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);	//... || tripulantes == 0)
 }
 
+//Como não consegui arranjar a cena da sala propulsor tentei fazer o movimento da unidade pelas salas da nave
+//penso que esteja bem, mas dá uma olhadela e vê se concordas, se não concordares, diz-me o que errei para ter
+//uma noção.
+
+void mover_unidade(string comando, Unidade *u1, Nave *nave, int id_sala_actual) {
+		u1->setOndeEstou(NULL);
+		Sala *a;
+		a = nave->mover_para_sala(comando, id_sala_actual);
+		u1->setOndeEstou(a);
+}
+
+
 int main(void) {
 	string cmd;
 	do {

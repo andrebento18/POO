@@ -23,4 +23,5 @@ public:
 	Sala *LocalizarSala()const;
 	string getNome()const;
 	void setOndeEstou(Sala *a);
+	void mover_unidade(string nome, int id_salaActual);
 };
