@@ -7,7 +7,7 @@ using namespace std;
 bool verifica_vitoria(Nave *nave, int *nvl) {
 	if (nave->getDistancia() > 400 * 1000 * *nvl) {
 		// vitória
-		system("CLS");//llll
+		system("CLS");
 		cout << "VITORIA" << endl;
 		return 1;
 	}
