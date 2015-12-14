@@ -64,15 +64,15 @@ Nave::~Nave() {
 // Devolve 0 - Nave destruida; 1 - Saúde da Nave OK
 int Nave::verifica_saudeNave() const
 {
+	int verifica_saude = 1;
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {
 				if (salas[i][j]->getIntegridade() == 0)
-					return 0;
-				else
-					return 1;
+					verifica_saude = 0;
 			}
 		}
+	return verifica_saude;
 }
 
 int Nave::getDistancia()const {
