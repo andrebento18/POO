@@ -6,7 +6,7 @@ class Sala {
 	int id_sala;
 	int integridade;
 	int oxigenio;
-	//vector <Unidade*> unidades;
+	vector <Unidade*> unidades;
 public:
 	Sala(string tipo, int id_sala);
 	~Sala();

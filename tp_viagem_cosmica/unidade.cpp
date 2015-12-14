@@ -3,9 +3,11 @@
 
 using namespace std;
 #include "unidade.h"
+#include "sala.h"
 
-Unidade::Unidade() {
-	// COMO CRIAR VARIOS TIPOS DE UNIDADES???
+Unidade::Unidade(string tipo) {
+	nome = tipo;
+	ondestou = NULL;
 }
 
 Unidade::~Unidade() {
@@ -29,4 +31,11 @@ string Unidade::getNome() const
 void Unidade::setOndeEstou(Sala * a)
 {
 	ondestou = a;
+}
+
+
+
+Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade(tipo)
+{
+	respira = true;
 }

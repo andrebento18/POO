@@ -67,10 +67,9 @@ int Nave::verifica_saudeNave() const
 	int verifica_saude = 1;
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++) {
-			if (salas[i][j] != NULL) {
+			if (salas[i][j] != NULL)
 				if (salas[i][j]->getIntegridade() == 0)
 					verifica_saude = 0;
-			}
 		}
 	return verifica_saude;
 }
@@ -98,25 +97,44 @@ void Nave::setDistancia() {
 }
 
 void Nave::evento() {
-	// Evento pó cósmico
-	// falta implemnentar não calhar na mesma sala
-	int n_salas_afetadas = random(3, 5);
-	while (n_salas_afetadas != 0) {
-		int i = random(0, 2);
-		int j = random(0, 4);
-		if (salas[i][j] != NULL) {
-			n_salas_afetadas--;
-			salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
-			cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
-		}
+int x = 0;
+	switch (x)
+	{
+	case 1:
+		//Evento Chuva de meteoritos
+		break;
+	case 2:
+		//Evento Ataque dos piratas
+		break;
+	case 3:
+		//Evento Ataque Xenomorfo
+		break;
+	case 4:
+			// Evento pó cósmico
+			// falta implemnentar não calhar na mesma sala
+			int n_salas_afetadas = random(3, 5);
+			while (n_salas_afetadas != 0) {
+				int i = random(0, 2);
+				int j = random(0, 4);
+				if (salas[i][j] != NULL) {
+					n_salas_afetadas--;
+					salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
+					cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
+				}
+			}
+	break;
+	default:
+	
+		break;
 	}
+	
 }
 
-Sala * Nave::mover_para_sala(string com, int  id){
+Sala * Nave::mover_para_sala(string comando_direcao, int  id){
 	for (int i = 0; i <= 2; i++){
 		for (int j = 0; j <= 4; j++){
 			if (salas[i][j]->getID() == id){
-				if (com == "cima"){
+				if (comando_direcao == "cima"){
 					if (i == 0) {
 						return salas[i][j];
 					}else{
@@ -126,7 +144,7 @@ Sala * Nave::mover_para_sala(string com, int  id){
 						return salas[movimento][j];
 					}
 				}
-				if (com == "baixo"){
+				if (comando_direcao == "baixo"){
 					if (i == 2) {
 						return salas[i][j];
 						
@@ -137,7 +155,7 @@ Sala * Nave::mover_para_sala(string com, int  id){
 						return salas[movimento][j];
 					}
 				}
-				if (com == "direita"){
+				if (comando_direcao == "direita"){
 					if (i == 4) {
 						return salas[i][j];
 					}else{
@@ -147,7 +165,7 @@ Sala * Nave::mover_para_sala(string com, int  id){
 						return salas[i][movimento];
 					}
 				}
-				if (com == "esquerda"){
+				if (comando_direcao == "esquerda"){
 					if (i == 0) {
 						return salas[i][j];
 						
@@ -160,6 +178,7 @@ Sala * Nave::mover_para_sala(string com, int  id){
 				}
 			}
 		}
+
 	}
 }
 
@@ -175,4 +194,15 @@ string Nave::getSalas()const {
 		}
 	}
 	return os.str();
+}
+
+void Nave::setReparacao()
+{
+	/*repara dois pontos de dano a essa sala, sendo que essa reparação
+	torna - se efectiva apenas no final do turno.Os esforços de reparação
+	de vários membros da tripulação na mesma sala são cumulativos(dois tripulantes – 4 pontos, etc.).
+	Nota: este ponto do texto foca - se mais na sala do que no tripulante.
+	Os tripulantes têm várias características diferentes e o seu comportamento varia
+	consoante essas características(por exemplo, se o tripulante for um robot,
+	então não repara a nave nem opera salas).*/
 }
