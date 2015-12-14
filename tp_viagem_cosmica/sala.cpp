@@ -4,7 +4,6 @@
 using namespace std;
 
 #include "sala.h"
-#include "unidade.h"
 
 Sala::Sala(string tipo, int id_sala):tipo(tipo), id_sala(id_sala) {
 	this->integridade = 100;
@@ -66,7 +65,10 @@ SalaSuportedeVida::SalaSuportedeVida(string tipo, int id_sala):Sala(tipo, id_sal
 
 SalaControlodeEscudo::SalaControlodeEscudo(string tipo, int id_sala):Sala(tipo, id_sala) {}
 
-SalaPonte::SalaPonte(string tipo, int id_sala):Sala(tipo, id_sala){}
+SalaPonte::SalaPonte(string tipo, int id_sala):Sala(tipo, id_sala), operada(false){}
+
+void SalaPonte::setOperada()const {
+}
 
 // SALAS OPCIONAIS 
 SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo, int id_sala):Sala(tipo, id_sala), cap_propulsao(100){

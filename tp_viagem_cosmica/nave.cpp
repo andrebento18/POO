@@ -97,9 +97,8 @@ void Nave::setDistancia() {
 }
 
 void Nave::evento() {
-int x = 0;
-	switch (x)
-	{
+	int x = 4;// random(1, 4);
+	switch (x){
 	case 1:
 		//Evento Chuva de meteoritos
 		break;
@@ -110,24 +109,20 @@ int x = 0;
 		//Evento Ataque Xenomorfo
 		break;
 	case 4:
-			// Evento pó cósmico
-			// falta implemnentar não calhar na mesma sala
-			int n_salas_afetadas = random(3, 5);
-			while (n_salas_afetadas != 0) {
-				int i = random(0, 2);
-				int j = random(0, 4);
-				if (salas[i][j] != NULL) {
-					n_salas_afetadas--;
-					salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
-					cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
-				}
+		// Evento pó cósmico
+		// falta implemnentar não calhar na mesma sala
+		int n_salas_afetadas = random(3, 5);
+		while (n_salas_afetadas != 0) {
+			int i = random(0, 2);
+			int j = random(0, 4);
+			if (salas[i][j] != NULL) {
+				n_salas_afetadas--;
+				salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
+				cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
 			}
-	break;
-	default:
-	
+		}
 		break;
 	}
-	
 }
 
 Sala * Nave::mover_para_sala(string comando_direcao, int  id){

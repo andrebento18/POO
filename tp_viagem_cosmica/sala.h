@@ -1,4 +1,5 @@
 #pragma once
+#include <vector> // ???
 #include "unidade.h"
 // classe mae
 class Sala {
@@ -16,8 +17,11 @@ public:
 	void setIntegridade(int valor_integridade);
 	int getOxigenio()const;
 	string toString()const;
+	// Propulsor virutal functions
 	virtual int getPropulsao()const { return getPropulsao(); }; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
 	virtual void setPropulsao() {};
+	// Ponte virtual functions
+	virtual void setOperada()const {};
 };
 
 // classes derivadas de Sala
@@ -45,8 +49,10 @@ public:
 };
 
 class SalaPonte : public Sala {
+	bool operada;
 public:
 	SalaPonte(string tipo, int id_sala);
+	void setOperada()const;
 };
 
 class SalaPropulsoresAdicionais : public Sala {

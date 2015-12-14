@@ -3,7 +3,6 @@
 
 using namespace std;
 #include "unidade.h"
-#include "sala.h"
 
 Unidade::Unidade(string tipo) {
 	nome = tipo;
@@ -33,9 +32,6 @@ void Unidade::setOndeEstou(Sala * a)
 	ondestou = a;
 }
 
-
-
-Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade(tipo)
-{
+Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade(tipo){
 	respira = true;
 }
