@@ -41,8 +41,6 @@ SalaPropulsor::SalaPropulsor(string tipo, int id_sala, int propulsao):Sala(tipo,
 	cout << "Propulsor adicionado" << endl;
 }
 
-
-
 int SalaPropulsor::getPropulsao() const
 {
 	return dist_propulsao;
