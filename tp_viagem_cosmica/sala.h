@@ -6,16 +6,18 @@ class Sala {
 	int id_sala;
 	int integridade;
 	int oxigenio;
-//	vector <Unidade*> unidades;
+	//vector <Unidade*> unidades;
 public:
 	Sala(string tipo, int id_sala);
 	~Sala();
 	string getTipo() const;
 	int getID()const;
 	int getIntegridade()const;
+	void setIntegridade(int valor_integridade);
 	int getOxigenio()const;
 	string toString()const;
-	virtual int getPropulsao()const {return NULL;}; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
+	virtual int getPropulsao()const { return getPropulsao(); }; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
+	virtual void setPropulsao() {};
 };
 
 // classes derivadas de Sala
@@ -23,7 +25,8 @@ class SalaPropulsor : public Sala {
 	int dist_propulsao;
 public:
 	SalaPropulsor(string tipo, int id_sala, int propulsao);
-	int getPropulsao()const;
+	int getPropulsao() const;
+	void setPropulsao();
 };
 
 class SaladeMaquinas : public Sala {
@@ -47,8 +50,11 @@ public:
 };
 
 class SalaPropulsoresAdicionais : public Sala {
+	int cap_propulsao;
 public:
 	SalaPropulsoresAdicionais(string tipo, int id_sala);
+	int getPropulsao() const; 
+	void setPropulsao();
 };
 
 class SalaBeliche : public Sala {

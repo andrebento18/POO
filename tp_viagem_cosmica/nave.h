@@ -9,6 +9,7 @@ public:
 	int verifica_saudeNave()const;
 	int getDistancia()const;
 	void setDistancia();
+	void evento();
 	Sala *mover_para_sala(string com, int id);
 	string getSalas()const;
 };

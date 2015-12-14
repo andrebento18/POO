@@ -2,16 +2,17 @@
 #include <vector>
 #include <string>
 using namespace std;
+#include "util.h"
+
 #include "nave.h"
 
 bool verifica_vitoria(Nave *nave, int nvl) {
-	if (nave->getDistancia() > 400 * /*1000 * */ nvl) {
+	if (nave->getDistancia() > 4000 + 1000  * nvl) {
 		// vitória
-		system("CLS");
+		system("cls");
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
 				cout << "-----VITORIA-----";
-
 			}
 			cout << endl;
 		}
@@ -26,11 +27,10 @@ bool verifica_vitoria(Nave *nave, int nvl) {
 bool verifica_derrota(Nave *nave) {
 	if (nave->verifica_saudeNave() == 0) {
 		// derrota
-		system("CLS");
+		system("cls");
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
 				cout << "-----GAME-OVER-----";
-
 			}
 			cout << endl;
 		}
@@ -42,30 +42,41 @@ bool verifica_derrota(Nave *nave) {
 		return 0;
 }
 
+void eventos(Nave *nave) {
+	nave->evento();
+}
+
 void avanca_nave(Nave *nave) {
 	nave->setDistancia();
 }
 
 void viagem(Nave *nave, int nvl) {
-	system("CLS");
+	system("cls");
 	/////////////// VIAGEM ///////////////
 	int turnos = 0;
+	int event_ocurr = 0;
 	do {
+		system("cls");
 		// 1. INICIO DO TURNO
 		turnos++;
 		cout << "Turno(s): " << turnos << endl;
 		
 		cout << nave->getSalas();
 
-		system("pause");
-
 		// 2. FASE DE ORDENS
 
 		// 3. FINAL DO TURNO
 
 		// 4. EVENTOS
+		if (event_ocurr == 0) {
+			eventos(nave);
+			int event_ocurr = random(5, 10);
+		}else
+			event_ocurr--;
 
 		avanca_nave(nave);
+		cout << "Prime uma tecla pra avancar o turno..." << endl;
+		system("pause");
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);	//... || tripulantes == 0)
 }
 
@@ -82,7 +93,7 @@ void mover_unidade(string comando, Unidade *u1, Nave *nave, int id_sala_actual) 
 int main(void) {
 	string cmd;
 	do {
-		system("CLS");
+		system("cls");
 		cout << "VIAGEM-COSMICA" << endl;
 		cout << "Insira jogar ou fim" << endl;
 		cout << "CMD> "; cin >> cmd;
@@ -91,7 +102,7 @@ int main(void) {
 			cout << "Insira a dificuldade da missao: ";
 			cin >> nvl;
 			
-			system("CLS");
+			system("cls");
 
 			/////////////// PREPARACAO DA NAVE ///////////////
 			Nave nave;

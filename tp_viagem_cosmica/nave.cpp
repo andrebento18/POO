@@ -2,9 +2,11 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
 using namespace std;
+
 #include "nave.h"
+
+int random(int min, int max);
 
 Nave::Nave() {
 	cout << "Vamos preparar a nave..." << endl;
@@ -82,15 +84,32 @@ void Nave::setDistancia() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {
-				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == "PropulsorAdicional")
+				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == "Propulsor Adicional") {
+					salas[i][j]->setPropulsao(); // Atualiazar potencia dos propulsores
 					dist_somar += salas[i][j]->getPropulsao();
-				// verificar também se a ponte está a ser operada
+					// verificar também se a ponte está a ser operada
+				}
 			}
 		}
 	}
 	this->distancia += dist_somar;
 	cout << "A nave avancou " << dist_somar << " milhas" << endl;
 	cout << this->distancia << " milhas percorridas no total" << endl;
+}
+
+void Nave::evento() {
+	// Evento pó cósmico
+	// falta implemnentar não calhar na mesma sala
+	int n_salas_afetadas = random(3, 5);
+	while (n_salas_afetadas != 0) {
+		int i = random(0, 2);
+		int j = random(0, 4);
+		if (salas[i][j] != NULL) {
+			n_salas_afetadas--;
+			salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
+			cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
+		}
+	}
 }
 
 Sala * Nave::mover_para_sala(string com, int  id){
