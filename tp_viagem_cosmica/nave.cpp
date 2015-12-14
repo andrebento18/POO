@@ -3,46 +3,54 @@
 #include <sstream>
 #include <vector>
 using namespace std;
+
 #include "nave.h"
 
-Nave::Nave() {
-	cout << "Nave criada" << endl;
+int random(int min, int max);
 
-	for (int i = 0; i <= 2; i++) {
-		for (int j = 0; j <= 4; j++) {
+Nave::Nave() {
+	cout << "Vamos preparar a nave..." << endl;
+	int contador = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 5; j++) {
 			if (i == 0 && j == 0 || i == 2 && j == 0) {
 				contador += 1;
-				salas[i][j] = new SalaPropulsor("Propulsor", contador, salas[i][j]->getIntegridade());
+				salas[i][j] = new SalaPropulsor("Propulsor", contador, 100);
 			}
 			else if (i == 0 && j == 4 || i == 1 && j == 0 || i == 2 && j == 4) {
 				salas[i][j] = NULL;
 			}
 			else if (i == 1 && j == 1) {
 				contador += 1;
-				salas[i][j] = new Sala("Sala de Maquinas", contador);
+				salas[i][j] = new SaladeMaquinas("Sala de Maquinas", contador);
 			}
 			else if (i == 1 && j == 2) {
 				contador += 1;
-				salas[i][j] = new Sala("Suporte de Vida", contador);
+				salas[i][j] = new SalaSuportedeVida("Suporte de Vida", contador);
 			}
 			else if (i == 1 && j == 3) {
 				contador += 1;
-				salas[i][j] = new Sala("Controlo de Escudo", contador);
+				salas[i][j] = new SalaControlodeEscudo("Controlo de Escudo", contador);
 			}
 			else if (i == 1 && j == 4) {
 				contador += 1;
-				salas[i][j] = new Sala("Ponte", contador);
+				salas[i][j] = new SalaPonte("Ponte", contador);
 			}
 			else {
 				string tipo_sala;
 				contador += 1;
 				cout << "Tipo de sala a adicionar com id " << contador << " : ";
-				cin >> tipo_sala;
-				salas[i][j] = new Sala(tipo_sala, contador);
-
+				getline(cin, tipo_sala);
+				if (tipo_sala == "Beliche")
+					salas[i][j] = new SalaBeliche(tipo_sala, contador);
+				else if (tipo_sala == "Propulsor Adicional")
+					salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala, contador);
+				else
+					salas[i][j] = new Sala(tipo_sala, contador);
 			}
 		}
 	}
+	cout << "Nave criada com sucesso!" << endl;
 }
 
 Nave::~Nave() {
@@ -53,27 +61,106 @@ Nave::~Nave() {
 	cout << "Nave destruida" << endl;
 }
 
+// Devolve 0 - Nave destruida; 1 - Saúde da Nave OK
 int Nave::verifica_saudeNave() const
 {
-	//int saude = 0; isto vai ser retornado
-	/*
-	getIntegridade...
-	getDano...
-	*/
-	return 100;
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 5; j++) {
+			if (salas[i][j] != NULL) {
+				if (salas[i][j]->getIntegridade() == 0)
+					return 0;
+				else
+					return 1;
+			}
+		}
 }
 
 int Nave::getDistancia()const {
 	return distancia;
 }
 
-void Nave::setDistancia(int dist_somar) {
-	//int dist_percor; // distancia feita pelos propulsores
-	//for (int i = 0; i < 3; i++)
-		//for (int j = 0; j < 5; j++) {
-		//	if (salas[i][j]->getTipo() == "Propulsor")
-		//		salas[i][j]->getPropulsao();
-		//}
+void Nave::setDistancia() {
+	int dist_somar = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (salas[i][j] != NULL) {
+				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == "Propulsor Adicional") {
+					salas[i][j]->setPropulsao(); // Atualiazar potencia dos propulsores
+					dist_somar += salas[i][j]->getPropulsao();
+					// verificar também se a ponte está a ser operada
+				}
+			}
+		}
+	}
+	this->distancia += dist_somar;
+	cout << "A nave avancou " << dist_somar << " milhas" << endl;
+	cout << this->distancia << " milhas percorridas no total" << endl;
+}
+
+void Nave::evento() {
+	// Evento pó cósmico
+	// falta implemnentar não calhar na mesma sala
+	int n_salas_afetadas = random(3, 5);
+	while (n_salas_afetadas != 0) {
+		int i = random(0, 2);
+		int j = random(0, 4);
+		if (salas[i][j] != NULL) {
+			n_salas_afetadas--;
+			salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
+			cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
+		}
+	}
+}
+
+Sala * Nave::mover_para_sala(string com, int  id){
+	for (int i = 0; i <= 2; i++){
+		for (int j = 0; j <= 4; j++){
+			if (salas[i][j]->getID() == id){
+				if (com == "cima"){
+					if (i == 0) {
+						return salas[i][j];
+					}else{
+						int movimento = 0;
+						movimento = i;
+						movimento--;
+						return salas[movimento][j];
+					}
+				}
+				if (com == "baixo"){
+					if (i == 2) {
+						return salas[i][j];
+						
+					}else{
+						int movimento = 0;
+						movimento = i;
+						movimento++;
+						return salas[movimento][j];
+					}
+				}
+				if (com == "direita"){
+					if (i == 4) {
+						return salas[i][j];
+					}else{
+						int movimento = 0;
+						movimento = j;
+						movimento++;
+						return salas[i][movimento];
+					}
+				}
+				if (com == "esquerda"){
+					if (i == 0) {
+						return salas[i][j];
+						
+					}else{
+						int movimento = 0;
+						movimento = j;
+						movimento--;
+						return salas[i][movimento];
+					}
+				}
+			}
+		}
+	}
 }
 
 string Nave::getSalas()const {
@@ -89,73 +176,3 @@ string Nave::getSalas()const {
 	}
 	return os.str();
 }
-
-Sala * Nave::mover_para_sala(string com, int  id) 
-{
-	for (int i = 0; i <= 2; i++)
-	{
-		for (int j = 0; j <= 4; j++) 
-		{
-			if (salas[i][j]->getID() == id)
-			{
-				if (com == "cima")
-				{
-					if (i == 0) {
-						return salas[i][j];
-					}
-					else
-					{
-						int movimento = 0;
-						movimento = i;
-						movimento--;
-						return salas[movimento][j];
-					}
-
-				}
-				if (com == "baixo")
-				{
-					if (i == 2) {
-						return salas[i][j];
-					}
-					else
-					{
-						int movimento = 0;
-						movimento = i;
-						movimento++;
-						return salas[movimento][j];
-					}
-
-				}
-				if (com == "direita")
-				{
-					if (i == 4) {
-						return salas[i][j];
-					}
-					else
-					{
-						int movimento = 0;
-						movimento = j;
-						movimento++;
-						return salas[i][movimento];
-					}
-
-				}
-				if (com == "esquerda")
-				{
-					if (i == 0) {
-						return salas[i][j];
-					}
-					else
-					{
-						int movimento = 0;
-						movimento = j;
-						movimento--;
-						return salas[i][movimento];
-					}
-
-				}
-			}
-		}
-	}
-}
-

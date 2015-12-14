@@ -2,78 +2,98 @@
 #include <vector>
 #include <string>
 using namespace std;
+#include "util.h"
+
 #include "nave.h"
 
-bool verifica_vitoria(Nave *nave, int *nvl) {
-	if (nave->getDistancia() > 400 * 1000 * *nvl) {
+bool verifica_vitoria(Nave *nave, int nvl) {
+	if (nave->getDistancia() > 4000 + 1000  * nvl) {
 		// vitória
-		system("CLS");//llll
-		cout << "VITORIA" << endl;
+		system("cls");
+		for (int i = 0; i <= 30; i++) {
+			for (int j = 0; j <= 3; j++) {
+				cout << "-----VITORIA-----";
+			}
+			cout << endl;
+		}
+		cout << "Parabens, prime uma tecla para voltar ao menu inicial" << endl;
+		system("pause");
 		return 1;
-	}
-	else
+	}else
 		// sem vitória
 		return 0;
 }
 
 bool verifica_derrota(Nave *nave) {
-	if (nave->verifica_saudeNave() == 0)
+	if (nave->verifica_saudeNave() == 0) {
 		// derrota
+		system("cls");
+		for (int i = 0; i <= 30; i++) {
+			for (int j = 0; j <= 3; j++) {
+				cout << "-----GAME-OVER-----";
+			}
+			cout << endl;
+		}
+		cout << "Perdeste o jogo, prime uma tecla para voltar ao menu inicial e tentar novamente" << endl;
+		system("pause");
 		return 1;
-	else
+	}else
 		// sem derrota
 		return 0;
 }
 
-Nave *prep_nave() {
-	system("CLS");
-	/////////////// PREPARACAO DA NAVE ///////////////
-	cout << "Vamos preparar a nave..." << endl;
-	//PropulsoresAdicionais;Beliches;RaioLaser;Auto-Reparador;
-	//SistemadeSegInterno;Enfermaria;SalaArmas;AlojamentodoCap;OficinaRobotica
-
-	Nave nave;
-	
-	cout << nave.getSalas();
-	
-	return &nave;
+void eventos(Nave *nave) {
+	nave->evento();
 }
 
-void viagem(Nave *nave, int *nvl) {
-	system("CLS");
+void avanca_nave(Nave *nave) {
+	nave->setDistancia();
+}
+
+void viagem(Nave *nave, int nvl) {
+	system("cls");
 	/////////////// VIAGEM ///////////////
 	int turnos = 0;
+	int event_ocurr = 0;
 	do {
+		system("cls");
+		// 1. INICIO DO TURNO
 		turnos++;
 		cout << "Turno(s): " << turnos << endl;
-
-		// 1. INICIO DO TURNO
+		
+		cout << nave->getSalas();
 
 		// 2. FASE DE ORDENS
 
 		// 3. FINAL DO TURNO
 
 		// 4. EVENTOS
+		if (event_ocurr == 0) {
+			eventos(nave);
+			int event_ocurr = random(5, 10);
+		}else
+			event_ocurr--;
 
+		avanca_nave(nave);
+		cout << "Prime uma tecla pra avancar o turno..." << endl;
+		system("pause");
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);	//... || tripulantes == 0)
 }
 
 //Como não consegui arranjar a cena da sala propulsor tentei fazer o movimento da unidade pelas salas da nave
 //penso que esteja bem, mas dá uma olhadela e vê se concordas, se não concordares, diz-me o que errei para ter
 //uma noção.
-
 void mover_unidade(string comando, Unidade *u1, Nave *nave, int id_sala_actual) {
-		u1->setOndeEstou(NULL);
-		Sala *a;
-		a = nave->mover_para_sala(comando, id_sala_actual);
-		u1->setOndeEstou(a);
+	u1->setOndeEstou(NULL);
+	Sala *a;
+	a = nave->mover_para_sala(comando, id_sala_actual);
+	u1->setOndeEstou(a);
 }
-
 
 int main(void) {
 	string cmd;
 	do {
-		system("CLS");
+		system("cls");
 		cout << "VIAGEM-COSMICA" << endl;
 		cout << "Insira jogar ou fim" << endl;
 		cout << "CMD> "; cin >> cmd;
@@ -81,12 +101,16 @@ int main(void) {
 			int nvl;
 			cout << "Insira a dificuldade da missao: ";
 			cin >> nvl;
+			
+			system("cls");
 
-			Nave *nave = prep_nave();
+			/////////////// PREPARACAO DA NAVE ///////////////
+			Nave nave;
 
+			cout << "Prima uma tecla para comecar a viagem..." << endl;
 			system("pause");
 
-			viagem(nave, &nvl);
+			viagem(&nave, nvl);
 		}
 	} while (cmd != "fim");
 
