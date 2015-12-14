@@ -46,9 +46,9 @@ public:
 	SalaPonte(string tipo, int id_sala);
 };
 
-class PropulsoresAdicionais : public Sala {
+class SalaPropulsoresAdicionais : public Sala {
 public:
-	PropulsoresAdicionais(string tipo, int id_sala);
+	SalaPropulsoresAdicionais(string tipo, int id_sala);
 };
 
 class SalaBeliche : public Sala {

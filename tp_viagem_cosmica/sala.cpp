@@ -57,7 +57,7 @@ SalaControlodeEscudo::SalaControlodeEscudo(string tipo, int id_sala):Sala(tipo, 
 SalaPonte::SalaPonte(string tipo, int id_sala):Sala(tipo, id_sala){}
 
 // SALAS OPCIONAIS 
-PropulsoresAdicionais::PropulsoresAdicionais(string tipo, int id_sala):Sala(tipo, id_sala){
+SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo, int id_sala):Sala(tipo, id_sala){
 	//O jogador pode optar por instalar mais propulsores(idênticos aos 
 	//dois propulsores obrigatórios), de forma a garantir que a nave se 
 	//pode deslocar mais depressa.

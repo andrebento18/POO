@@ -90,10 +90,10 @@ int main(void) {
 			int nvl;
 			cout << "Insira a dificuldade da missao: ";
 			cin >> nvl;
-
+			
 			system("CLS");
-			/////////////// PREPARACAO DA NAVE ///////////////
 
+			/////////////// PREPARACAO DA NAVE ///////////////
 			Nave nave;
 
 			cout << "Prima uma tecla para comecar a viagem..." << endl;

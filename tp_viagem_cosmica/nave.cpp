@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
 using namespace std;
 #include "nave.h"
 
@@ -37,9 +38,11 @@ Nave::Nave() {
 				string tipo_sala;
 				contador += 1;
 				cout << "Tipo de sala a adicionar com id " << contador << " : ";
-				cin >> tipo_sala;
+				getline(cin, tipo_sala);
 				if (tipo_sala == "Beliche")
 					salas[i][j] = new SalaBeliche(tipo_sala, contador);
+				else if (tipo_sala == "Propulsor Adicional")
+					salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala, contador);
 				else
 					salas[i][j] = new Sala(tipo_sala, contador);
 			}
