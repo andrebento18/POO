@@ -64,6 +64,7 @@ Nave::~Nave() {
 // Devolve 0 - Nave destruida; 1 - Saúde da Nave OK
 int Nave::verifica_saudeNave() const
 {
+	int verifica_saude = 0;
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {

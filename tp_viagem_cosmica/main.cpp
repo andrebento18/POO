@@ -70,7 +70,7 @@ void viagem(Nave *nave, int nvl) {
 		// 4. EVENTOS
 		if (event_ocurr == 0) {
 			eventos(nave);
-			int event_ocurr = random(5, 10);
+			event_ocurr = random(5, 10);
 		}else
 			event_ocurr--;
 
