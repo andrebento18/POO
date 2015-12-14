@@ -4,11 +4,10 @@
 //um tripulante.Num dado instante, cada unidade estará, em princípio, numa determinada sala da nave.
 class Sala;
 class Unidade{
-	Sala *ondestou = NULL;
+	Sala *ondestou;
 	int pv;
 	string nome; 
 	//LISTA DE CARACTERISTICAS
-	bool respira; //0-Nao;1-Sim
 	bool flamejante; //0-Nao;1-Sim
 	int toxico; //pontos de vida que cada unidade perde na mesma sala
 	bool indeciso; //0-Nao;1-Sim 50% de prob. de ficar indeciso
@@ -17,11 +16,18 @@ class Unidade{
 	int reparador; //caso não esteja em combate, ao terminar o turno repara x pontos
 	int combatente; //caso hajam enimigos na mesma sala, provoca x pontos de dano a um enimigo na sala
 public:
-	Unidade();
+	Unidade(string tipo);
 	~Unidade();
 	int getPV()const;
 	Sala *LocalizarSala()const;
 	string getNome()const;
 	void setOndeEstou(Sala *a);
-	void mover_unidade(string nome, int id_salaActual);
+};
+
+class Unidade_MembroTripulacao : public Unidade {
+	bool respira; //0-Nao;1-Sim
+public:
+	Unidade_MembroTripulacao(string tipo);
+	
+
 };

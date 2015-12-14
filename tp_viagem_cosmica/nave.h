@@ -10,6 +10,7 @@ public:
 	int getDistancia()const;
 	void setDistancia();
 	void evento();
-	Sala *mover_para_sala(string com, int id);
+	Sala *mover_para_sala(string comando_direcao, int id);
 	string getSalas()const;
+	void setReparacao();
 };

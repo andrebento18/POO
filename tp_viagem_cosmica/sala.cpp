@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "sala.h"
+#include "unidade.h"
 
 Sala::Sala(string tipo, int id_sala):tipo(tipo), id_sala(id_sala) {
 	this->integridade = 100;
