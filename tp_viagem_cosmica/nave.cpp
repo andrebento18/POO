@@ -10,43 +10,80 @@ int random(int min, int max);
 
 Nave::Nave() {
 	cout << "Vamos preparar a nave..." << endl;
-	int contador = 0;
+	int contador = 1;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (i == 0 && j == 0 || i == 2 && j == 0) {
-				contador += 1;
-				salas[i][j] = new SalaPropulsor("Propulsor", contador, 100);
+				contador++;
+				salas[i][j] = new SalaPropulsor("Propulsor", 100);
 			}
 			else if (i == 0 && j == 4 || i == 1 && j == 0 || i == 2 && j == 4) {
 				salas[i][j] = NULL;
 			}
 			else if (i == 1 && j == 1) {
-				contador += 1;
-				salas[i][j] = new SaladeMaquinas("Sala de Maquinas", contador);
+				contador++;
+				salas[i][j] = new SaladeMaquinas("Sala de Maquinas");
 			}
 			else if (i == 1 && j == 2) {
-				contador += 1;
-				salas[i][j] = new SalaSuportedeVida("Suporte de Vida", contador);
+				contador++;
+				salas[i][j] = new SalaSuportedeVida("Suporte de Vida");
 			}
 			else if (i == 1 && j == 3) {
-				contador += 1;
-				salas[i][j] = new SalaControlodeEscudo("Controlo de Escudo", contador);
+				contador++;
+				salas[i][j] = new SalaControlodeEscudo("Controlo de Escudo");
 			}
 			else if (i == 1 && j == 4) {
-				contador += 1;
-				salas[i][j] = new SalaPonte("Ponte", contador);
+				contador++;
+				salas[i][j] = new SalaPonte("Ponte");
 			}
 			else {
 				string tipo_sala;
-				contador += 1;
-				cout << "Tipo de sala a adicionar com id " << contador << " : ";
-				getline(cin, tipo_sala);
-				if (tipo_sala == "Beliche")
-					salas[i][j] = new SalaBeliche(tipo_sala, contador);
-				else if (tipo_sala == "Propulsor Adicional")
-					salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala, contador);
-				else
-					salas[i][j] = new Sala(tipo_sala, contador);
+				do {
+					cin.clear();
+					cin.ignore(1000, '\n');
+					cout << "Tipo de sala a adicionar com id " << contador << " : ";
+					getline(cin, tipo_sala);
+					if (tipo_sala == "Propulsor Adicional") {
+						contador++;
+						salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala);
+						break;
+					}else if (tipo_sala == "Beliche") {
+						contador++;
+						salas[i][j] = new SalaBeliche(tipo_sala);
+						break;
+					}
+					else if (tipo_sala == "Raio Laser") {
+						contador++;
+						salas[i][j] = new SalaRaioLaser(tipo_sala);
+						break;
+					}else if (tipo_sala == "Auto-reparador") {
+						contador++;
+						salas[i][j] = new SalaAutoReparador(tipo_sala);
+						break;
+					}else if (tipo_sala == "Sistema de Seguranca interno") {
+						contador++;
+						salas[i][j] = new SalaSistemadeSegInterno(tipo_sala);
+						break;
+					}else if (tipo_sala == "Enfermaria") {
+						contador++;
+						salas[i][j] = new SalaEnfermaria(tipo_sala);
+						break;
+					}else if (tipo_sala == "Sala de armas") {
+						contador++;
+						salas[i][j] = new SalaArmas(tipo_sala);
+						break;
+					}else if (tipo_sala == "Alojamentos do Capitao") {
+						contador++;
+						salas[i][j] = new SalaAlojamentosdoCapitao(tipo_sala);
+						break;
+					}else if (tipo_sala == "Oficina Robotica") {
+						contador++;
+						salas[i][j] = new SalaOficinaRobotica(tipo_sala);
+						break;
+					}
+					else
+						cout << "Sala inexistente" << endl;
+				} while (tipo_sala != "Beliche" || tipo_sala != "Propulsor Adicional" || tipo_sala != "Raio Laser" || tipo_sala == "Auto-reparador" || tipo_sala == "Sistema de Seguranca interno" || tipo_sala == "Enfermaria" || tipo_sala != "Sala de armas" || tipo_sala != "Alojamentos do Capitao" || tipo_sala != "Oficina Robotica");
 			}
 		}
 	}
@@ -125,57 +162,57 @@ void Nave::evento() {
 	}
 }
 
-Sala * Nave::mover_para_sala(string comando_direcao, int  id){
-	for (int i = 0; i <= 2; i++){
-		for (int j = 0; j <= 4; j++){
-			if (salas[i][j]->getID() == id){
-				if (comando_direcao == "cima"){
-					if (i == 0) {
-						return salas[i][j];
-					}else{
-						int movimento = 0;
-						movimento = i;
-						movimento--;
-						return salas[movimento][j];
-					}
-				}
-				if (comando_direcao == "baixo"){
-					if (i == 2) {
-						return salas[i][j];
-						
-					}else{
-						int movimento = 0;
-						movimento = i;
-						movimento++;
-						return salas[movimento][j];
-					}
-				}
-				if (comando_direcao == "direita"){
-					if (i == 4) {
-						return salas[i][j];
-					}else{
-						int movimento = 0;
-						movimento = j;
-						movimento++;
-						return salas[i][movimento];
-					}
-				}
-				if (comando_direcao == "esquerda"){
-					if (i == 0) {
-						return salas[i][j];
-						
-					}else{
-						int movimento = 0;
-						movimento = j;
-						movimento--;
-						return salas[i][movimento];
-					}
-				}
-			}
-		}
-
-	}
-}
+//Sala * Nave::mover_para_sala(string comando_direcao, int  id){
+//	for (int i = 0; i <= 2; i++){
+//		for (int j = 0; j <= 4; j++){
+//			if (salas[i][j]->getID() == id){
+//				if (comando_direcao == "cima"){
+//					if (i == 0) {
+//						return salas[i][j];
+//					}else{
+//						int movimento = 0;
+//						movimento = i;
+//						movimento--;
+//						return salas[movimento][j];
+//					}
+//				}
+//				if (comando_direcao == "baixo"){
+//					if (i == 2) {
+//						return salas[i][j];
+//						
+//					}else{
+//						int movimento = 0;
+//						movimento = i;
+//						movimento++;
+//						return salas[movimento][j];
+//					}
+//				}
+//				if (comando_direcao == "direita"){
+//					if (i == 4) {
+//						return salas[i][j];
+//					}else{
+//						int movimento = 0;
+//						movimento = j;
+//						movimento++;
+//						return salas[i][movimento];
+//					}
+//				}
+//				if (comando_direcao == "esquerda"){
+//					if (i == 0) {
+//						return salas[i][j];
+//						
+//					}else{
+//						int movimento = 0;
+//						movimento = j;
+//						movimento--;
+//						return salas[i][movimento];
+//					}
+//				}
+//			}
+//		}
+//
+//	}
+//}
 
 string Nave::getSalas()const {
 	ostringstream os;

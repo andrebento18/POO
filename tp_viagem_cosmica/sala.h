@@ -1,72 +1,122 @@
 #pragma once
-#include <vector> // ???
+#include <vector>
 #include "unidade.h"
 // classe mae
 class Sala {
 	string tipo;
 	int id_sala;
+	static int conta;
 	int integridade;
+	bool operada;
 	int oxigenio;
 	vector <Unidade*> unidades;
 public:
-	Sala(string tipo, int id_sala);
+	Sala(string tipo);
 	~Sala();
 	string getTipo() const;
 	int getID()const;
 	int getIntegridade()const;
 	void setIntegridade(int valor_integridade);
+	bool getOperada()const;
+	void setOperada(bool valor);
 	int getOxigenio()const;
-	string toString()const;
+	virtual string toString()const;
 	// Propulsor virutal functions
 	virtual int getPropulsao()const { return getPropulsao(); }; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
 	virtual void setPropulsao() {};
 	// Ponte virtual functions
-	virtual void setOperada()const {};
+	virtual void setOperada() {};
 };
 
-// classes derivadas de Sala
+// SALAS PREDEFINIDAS
 class SalaPropulsor : public Sala {
 	int dist_propulsao;
 public:
-	SalaPropulsor(string tipo, int id_sala, int propulsao);
-	int getPropulsao() const;
-	void setPropulsao();
+	SalaPropulsor(string tipo, int propulsao);
+	virtual int getPropulsao() const;
+	virtual void setPropulsao();
+	virtual string toString()const;
 };
 
 class SaladeMaquinas : public Sala {
 public:
-	SaladeMaquinas(string tipo, int id_sala);
+	SaladeMaquinas(string tipo);
+	virtual string toString()const;
 };
 
 class SalaSuportedeVida : public Sala {
 public:
-	SalaSuportedeVida(string tipo, int id_sala);
+	SalaSuportedeVida(string tipo);
+	virtual string toString()const;
 };
 
 class SalaControlodeEscudo : public Sala {
 public:
-	SalaControlodeEscudo(string tipo, int id_sala);
+	SalaControlodeEscudo(string tipo);
+	virtual string toString()const;
 };
 
 class SalaPonte : public Sala {
-	bool operada;
 public:
-	SalaPonte(string tipo, int id_sala);
-	void setOperada()const;
+	SalaPonte(string tipo);
+	virtual void setOperada();
+	virtual string toString()const;
 };
 
+// SALAS OPCIONAIS
 class SalaPropulsoresAdicionais : public Sala {
 	int cap_propulsao;
 public:
-	SalaPropulsoresAdicionais(string tipo, int id_sala);
-	int getPropulsao() const; 
-	void setPropulsao();
+	SalaPropulsoresAdicionais(string tipo);
+	virtual int getPropulsao() const; 
+	virtual void setPropulsao();
+	virtual string toString()const;
 };
 
 class SalaBeliche : public Sala {
 public:
-	SalaBeliche(string tipo, int id_sala);
+	SalaBeliche(string tipo);
+	virtual string toString()const;
 };
 
-//PropulsoresAdicionais;Beliches;RaioLaser;Auto-Reparador;
-//SistemadeSegInterno;Enfermaria;SalaArmas;AlojamentodoCap;OficinaRobotica
+class SalaRaioLaser : public Sala {
+public:
+	SalaRaioLaser(string tipo);
+	virtual string toString()const;
+};
+
+class SalaAutoReparador : public Sala {
+public:
+	SalaAutoReparador(string tipo);
+	virtual string toString()const;
+};
+
+class SalaSistemadeSegInterno : public Sala {
+public:
+	SalaSistemadeSegInterno(string tipo);
+	virtual string toString()const;
+};
+
+class SalaEnfermaria : public Sala {
+public:
+	SalaEnfermaria(string tipo);
+	virtual string toString()const;
+};
+
+class SalaArmas : public Sala {
+public:
+	SalaArmas(string tipo);
+	virtual string toString()const;
+};
+
+class SalaAlojamentosdoCapitao : public Sala {
+public:
+	SalaAlojamentosdoCapitao(string tipo);
+	virtual string toString()const;
+};
+
+class SalaOficinaRobotica : public Sala {
+public:
+	SalaOficinaRobotica(string tipo);
+	virtual string toString()const;
+};

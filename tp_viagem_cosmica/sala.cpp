@@ -5,10 +5,14 @@ using namespace std;
 
 #include "sala.h"
 
-Sala::Sala(string tipo, int id_sala):tipo(tipo), id_sala(id_sala) {
-	this->integridade = 100;
+int Sala::conta = 1;
+
+Sala::Sala(string tipo):tipo(tipo){
+	id_sala = conta++;
+	integridade = 100;
+	operada = false;
+	oxigenio = 100;
 	cout << "Sala " << this->tipo << " criada" << endl;
-	//falta inicializar integrigade, etc...
 }
 
 Sala::~Sala() {
@@ -32,6 +36,15 @@ void Sala::setIntegridade(int valor_integridade) {
 	integridade = valor_integridade;
 }
 
+bool Sala::getOperada()const {
+	return operada;
+}
+
+void Sala::setOperada(bool valor) {
+	if (operada != valor)
+		operada = valor;
+}
+
 int Sala::getOxigenio() const
 {
 	return oxigenio;
@@ -43,8 +56,9 @@ string Sala::toString()const {
 	return os.str();
 }
 
-// SALAS PREDEFINIDAS
-SalaPropulsor::SalaPropulsor(string tipo, int id_sala, int propulsao):Sala(tipo, id_sala), dist_propulsao(propulsao){
+////////// SALAS PREDEFINIDAS ///////////
+// Sala Propulsor
+SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo), dist_propulsao(propulsao){
 	cout << "Propulsor adicionado" << endl;
 }
 
@@ -57,21 +71,58 @@ void SalaPropulsor::setPropulsao(){
 	dist_propulsao = getIntegridade();
 }
 
-SaladeMaquinas::SaladeMaquinas(string tipo, int id_sala):Sala(tipo, id_sala) {
+string SalaPropulsor::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala de Máquinas
+SaladeMaquinas::SaladeMaquinas(string tipo):Sala(tipo) {
 	cout << "Sala de Maquinas adicionada" << endl;
 }
 
-SalaSuportedeVida::SalaSuportedeVida(string tipo, int id_sala):Sala(tipo, id_sala) {}
-
-SalaControlodeEscudo::SalaControlodeEscudo(string tipo, int id_sala):Sala(tipo, id_sala) {}
-
-SalaPonte::SalaPonte(string tipo, int id_sala):Sala(tipo, id_sala), operada(false){}
-
-void SalaPonte::setOperada()const {
+string SaladeMaquinas::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Suporte de Vida
+SalaSuportedeVida::SalaSuportedeVida(string tipo):Sala(tipo) {
+	cout << "Sala Suporte de Vida adicionada" << endl;
 }
 
-// SALAS OPCIONAIS 
-SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo, int id_sala):Sala(tipo, id_sala), cap_propulsao(100){
+string SalaSuportedeVida::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Controlo de Escudo
+SalaControlodeEscudo::SalaControlodeEscudo(string tipo):Sala(tipo) {
+	cout << "Sala Controlo de Escudo adicionada" << endl;
+}
+
+string SalaControlodeEscudo::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Ponte
+SalaPonte::SalaPonte(string tipo):Sala(tipo){
+	cout << "Ponte adicionada" << endl;
+}
+
+void SalaPonte::setOperada() {
+}
+
+string SalaPonte::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+////////// SALAS OPCIONAIS ///////////
+// Sala Propulsores Adicionais
+SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo):Sala(tipo), cap_propulsao(100){
 	//O jogador pode optar por instalar mais propulsores(idênticos aos 
 	//dois propulsores obrigatórios), de forma a garantir que a nave se 
 	//pode deslocar mais depressa.
@@ -87,7 +138,13 @@ void SalaPropulsoresAdicionais::setPropulsao() {
 	cap_propulsao = getIntegridade();
 }
 
-SalaBeliche::SalaBeliche(string tipo, int id_sala) : Sala(tipo, id_sala) {
+string SalaPropulsoresAdicionais::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Beliche
+SalaBeliche::SalaBeliche(string tipo) : Sala(tipo) {
 	//A instalação de beliches adicionais permite aumentar o número de 
 	//tripulantes. Cada sala de beliches instalada na nave permite trazer 
 	//mais um membro da tripulação.Danos ao beliche durante a viagem não 
@@ -95,4 +152,78 @@ SalaBeliche::SalaBeliche(string tipo, int id_sala) : Sala(tipo, id_sala) {
 	cout << "Beliche adicionado" << endl;
 }
 
+string SalaBeliche::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Raio Laser
+SalaRaioLaser::SalaRaioLaser(string tipo) :Sala(tipo) {
+	cout << "Raio Laser adicionado" << endl;
+}
 
+string SalaRaioLaser::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+// Sala Auto Reparador
+SalaAutoReparador::SalaAutoReparador(string tipo):Sala(tipo) {
+	cout << "Auto-Reparador adicionado" << endl;
+}
+
+string SalaAutoReparador::toString()const{
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+SalaSistemadeSegInterno::SalaSistemadeSegInterno(string tipo):Sala(tipo){
+	cout << "Sistema de Seguranca Interno adicionado" << endl;
+}
+
+string SalaSistemadeSegInterno::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+SalaEnfermaria::SalaEnfermaria(string tipo):Sala(tipo){
+	cout << "Enfermaria adicionada" << endl;
+}
+
+string SalaEnfermaria::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+SalaArmas::SalaArmas(string tipo):Sala(tipo){
+	cout << "Sala de Armas adicionada" << endl;
+}
+
+string SalaArmas::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+SalaAlojamentosdoCapitao::SalaAlojamentosdoCapitao(string tipo):Sala(tipo){
+	cout << "Alojamento do Capitao adicionado" << endl;
+}
+
+string SalaAlojamentosdoCapitao::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}
+
+SalaOficinaRobotica::SalaOficinaRobotica(string tipo):Sala(tipo){
+	cout << "Oficina de Robotica adicionada" << endl;
+}
+
+string SalaOficinaRobotica::toString()const {
+	ostringstream os;
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	return os.str();
+}

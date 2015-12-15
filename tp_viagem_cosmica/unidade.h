@@ -28,6 +28,4 @@ class Unidade_MembroTripulacao : public Unidade {
 	bool respira; //0-Nao;1-Sim
 public:
 	Unidade_MembroTripulacao(string tipo);
-	
-
 };

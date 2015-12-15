@@ -2,8 +2,8 @@
 #include <vector>
 #include <string>
 using namespace std;
-#include "util.h"
 
+#include "util.h"
 #include "nave.h"
 
 bool verifica_vitoria(Nave *nave, int nvl) {
@@ -83,12 +83,12 @@ void viagem(Nave *nave, int nvl) {
 //Como não consegui arranjar a cena da sala propulsor tentei fazer o movimento da unidade pelas salas da nave
 //penso que esteja bem, mas dá uma olhadela e vê se concordas, se não concordares, diz-me o que errei para ter
 //uma noção.
-void mover_unidade(string comando, Unidade *u1, Nave *nave, int id_sala_actual) {
-	u1->setOndeEstou(NULL);
-	Sala *a;
-	a = nave->mover_para_sala(comando, id_sala_actual);
-	u1->setOndeEstou(a);
-}
+//void mover_unidade(string comando, Unidade *u1, Nave *nave, int id_sala_actual) {
+//	u1->setOndeEstou(NULL);
+//	Sala *a;
+//	a = nave->mover_para_sala(comando, id_sala_actual);
+//	u1->setOndeEstou(a);
+//}
 
 int main(void) {
 	string cmd;
@@ -98,9 +98,11 @@ int main(void) {
 		cout << "Insira jogar ou fim" << endl;
 		cout << "CMD> "; cin >> cmd;
 		if(cmd == "jogar"){
-			int nvl;
-			cout << "Insira a dificuldade da missao: ";
-			cin >> nvl;
+			double nvl;
+			do {
+				cout << "Insira a dificuldade da missao: ";
+				cin >> nvl;
+			} while (nvl <= 0);
 			
 			system("cls");
 
