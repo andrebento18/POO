@@ -56,6 +56,14 @@ string Sala::toString()const {
 	return os.str();
 }
 
+void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar) {
+	if (unidade_a_adicionar->LocalizarSala() == NULL) {	//Verifica se não está em lado nenhum(NULL)
+		unidades.push_back(unidade_a_adicionar);
+		unidade_a_adicionar->setOndeEstou(this);
+	}else
+		cout << "[WARNING]Erro[WARNING]\n";
+}
+
 ////////// SALAS PREDEFINIDAS ///////////
 // Sala Propulsor
 SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo), dist_propulsao(propulsao){
