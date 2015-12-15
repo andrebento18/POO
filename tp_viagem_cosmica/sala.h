@@ -17,11 +17,13 @@ public:
 	void setIntegridade(int valor_integridade);
 	int getOxigenio()const;
 	string toString()const;
+	virtual void adicionar_Unidade(Unidade  *unidade_a_adicionar);
 	// Propulsor virutal functions
 	virtual int getPropulsao()const { return getPropulsao(); }; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
 	virtual void setPropulsao() {};
 	// Ponte virtual functions
 	virtual void setOperada()const {};
+	
 };
 
 // classes derivadas de Sala

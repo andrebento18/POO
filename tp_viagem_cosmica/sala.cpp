@@ -70,6 +70,16 @@ SalaPonte::SalaPonte(string tipo, int id_sala):Sala(tipo, id_sala), operada(fals
 void SalaPonte::setOperada()const {
 }
 
+void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar)
+{
+	if (unidade_a_adicionar->LocalizarSala() == NULL) {	//Verifica se não está em lado nenhum(NULL)
+		unidades.push_back(unidade_a_adicionar);
+		unidade_a_adicionar->setOndeEstou(this); 							  
+	}
+	else
+		cout << "[WARNING]Erro[WARNING]\n";
+}
+
 // SALAS OPCIONAIS 
 SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo, int id_sala):Sala(tipo, id_sala), cap_propulsao(100){
 	//O jogador pode optar por instalar mais propulsores(idênticos aos 
