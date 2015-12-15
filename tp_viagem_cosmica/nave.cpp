@@ -6,6 +6,16 @@ using namespace std;
 
 #include "nave.h"
 
+#define PROPULSORADICIONAL "Propulsor Adicional"
+#define BELICHE "Beliche"
+#define RAIOLASER "Raio Laser"
+#define AUTOREPARADOR "Auto-reparador"
+#define SISTEMASEGINTERNO "Sistema de Seguranca interno"
+#define ENFERMARIA "Enfermaria"
+#define SALAARMAS "Sala de armas"
+#define ALOJCAPITAO "Alojamentos do Capitao"
+#define OFICROBOTICA "Oficina Robotica"
+
 int random(int min, int max);
 
 Nave::Nave() {
@@ -43,47 +53,47 @@ Nave::Nave() {
 					cin.ignore(1000, '\n');
 					cout << "Tipo de sala a adicionar com id " << contador << " : ";
 					getline(cin, tipo_sala);
-					if (tipo_sala == "Propulsor Adicional") {
+					if (tipo_sala == PROPULSORADICIONAL) {
 						contador++;
 						salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala);
 						break;
-					}else if (tipo_sala == "Beliche") {
+					}else if (tipo_sala == BELICHE) {
 						contador++;
 						salas[i][j] = new SalaBeliche(tipo_sala);
 						break;
 					}
-					else if (tipo_sala == "Raio Laser") {
+					else if (tipo_sala == RAIOLASER) {
 						contador++;
 						salas[i][j] = new SalaRaioLaser(tipo_sala);
 						break;
-					}else if (tipo_sala == "Auto-reparador") {
+					}else if (tipo_sala == AUTOREPARADOR) {
 						contador++;
 						salas[i][j] = new SalaAutoReparador(tipo_sala);
 						break;
-					}else if (tipo_sala == "Sistema de Seguranca interno") {
+					}else if (tipo_sala == SISTEMASEGINTERNO) {
 						contador++;
 						salas[i][j] = new SalaSistemadeSegInterno(tipo_sala);
 						break;
-					}else if (tipo_sala == "Enfermaria") {
+					}else if (tipo_sala == ENFERMARIA) {
 						contador++;
 						salas[i][j] = new SalaEnfermaria(tipo_sala);
 						break;
-					}else if (tipo_sala == "Sala de armas") {
+					}else if (tipo_sala == SALAARMAS) {
 						contador++;
 						salas[i][j] = new SalaArmas(tipo_sala);
 						break;
-					}else if (tipo_sala == "Alojamentos do Capitao") {
+					}else if (tipo_sala == ALOJCAPITAO) {
 						contador++;
 						salas[i][j] = new SalaAlojamentosdoCapitao(tipo_sala);
 						break;
-					}else if (tipo_sala == "Oficina Robotica") {
+					}else if (tipo_sala == OFICROBOTICA) {
 						contador++;
 						salas[i][j] = new SalaOficinaRobotica(tipo_sala);
 						break;
 					}
 					else
-						cout << "Sala inexistente" << endl;
-				} while (tipo_sala != "Beliche" || tipo_sala != "Propulsor Adicional" || tipo_sala != "Raio Laser" || tipo_sala == "Auto-reparador" || tipo_sala == "Sistema de Seguranca interno" || tipo_sala == "Enfermaria" || tipo_sala != "Sala de armas" || tipo_sala != "Alojamentos do Capitao" || tipo_sala != "Oficina Robotica");
+						cout << "A sala que pretende criar nao e possivel!" << endl;
+				} while (tipo_sala != BELICHE || tipo_sala != PROPULSORADICIONAL || tipo_sala != RAIOLASER || tipo_sala == AUTOREPARADOR || tipo_sala == SISTEMASEGINTERNO || tipo_sala == ENFERMARIA || tipo_sala != SALAARMAS || tipo_sala != ALOJCAPITAO || tipo_sala != OFICROBOTICA);
 			}
 		}
 	}
@@ -120,10 +130,9 @@ void Nave::setDistancia() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {
-				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == "Propulsor Adicional") {
+				if ((salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL) && salas[1][4]->getOperada() == true) {
 					salas[i][j]->setPropulsao(); // Atualiazar potencia dos propulsores
 					dist_somar += salas[i][j]->getPropulsao();
-					// verificar também se a ponte está a ser operada
 				}
 			}
 		}
