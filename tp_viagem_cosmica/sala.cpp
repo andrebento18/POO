@@ -59,7 +59,6 @@ string Sala::toString()const {
 void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar) {
 	if (unidade_a_adicionar->LocalizarSala() == NULL) {	//Verifica se não está em lado nenhum(NULL)
 		unidades.push_back(unidade_a_adicionar);
-		unidade_a_adicionar->setOndeEstou(this);
 	}else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
@@ -128,29 +127,6 @@ string SalaPonte::toString()const {
 	return os.str();
 }
 
-////////// SALAS OPCIONAIS ///////////
-// Sala Propulsores Adicionais
-SalaPropulsoresAdicionais::SalaPropulsoresAdicionais(string tipo):Sala(tipo), cap_propulsao(100){
-	//O jogador pode optar por instalar mais propulsores(idênticos aos 
-	//dois propulsores obrigatórios), de forma a garantir que a nave se 
-	//pode deslocar mais depressa.
-	cout << "Propulsor Adicional adicionado" << endl;
-}
-
-int SalaPropulsoresAdicionais::getPropulsao() const
-{
-	return cap_propulsao;
-}
-
-void SalaPropulsoresAdicionais::setPropulsao() {
-	cap_propulsao = getIntegridade();
-}
-
-string SalaPropulsoresAdicionais::toString()const {
-	ostringstream os;
-	os << Sala::toString();
-	return os.str();
-}
 // Sala Beliche
 SalaBeliche::SalaBeliche(string tipo) : Sala(tipo) {
 	//A instalação de beliches adicionais permite aumentar o número de 

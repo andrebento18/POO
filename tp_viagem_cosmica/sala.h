@@ -65,14 +65,6 @@ public:
 };
 
 // SALAS OPCIONAIS
-class SalaPropulsoresAdicionais : public Sala {
-	int cap_propulsao;
-public:
-	SalaPropulsoresAdicionais(string tipo);
-	virtual int getPropulsao() const; 
-	virtual void setPropulsao();
-	virtual string toString()const;
-};
 
 class SalaBeliche : public Sala {
 public:

@@ -57,7 +57,8 @@ Nave::Nave() {
 						contador++;
 						salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala);
 						break;
-					}else if (tipo_sala == BELICHE) {
+					}
+					else if (tipo_sala == BELICHE) {
 						contador++;
 						salas[i][j] = new SalaBeliche(tipo_sala);
 						break;
@@ -66,27 +67,33 @@ Nave::Nave() {
 						contador++;
 						salas[i][j] = new SalaRaioLaser(tipo_sala);
 						break;
-					}else if (tipo_sala == AUTOREPARADOR) {
+					}
+					else if (tipo_sala == AUTOREPARADOR) {
 						contador++;
 						salas[i][j] = new SalaAutoReparador(tipo_sala);
 						break;
-					}else if (tipo_sala == SISTEMASEGINTERNO) {
+					}
+					else if (tipo_sala == SISTEMASEGINTERNO) {
 						contador++;
 						salas[i][j] = new SalaSistemadeSegInterno(tipo_sala);
 						break;
-					}else if (tipo_sala == ENFERMARIA) {
+					}
+					else if (tipo_sala == ENFERMARIA) {
 						contador++;
 						salas[i][j] = new SalaEnfermaria(tipo_sala);
 						break;
-					}else if (tipo_sala == SALAARMAS) {
+					}
+					else if (tipo_sala == SALAARMAS) {
 						contador++;
 						salas[i][j] = new SalaArmas(tipo_sala);
 						break;
-					}else if (tipo_sala == ALOJCAPITAO) {
+					}
+					else if (tipo_sala == ALOJCAPITAO) {
 						contador++;
 						salas[i][j] = new SalaAlojamentosdoCapitao(tipo_sala);
 						break;
-					}else if (tipo_sala == OFICROBOTICA) {
+					}
+					else if (tipo_sala == OFICROBOTICA) {
 						contador++;
 						salas[i][j] = new SalaOficinaRobotica(tipo_sala);
 						break;
@@ -98,7 +105,60 @@ Nave::Nave() {
 		}
 	}
 	cout << "Nave criada com sucesso!" << endl;
+	system("CLS");
+	cout << "Agora vamos adicionar os tripulantes a tua nave!\n";
+
+	int conta_mebros_trip = 3;
+
+	for (int i = 0; i < 3; i++){
+		for (int j = 0; j < 5; j++) {
+			if(salas[i][j] != NULL)
+				if (salas[i][j]->getTipo() == BELICHE) {
+					conta_mebros_trip++;
+					cout << conta_mebros_trip << endl;
+				}
+		}
+	}
+
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (salas[i][j] != NULL) {
+				if (salas[i][j]->getTipo() == ALOJCAPITAO) {
+					Unidade *p = new Capitao("Capitao");
+					//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
+					salas[i][j]->adicionar_Unidade(p);
+					//SETA A SALA ONDE ESTA A UNIDADE
+					p->setOndeEstou(salas[i][j]);
+					cout << "Membro da tripulaçao adicionado a Sala Alojamento do Capitao!\n";
+					conta_mebros_trip--;
+				}
+				else if (salas[i][j]->getTipo() == OFICROBOTICA) {
+					Unidade *p = new Robot("Robot");
+					//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
+					salas[i][j]->adicionar_Unidade(p);
+					//SETA A SALA ONDE ESTA A UNIDADE
+					p->setOndeEstou(salas[i][j]);
+					cout << "Membro da tripulaçao adicionado a Sala Oficina Robotica!\n";
+					conta_mebros_trip--;
+				}
+			}
+		}
+	}
+
+
+	do{
+		Unidade *p = new Unidade_MembroTripulacao("Membro de Tripulacao");
+		//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
+		salas[1][4]->adicionar_Unidade(p);
+		//SETA A SALA ONDE ESTA A UNIDADE
+		p->setOndeEstou(salas[1][4]);
+		cout << "Membro da tripulaçao adicionado a Sala Ponte!\n";
+		conta_mebros_trip--;
+	} while (conta_mebros_trip != 0);
+	cout << "Membros adicionados com sucesso!\n";
 }
+
 
 Nave::~Nave() {
 	for (int i = 0; i < 3; i++) 

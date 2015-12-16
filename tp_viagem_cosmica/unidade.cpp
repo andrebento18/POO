@@ -4,8 +4,9 @@ using namespace std;
 
 #include "unidade.h"
 
-Unidade::Unidade(string tipo) {
+Unidade::Unidade(string tipo, int pv) {
 	nome = tipo;
+	ponto_vida = pv;
 	ondestou = NULL;
 }
 
@@ -37,26 +38,26 @@ void Unidade::setOndeEstou(Sala * a)
 	ondestou = a;
 }
 
-
-
-void Unidade::Exoesqueleto(int valor_ignorado)
-{
-	exoesqueleto = valor_ignorado;
-}
-
-Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade(tipo){
+Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade( tipo, 5){
 	respira = true;
+	reparador = 1;
+	combatente = 1;
+	operador = true;
+	tripulacao = true;
 }
 
-Capitao::Capitao(string tipo, int exoesqueleto) : Unidade(tipo) {
+Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	respira = true;
-	Exoesqueleto(exoesqueleto); //mete o exosqueleto com o valor a ser ignorado
-	
+	exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
+	combatente = 2;
+	operador = true;
+	tripulacao = true;
 }
 
-Robot::Robot(string tipo, int exoesqueleto) : Unidade(tipo) {
-	Exoesqueleto(exoesqueleto); //mete o exosqueleto com o valor a ser ignorado
-
+Robot::Robot(string tipo) : Unidade(tipo, 8) {
+	exoesqueleto = 2;//mete o exosqueleto com o valor a ser ignorado
+	combatente = 3;
+	tripulacao = true;
 }
 
 
