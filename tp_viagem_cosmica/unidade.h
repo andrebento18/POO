@@ -1,4 +1,5 @@
 #pragma once
+//funcao unidade
 //Existem várias “entidades” na nave.Podem ser tripulantes ou outras coisas como por exemplo invasores.
 //São colectivamente referidos como “unidades”.Um tripulante será uma unidade, mas uma unidade pode não ser 
 //um tripulante.Num dado instante, cada unidade estará, em princípio, numa determinada sala da nave.
@@ -29,7 +30,7 @@ class Unidade{
 	int move;
 	int armado;
 	
-	
+
 public:
 	Unidade(string tipo, int pv);
 	virtual ~Unidade();
