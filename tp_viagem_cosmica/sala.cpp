@@ -81,7 +81,7 @@ void SalaPropulsor::setPropulsao(){
 
 string SalaPropulsor::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala de Máquinas
@@ -91,7 +91,7 @@ SaladeMaquinas::SaladeMaquinas(string tipo):Sala(tipo) {
 
 string SaladeMaquinas::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala Suporte de Vida
@@ -101,7 +101,7 @@ SalaSuportedeVida::SalaSuportedeVida(string tipo):Sala(tipo) {
 
 string SalaSuportedeVida::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala Controlo de Escudo
@@ -111,7 +111,7 @@ SalaControlodeEscudo::SalaControlodeEscudo(string tipo):Sala(tipo) {
 
 string SalaControlodeEscudo::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala Ponte
@@ -124,7 +124,7 @@ void SalaPonte::setOperada() {
 
 string SalaPonte::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 
@@ -148,7 +148,7 @@ void SalaPropulsoresAdicionais::setPropulsao() {
 
 string SalaPropulsoresAdicionais::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala Beliche
@@ -162,7 +162,7 @@ SalaBeliche::SalaBeliche(string tipo) : Sala(tipo) {
 
 string SalaBeliche::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << Sala::toString();
 	return os.str();
 }
 // Sala Raio Laser

@@ -14,7 +14,12 @@ Unidade::~Unidade() {
 }
 
 int Unidade::getPV()const {
-	return pv;
+	return ponto_vida;
+}
+
+void Unidade::LevaDano(int dano_recebido)
+{
+	ponto_vida = ponto_vida - dano_recebido;
 }
 
 Sala * Unidade::LocalizarSala() const
@@ -32,6 +37,27 @@ void Unidade::setOndeEstou(Sala * a)
 	ondestou = a;
 }
 
+
+
+void Unidade::Exoesqueleto(int valor_ignorado)
+{
+	exoesqueleto = valor_ignorado;
+}
+
 Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade(tipo){
 	respira = true;
 }
+
+Capitao::Capitao(string tipo, int exoesqueleto) : Unidade(tipo) {
+	respira = true;
+	Exoesqueleto(exoesqueleto); //mete o exosqueleto com o valor a ser ignorado
+	
+}
+
+Robot::Robot(string tipo, int exoesqueleto) : Unidade(tipo) {
+	Exoesqueleto(exoesqueleto); //mete o exosqueleto com o valor a ser ignorado
+
+}
+
+
+
