@@ -184,7 +184,7 @@ int Nave::getDistancia()const {
 	return distancia;
 }
 
-void Nave::setDistancia() {
+void Nave::avancaNave() {
 	int dist_somar = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
@@ -287,8 +287,12 @@ string Nave::getSalas()const {
 	os << "Nave com: " << endl;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j <5; j++) {
-			if (salas[i][j] != NULL)
+			if (salas[i][j] != NULL) {
 				os << salas[i][j]->toString() << endl;
+				int quant_unid = salas[i][j]->getUnidades();
+				for (int k = 0; k < quant_unid; k++)
+					os << salas[i][j]->getUnidade(k)->getNome() << " " << salas[i][j]->getUnidade(k)->getRespira() << endl;
+			}
 			else
 				continue;
 		}

@@ -1,5 +1,4 @@
 #pragma once
-//funcao unidade
 //Existem várias “entidades” na nave.Podem ser tripulantes ou outras coisas como por exemplo invasores.
 //São colectivamente referidos como “unidades”.Um tripulante será uma unidade, mas uma unidade pode não ser 
 //um tripulante.Num dado instante, cada unidade estará, em princípio, numa determinada sala da nave.
@@ -31,17 +30,21 @@ class Unidade{
 public:
 	Unidade(string tipo, int pv);
 	virtual ~Unidade();
+	virtual string toString()const;
 	string getNome()const;
 	int getPV()const;
 	void LevaDano(int dano_recebido);
+	bool getRespira()const;
 	void setRespira(bool respira);
-	Sala *LocalizarSala()const;
+	Sala *getOndeEstou()const;
 	void setOndeEstou(Sala *a);
 };
 
 class Unidade_MembroTripulacao : public Unidade {
 public:
 	Unidade_MembroTripulacao(string tipo);
+	string toString()const;
+	void Respirar();
 };
 
 class Capitao : public Unidade {

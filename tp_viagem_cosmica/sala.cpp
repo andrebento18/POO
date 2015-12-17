@@ -50,18 +50,28 @@ int Sala::getOxigenio() const
 	return oxigenio;
 }
 
+void Sala::reduzOxigenio(int oxig_reduzir) {
+	oxigenio -= oxig_reduzir;
+}
+
 string Sala::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade();
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade() << ", " << getOxigenio();
 	return os.str();
 }
 
 void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar) {
-	if (unidade_a_adicionar->LocalizarSala() == NULL) {	//Verifica se não está em lado nenhum(NULL)
+	if (unidade_a_adicionar->getOndeEstou() == NULL) {	//Verifica se não está em lado nenhum(NULL)
 		unidades.push_back(unidade_a_adicionar);
 	}else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
+
+//Unidade* Sala::getUnidades()const {
+//	for (auto p = unidades.begin(); p < unidades.end(); p++) {
+//		
+//	}
+//}
 
 ////////// SALAS PREDEFINIDAS ///////////
 // Sala Propulsor
@@ -120,6 +130,14 @@ SalaPonte::SalaPonte(string tipo):Sala(tipo){
 }
 
 void SalaPonte::setOperada() {
+}
+
+int Sala::getUnidades()const {
+	return unidades.size();
+}
+
+Unidade* Sala::getUnidade(int id)const {
+	return unidades[id];
 }
 
 string SalaPonte::toString()const {

@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+#include "ConsolaG++.h"
 #include "util.h"
 #include "nave.h"
 
@@ -42,14 +43,6 @@ bool verifica_derrota(Nave *nave) {
 		return 0;
 }
 
-void eventos(Nave *nave) {
-	nave->evento();
-}
-
-void avanca_nave(Nave *nave) {
-	nave->setDistancia();
-}
-
 void viagem(Nave *nave, double nvl) {
 	system("cls");
 	/////////////// VIAGEM ///////////////
@@ -69,12 +62,12 @@ void viagem(Nave *nave, double nvl) {
 
 		// 4. EVENTOS
 		if (event_ocurr == 0) {
-			eventos(nave);
+			nave->evento();
 			event_ocurr = random(5, 10);
 		}else
 			event_ocurr--;
 
-		avanca_nave(nave);
+		nave->avancaNave();
 		cout << "Prime uma tecla pra avancar o turno..." << endl;
 		system("pause");
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);	//... || tripulantes == 0)
@@ -91,9 +84,15 @@ void viagem(Nave *nave, double nvl) {
 //}
 
 int main(void) {
+	Consola c;
+	c.clrscr();
+	c.setScreenSize(45, 80);
+	c.setTextColor(c.VERDE_CLARO);
+	c.setBackgroundColor(c.PRETO);
+
 	string cmd;
 	do {
-		system("cls");
+		c.clrscr();
 		cout << "VIAGEM-COSMICA" << endl;
 		cout << "Insira jogar ou fim" << endl;
 		cout << "CMD> "; cin >> cmd;
@@ -106,7 +105,6 @@ int main(void) {
 			
 			system("cls");
 
-			/////////////// PREPARACAO DA NAVE ///////////////
 			Nave nave;
 
 			cout << "Prima uma tecla para comecar a viagem..." << endl;

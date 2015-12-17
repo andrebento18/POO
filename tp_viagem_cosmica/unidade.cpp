@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 #include "unidade.h"
+#include "sala.h"
 
 Unidade::Unidade(string tipo, int pv) {
 	nome = tipo;
@@ -11,7 +13,13 @@ Unidade::Unidade(string tipo, int pv) {
 }
 
 Unidade::~Unidade() {
-	cout << "Unidade destruida" << endl;
+	cout << "Unidade " << getNome() << " destruida" << endl;
+}
+
+string Unidade::toString()const {
+	ostringstream os;
+	os << "Unidade " << getNome() << ", pv: " << getPV();
+	return os.str();
 }
 
 int Unidade::getPV()const {
@@ -20,14 +28,18 @@ int Unidade::getPV()const {
 
 void Unidade::LevaDano(int dano_recebido)
 {
-	ponto_vida = ponto_vida - dano_recebido;
+	ponto_vida -= dano_recebido;
+}
+
+bool Unidade::getRespira()const {
+	return respira;
 }
 
 void Unidade::setRespira(bool respira) {
 	this->respira = respira;
 }
 
-Sala * Unidade::LocalizarSala() const
+Sala * Unidade::getOndeEstou() const
 {
 	return ondestou;
 }
@@ -49,6 +61,16 @@ Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade( tipo, 5
 	combatente = 1;
 	operador = true;
 	tripulacao = true;*/
+}
+
+string Unidade_MembroTripulacao::toString() const{
+	ostringstream os;
+	os << Unidade::toString() << " , respiracao " << getRespira();
+	return os.str();
+}
+
+void Unidade_MembroTripulacao::Respirar() {
+	getOndeEstou()->reduzOxigenio(getRespira());
 }
 
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {

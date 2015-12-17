@@ -8,7 +8,7 @@ public:
 	~Nave();
 	int verifica_saudeNave()const;
 	int getDistancia()const;
-	void setDistancia();
+	void avancaNave();
 	void evento();
 	//Sala *mover_para_sala(string comando_direcao, int id);
 	string getSalas()const;

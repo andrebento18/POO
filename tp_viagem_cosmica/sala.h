@@ -13,7 +13,8 @@ class Sala {
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
-	~Sala();
+	virtual ~Sala();
+	virtual string toString()const;
 	string getTipo() const;
 	int getID()const;
 	int getIntegridade()const;
@@ -21,7 +22,8 @@ public:
 	bool getOperada()const;
 	void setOperada(bool valor);
 	int getOxigenio()const;
-	virtual string toString()const;
+	void reduzOxigenio(int oxig_reduzir);
+	
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 	// Propulsor virutal functions
 	virtual int getPropulsao()const { return propulsao; };
@@ -30,13 +32,16 @@ public:
 	};
 	// Ponte virtual functions
 	virtual void setOperada() {};
+
+	int getUnidades()const;
+	Unidade* getUnidade(int id)const;
 };
 
 // SALAS PREDEFINIDAS
 class SalaPropulsor : public Sala {
 public:
 	SalaPropulsor(string tipo, int propulsao);
-	void propulsiona()const ;
+	void propulsiona()const;
 	virtual string toString()const;
 };
 

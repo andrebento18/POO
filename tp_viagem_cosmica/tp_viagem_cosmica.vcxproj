@@ -146,12 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsolaG++.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="nave.cpp" />
     <ClCompile Include="sala.cpp" />
     <ClCompile Include="unidade.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsolaG++.h" />
     <ClInclude Include="nave.h" />
     <ClInclude Include="sala.h" />
     <ClInclude Include="unidade.h" />
