@@ -60,7 +60,7 @@ string Sala::toString()const {
 	return os.str();
 }
 
-void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar) {
+void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
 	if (unidade_a_adicionar->getOndeEstou() == NULL) {	//Verifica se não está em lado nenhum(NULL)
 		unidades.push_back(unidade_a_adicionar);
 	}else

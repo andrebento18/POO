@@ -153,6 +153,7 @@
     <ClCompile Include="unidade.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="caracteristicas.h" />
     <ClInclude Include="ConsolaG++.h" />
     <ClInclude Include="nave.h" />
     <ClInclude Include="sala.h" />

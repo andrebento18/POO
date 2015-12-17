@@ -31,14 +31,6 @@ void Unidade::LevaDano(int dano_recebido)
 	ponto_vida -= dano_recebido;
 }
 
-bool Unidade::getRespira()const {
-	return respira;
-}
-
-void Unidade::setRespira(bool respira) {
-	this->respira = respira;
-}
-
 Sala * Unidade::getOndeEstou() const
 {
 	return ondestou;
@@ -56,11 +48,7 @@ void Unidade::setOndeEstou(Sala * a)
 
 Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade( tipo, 5){
 	setRespira(true);
-	/*respira = true;
-	reparador = 1;
-	combatente = 1;
-	operador = true;
-	tripulacao = true;*/
+	this->setCaracteristica()->
 }
 
 string Unidade_MembroTripulacao::toString() const{
@@ -69,8 +57,15 @@ string Unidade_MembroTripulacao::toString() const{
 	return os.str();
 }
 
+void Unidade::actuar()
+{
+	for (unsigned int i = 0; i < vect_car.size(); i++) {
+		vect_car[i]->Actua(this);
+	}
+}
+
 void Unidade_MembroTripulacao::Respirar() {
-	getOndeEstou()->reduzOxigenio(getRespira());
+	getOndeEstou()->reduzOxigenio(2); // Ver quanto respira
 }
 
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {

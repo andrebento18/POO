@@ -47,5 +47,8 @@
     <ClInclude Include="ConsolaG++.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="caracteristicas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
