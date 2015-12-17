@@ -23,6 +23,10 @@ void Unidade::LevaDano(int dano_recebido)
 	ponto_vida = ponto_vida - dano_recebido;
 }
 
+void Unidade::setRespira(bool respira) {
+	this->respira = respira;
+}
+
 Sala * Unidade::LocalizarSala() const
 {
 	return ondestou;
@@ -39,25 +43,27 @@ void Unidade::setOndeEstou(Sala * a)
 }
 
 Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade( tipo, 5){
-	respira = true;
+	setRespira(true);
+	/*respira = true;
 	reparador = 1;
 	combatente = 1;
 	operador = true;
-	tripulacao = true;
+	tripulacao = true;*/
 }
 
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
-	respira = true;
-	exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
-	combatente = 2;
-	operador = true;
-	tripulacao = true;
+	setRespira(true);
+	//respira = true;
+	//exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
+	//combatente = 2;
+	//operador = true;
+	//tripulacao = true;
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
-	exoesqueleto = 2;//mete o exosqueleto com o valor a ser ignorado
-	combatente = 3;
-	tripulacao = true;
+	//exoesqueleto = 2;//mete o exosqueleto com o valor a ser ignorado
+	//combatente = 3;
+	//tripulacao = true;
 }
 
 

@@ -55,7 +55,7 @@ Nave::Nave() {
 					getline(cin, tipo_sala);
 					if (tipo_sala == PROPULSORADICIONAL) {
 						contador++;
-						salas[i][j] = new SalaPropulsoresAdicionais(tipo_sala);
+						salas[i][j] = new SalaPropulsor(tipo_sala, 100);
 						break;
 					}
 					else if (tipo_sala == BELICHE) {
@@ -119,7 +119,6 @@ Nave::Nave() {
 				}
 		}
 	}
-
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
@@ -190,8 +189,8 @@ void Nave::setDistancia() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {
-				if ((salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL) && salas[1][4]->getOperada() == true) {
-					salas[i][j]->setPropulsao(); // Atualiazar potencia dos propulsores
+				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL/*) && salas[1][4]->getOperada() == true*/) {
+					salas[i][j]->setPropulsao(salas[i][j]->getIntegridade()); // Atualiazar potencia dos propulsores
 					dist_somar += salas[i][j]->getPropulsao();
 				}
 			}

@@ -65,18 +65,19 @@ void Sala::adicionar_Unidade(Unidade  *unidade_a_adicionar) {
 
 ////////// SALAS PREDEFINIDAS ///////////
 // Sala Propulsor
-SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo), dist_propulsao(propulsao){
+SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo){
+	setPropulsao(propulsao);
 	cout << "Propulsor adicionado" << endl;
 }
 
-int SalaPropulsor::getPropulsao() const
-{
-	return dist_propulsao;
-}
-
-void SalaPropulsor::setPropulsao(){
-	dist_propulsao = getIntegridade();
-}
+//int SalaPropulsor::getPropulsao() const
+//{
+//	return dist_propulsao;
+//}
+//
+//void SalaPropulsor::setPropulsao(){
+//	dist_propulsao = getIntegridade();
+//}
 
 string SalaPropulsor::toString()const {
 	ostringstream os;

@@ -6,7 +6,7 @@ using namespace std;
 #include "util.h"
 #include "nave.h"
 
-bool verifica_vitoria(Nave *nave, int nvl) {
+bool verifica_vitoria(Nave *nave, double nvl) {
 	if (nave->getDistancia() > 4000 + 1000  * nvl) {
 		// vitória
 		system("cls");
@@ -50,7 +50,7 @@ void avanca_nave(Nave *nave) {
 	nave->setDistancia();
 }
 
-void viagem(Nave *nave, int nvl) {
+void viagem(Nave *nave, double nvl) {
 	system("cls");
 	/////////////// VIAGEM ///////////////
 	int turnos = 0;

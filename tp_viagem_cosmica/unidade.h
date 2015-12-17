@@ -26,18 +26,16 @@ class Unidade{
 	bool tripulacao;
 	int regenerador; //quantidade de pontos de vida que regenera por turno
 	//bool inimigo(x,y)
-	int combatente;
 	int move;
 	int armado;
-	
-
 public:
 	Unidade(string tipo, int pv);
 	virtual ~Unidade();
+	string getNome()const;
 	int getPV()const;
 	void LevaDano(int dano_recebido);
+	void setRespira(bool respira);
 	Sala *LocalizarSala()const;
-	string getNome()const;
 	void setOndeEstou(Sala *a);
 };
 

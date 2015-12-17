@@ -9,6 +9,7 @@ class Sala {
 	int integridade;
 	bool operada;
 	int oxigenio;
+	int propulsao;
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
@@ -21,21 +22,21 @@ public:
 	void setOperada(bool valor);
 	int getOxigenio()const;
 	virtual string toString()const;
-	virtual void adicionar_Unidade(Unidade  *unidade_a_adicionar);
+	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 	// Propulsor virutal functions
-	virtual int getPropulsao()const { return getPropulsao(); }; // ????? É preciso andar com funcoes virtuais para obter as das derivadas???
-	virtual void setPropulsao() {};
+	virtual int getPropulsao()const { return propulsao; };
+	void setPropulsao(int propulsao) {
+		this->propulsao = propulsao;
+	};
 	// Ponte virtual functions
 	virtual void setOperada() {};
 };
 
 // SALAS PREDEFINIDAS
 class SalaPropulsor : public Sala {
-	int dist_propulsao;
 public:
 	SalaPropulsor(string tipo, int propulsao);
-	virtual int getPropulsao() const;
-	virtual void setPropulsao();
+	void propulsiona()const ;
 	virtual string toString()const;
 };
 
