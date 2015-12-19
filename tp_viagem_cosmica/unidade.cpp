@@ -3,6 +3,7 @@
 #include <sstream>
 using namespace std;
 
+#include "caracteristicas.h"
 #include "unidade.h"
 #include "sala.h"
 
@@ -22,23 +23,23 @@ string Unidade::toString()const {
 	return os.str();
 }
 
+string Unidade::getNome() const
+{
+	return nome;
+}
+
 int Unidade::getPV()const {
 	return ponto_vida;
 }
 
-void Unidade::LevaDano(int dano_recebido)
-{
-	ponto_vida -= dano_recebido;
-}
+//void Unidade::LevaDano(int dano_recebido)
+//{
+//	ponto_vida -= dano_recebido;
+//}
 
 Sala * Unidade::getOndeEstou() const
 {
 	return ondestou;
-}
-
-string Unidade::getNome() const
-{
-	return nome;
 }
 
 void Unidade::setOndeEstou(Sala * a)
@@ -46,30 +47,34 @@ void Unidade::setOndeEstou(Sala * a)
 	ondestou = a;
 }
 
-Unidade_MembroTripulacao::Unidade_MembroTripulacao(string tipo):Unidade( tipo, 5){
-	setRespira(true);
-	this->setCaracteristica()->
+//Caracteristica *Unidade::getCaracteristica()const {
+//
+//}
+
+void Unidade::setCaracteristica(Caracteristica *p) {
+	vect_car.push_back(p);
 }
 
-string Unidade_MembroTripulacao::toString() const{
-	ostringstream os;
-	os << Unidade::toString() << " , respiracao " << getRespira();
-	return os.str();
-}
-
-void Unidade::actuar()
-{
+void Unidade::actua(){
 	for (unsigned int i = 0; i < vect_car.size(); i++) {
 		vect_car[i]->Actua(this);
 	}
 }
 
-void Unidade_MembroTripulacao::Respirar() {
-	getOndeEstou()->reduzOxigenio(2); // Ver quanto respira
+MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
+	Caracteristica *p = new Respira();
+	setCaracteristica(p);
+	cout << "Membro de Tripulacao criado" << endl;
+}
+
+string MembroTripulacao::toString() const{
+	ostringstream os;
+	os << Unidade::toString(); //<< " , respiracao " << getRespira();
+	return os.str();
 }
 
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
-	setRespira(true);
+	
 	//respira = true;
 	//exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
 	//combatente = 2;

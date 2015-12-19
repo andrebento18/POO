@@ -1,9 +1,8 @@
 #pragma once
 class Unidade;
-class Caracteristicas {
+class Caracteristica {
 public:
-	void Actua(Unidade *u) {
-		u->actuar();
+	virtual void Actua(Unidade *u) {
 	};
 };
 
@@ -27,10 +26,11 @@ public:
 //int move;
 //int armado;
 
-class Respira : public Caracteristicas {
+class Respira : public Caracteristica {
 	int respira;
 public:
 	Respira() {
+		cout << "car respira adicionada"<< endl;
 		respira = 2;
 	}
 	void Respirar() {

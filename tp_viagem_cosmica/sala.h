@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "unidade.h"
-// classe mae
 class Sala {
 	string tipo;
 	int id_sala;
@@ -37,7 +36,6 @@ public:
 	Unidade* getUnidade(int id)const;
 };
 
-// SALAS PREDEFINIDAS
 class SalaPropulsor : public Sala {
 public:
 	SalaPropulsor(string tipo, int propulsao);
@@ -69,8 +67,6 @@ public:
 	virtual void setOperada();
 	virtual string toString()const;
 };
-
-// SALAS OPCIONAIS
 
 class SalaBeliche : public Sala {
 public:

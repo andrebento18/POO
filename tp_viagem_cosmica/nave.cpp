@@ -145,9 +145,8 @@ Nave::Nave() {
 		}
 	}
 
-
 	do{
-		Unidade *p = new Unidade_MembroTripulacao("Membro de Tripulacao");
+		Unidade *p = new MembroTripulacao("Membro de Tripulacao");
 		//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
 		salas[1][4]->adicionar_Unidade(p);
 		//SETA A SALA ONDE ESTA A UNIDADE
@@ -157,7 +156,6 @@ Nave::Nave() {
 	} while (conta_mebros_trip != 0);
 	cout << "Membros adicionados com sucesso!\n";
 }
-
 
 Nave::~Nave() {
 	for (int i = 0; i < 3; i++) 
@@ -291,7 +289,7 @@ string Nave::getSalas()const {
 				os << salas[i][j]->toString() << endl;
 				int quant_unid = salas[i][j]->getUnidades();
 				for (int k = 0; k < quant_unid; k++)
-					os << salas[i][j]->getUnidade(k)->getNome() << " " << salas[i][j]->getUnidade(k)->getRespira() << endl;
+					os << salas[i][j]->getUnidade(k)->getNome() << endl;
 			}
 			else
 				continue;
