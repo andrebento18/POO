@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <windows.h>
+#include <MMSystem.h>
 using namespace std;
-
 #include "ConsolaG++.h"
 #include "util.h"
 #include "nave.h"
@@ -52,8 +53,11 @@ void viagem(Nave *nave, double nvl) {
 		system("cls");
 		// 1. INICIO DO TURNO
 		turnos++;
-		cout << "Turno(s): " << turnos << endl;
 		
+		nave->inicio_turno();
+		
+		cout << "Turno(s): " << turnos << endl;
+		// Apenas para efeitos de display
 		cout << nave->getSalas();
 
 		// 2. FASE DE ORDENS
@@ -84,6 +88,8 @@ void viagem(Nave *nave, double nvl) {
 //}
 
 int main(void) {
+	PlaySound(TEXT("./SOUND/Space_Cruise.wav"), NULL, SND_ASYNC);
+	
 	Consola c;
 	c.clrscr();
 	c.setScreenSize(45, 80);
@@ -116,3 +122,5 @@ int main(void) {
 
 	return 0;
 }
+
+

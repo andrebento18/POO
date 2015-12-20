@@ -7,7 +7,10 @@ using namespace std;
 #include "unidade.h"
 #include "sala.h"
 
+int Unidade::conta_unidades = 0;
+
 Unidade::Unidade(string tipo, int pv) {
+	id_unidade = conta_unidades++;
 	nome = tipo;
 	ponto_vida = pv;
 	ondestou = NULL;
@@ -32,19 +35,26 @@ int Unidade::getPV()const {
 	return ponto_vida;
 }
 
-//void Unidade::LevaDano(int dano_recebido)
-//{
-//	ponto_vida -= dano_recebido;
-//}
+void Unidade::LevaDano(int dano_recebido){
+	if (getPV() <= 0) {
+		getOndeEstou()->remover_Unidade(this);
+	}else
+		ponto_vida -= dano_recebido;
+}
 
-Sala * Unidade::getOndeEstou() const
+Sala * Unidade::getOndeEstou()const
 {
 	return ondestou;
 }
 
-void Unidade::setOndeEstou(Sala * a)
-{
-	ondestou = a;
+void Unidade::setOndeEstou(Sala *s){
+	// Se a unidade tem sala, remover da sala e adicionar à nova
+	if (getOndeEstou() != NULL) {
+		getOndeEstou()->remover_Unidade(this);
+		s->adicionar_Unidade(this);
+	}
+	// Setar sempre a variavel ondestou
+	ondestou = s;
 }
 
 //Caracteristica *Unidade::getCaracteristica()const {
@@ -57,7 +67,7 @@ void Unidade::setCaracteristica(Caracteristica *p) {
 
 void Unidade::actua(){
 	for (unsigned int i = 0; i < vect_car.size(); i++) {
-		vect_car[i]->Actua(this);
+		vect_car[i]->actua(this);
 	}
 }
 

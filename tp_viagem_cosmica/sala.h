@@ -1,46 +1,53 @@
 #pragma once
 #include <vector>
 #include "unidade.h"
+class Nave;
 class Sala {
 	string tipo;
 	int id_sala;
-	static int conta;
+	static int conta_salas;
 	int integridade;
 	bool operada;
 	int oxigenio;
-	int propulsao;
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
 	virtual ~Sala();
+	
 	virtual string toString()const;
+	
 	string getTipo() const;
 	int getID()const;
+	
 	int getIntegridade()const;
 	void setIntegridade(int valor_integridade);
+	
 	bool getOperada()const;
 	void setOperada(bool valor);
+
 	int getOxigenio()const;
 	void reduzOxigenio(int oxig_reduzir);
 	
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
-	// Propulsor virutal functions
-	virtual int getPropulsao()const { return propulsao; };
-	void setPropulsao(int propulsao) {
-		this->propulsao = propulsao;
-	};
+	void remover_Unidade(Unidade *unidade_a_remover);
+
 	// Ponte virtual functions
 	virtual void setOperada() {};
 
-	int getUnidades()const;
-	Unidade* getUnidade(int id)const;
+	unsigned int countUnidades()const;
+	Unidade *getUnidade(int id)const;
+
+	void unidades_actuar() {
+		for (unsigned int i = 0; i < unidades.size(); i++){
+			unidades[i]->actua();
+		}
+	}
 };
 
 class SalaPropulsor : public Sala {
 public:
 	SalaPropulsor(string tipo, int propulsao);
-	void propulsiona()const;
-	virtual string toString()const;
+	string toString()const;
 };
 
 class SaladeMaquinas : public Sala {

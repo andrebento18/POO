@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
-#include "caracteristicas.h"
+class Caracteristica;
 class Sala;
 class Unidade{
 	string nome;
 	int ponto_vida;
+	int id_unidade;
+	static int conta_unidades;
 	Sala *ondestou;
 	vector <Caracteristica*> vect_car;
 public:
@@ -12,10 +14,17 @@ public:
 	virtual ~Unidade();
 	virtual string toString()const;
 	string getNome()const;
+	
 	int getPV()const;
-	//void LevaDano(int dano_recebido);
+	void LevaDano(int dano_recebido);
+
+	int getID_Unidade()const {
+		return id_unidade;
+	}
+	
 	Sala *getOndeEstou()const;
-	void setOndeEstou(Sala *a);
+	void setOndeEstou(Sala *s);
+	
 	//Caracteristica *getCaracteristica()const;
 	void setCaracteristica(Caracteristica *p);
 	void actua();

@@ -1,8 +1,14 @@
 #pragma once
-class Unidade;
+#include "unidade.h"
+#include "sala.h"
 class Caracteristica {
 public:
-	virtual void Actua(Unidade *u) {
+	Caracteristica() {};
+	virtual ~Caracteristica() {
+		cout << "Caracteristica eliminada" << endl;
+	}
+	virtual void actua(Unidade *u) {
+		cout << "Actua Car" << endl;
 	};
 };
 
@@ -30,9 +36,18 @@ class Respira : public Caracteristica {
 	int respira;
 public:
 	Respira() {
-		cout << "car respira adicionada"<< endl;
 		respira = 2;
 	}
-	void Respirar() {
+	void actua(Unidade *u) override{
+		if (u->getOndeEstou()->getOxigenio() <= 0)
+			u->LevaDano(1);
+		else
+			u->getOndeEstou()->reduzOxigenio(respira);
 	};
+};
+
+class Operador : public Caracteristica {
+	bool operador;
+public:
+	Operador() {};
 };

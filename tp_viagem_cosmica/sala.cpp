@@ -5,10 +5,10 @@ using namespace std;
 
 #include "sala.h"
 
-int Sala::conta = 1;
+int Sala::conta_salas = 1;
 
 Sala::Sala(string tipo):tipo(tipo){
-	id_sala = conta++;
+	id_sala = conta_salas++;
 	integridade = 100;
 	operada = false;
 	oxigenio = 100;
@@ -56,27 +56,47 @@ void Sala::reduzOxigenio(int oxig_reduzir) {
 
 string Sala::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", " << getIntegridade() << ", " << getOxigenio();
+	os << "Tipo: " << getTipo() << ", id " << getID() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << " Unidades:" << endl;
+	for (unsigned int i = 0; i < unidades.size(); i++)
+		os << unidades[i]->getNome() << ", pv" << unidades[i]->getPV() << endl;
 	return os.str();
 }
 
 void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
-	if (unidade_a_adicionar->getOndeEstou() == NULL) {	//Verifica se não está em lado nenhum(NULL)
+	if (unidade_a_adicionar->getOndeEstou() == NULL) {
 		unidades.push_back(unidade_a_adicionar);
+		setOperada(true);
 	}else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
 
-//Unidade* Sala::getUnidades()const {
-//	for (auto p = unidades.begin(); p < unidades.end(); p++) {
-//		
-//	}
-//}
+void Sala::remover_Unidade(Unidade *unidade_a_remover) {
+	if (unidade_a_remover->getOndeEstou() == this) {
+		for (auto p = unidades.begin(); p < unidades.end(); p++) {
+			if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
+				// COM BUG
+				unidades.erase(p);
+				//delete *p;
+				cout << "Unidade removida" << endl;
+				break;
+			}
+		}
+		if (unidades.size() == 0)
+			setOperada(false);
+	}
+}
+
+unsigned int Sala::countUnidades()const {
+	return unidades.size();
+}
+
+Unidade* Sala::getUnidade(int id)const {
+	return unidades[id];
+}
 
 ////////// SALAS PREDEFINIDAS ///////////
 // Sala Propulsor
 SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo){
-	setPropulsao(propulsao);
 	cout << "Propulsor adicionado" << endl;
 }
 
@@ -132,13 +152,7 @@ SalaPonte::SalaPonte(string tipo):Sala(tipo){
 void SalaPonte::setOperada() {
 }
 
-int Sala::getUnidades()const {
-	return unidades.size();
-}
 
-Unidade* Sala::getUnidade(int id)const {
-	return unidades[id];
-}
 
 string SalaPonte::toString()const {
 	ostringstream os;

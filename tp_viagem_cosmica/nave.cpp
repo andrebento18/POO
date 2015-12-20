@@ -182,14 +182,20 @@ int Nave::getDistancia()const {
 	return distancia;
 }
 
+void Nave::inicio_turno() {
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 5; j++)
+			if (salas[i][j] != NULL) 
+				salas[i][j]->unidades_actuar();
+}
+
 void Nave::avancaNave() {
 	int dist_somar = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (salas[i][j] != NULL) {
-				if (salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL/*) && salas[1][4]->getOperada() == true*/) {
-					salas[i][j]->setPropulsao(salas[i][j]->getIntegridade()); // Atualiazar potencia dos propulsores
-					dist_somar += salas[i][j]->getPropulsao();
+				if ((salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL) && salas[1][1]->getIntegridade() == 100 && salas[1][4]->getOperada() == true) {
+					dist_somar += salas[i][j]->getIntegridade();
 				}
 			}
 		}
@@ -200,16 +206,19 @@ void Nave::avancaNave() {
 }
 
 void Nave::evento() {
-	int x = 4;// random(1, 4);
+	int x = random(1, 4);
 	switch (x){
 	case 1:
 		//Evento Chuva de meteoritos
+		cout << "... IMPLEMENTAR CHUVA DE METEORITOS" << endl;
 		break;
 	case 2:
 		//Evento Ataque dos piratas
+		cout << "... IMPLEMENTAR ATAQUE DOS PIRATAS" << endl;
 		break;
 	case 3:
 		//Evento Ataque Xenomorfo
+		cout << "... IMPLEMENTAR ATAQUE XENOMORFO" << endl;
 		break;
 	case 4:
 		// Evento pó cósmico
@@ -284,27 +293,12 @@ string Nave::getSalas()const {
 	ostringstream os;
 	os << "Nave com: " << endl;
 	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j <5; j++) {
-			if (salas[i][j] != NULL) {
-				os << salas[i][j]->toString() << endl;
-				int quant_unid = salas[i][j]->getUnidades();
-				for (int k = 0; k < quant_unid; k++)
-					os << salas[i][j]->getUnidade(k)->getNome() << endl;
-			}
+		for (int j = 0; j < 5; j++) {
+			if (salas[i][j] != NULL) 
+				os << salas[i][j]->toString();
 			else
 				continue;
 		}
 	}
 	return os.str();
-}
-
-void Nave::setReparacao()
-{
-	/*repara dois pontos de dano a essa sala, sendo que essa reparação
-	torna - se efectiva apenas no final do turno.Os esforços de reparação
-	de vários membros da tripulação na mesma sala são cumulativos(dois tripulantes – 4 pontos, etc.).
-	Nota: este ponto do texto foca - se mais na sala do que no tripulante.
-	Os tripulantes têm várias características diferentes e o seu comportamento varia
-	consoante essas características(por exemplo, se o tripulante for um robot,
-	então não repara a nave nem opera salas).*/
 }
