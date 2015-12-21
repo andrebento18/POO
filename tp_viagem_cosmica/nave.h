@@ -8,6 +8,8 @@ public:
 	~Nave();
 	
 	int verifica_saudeNave()const;
+	int countTripulacao()const;
+
 	int getDistancia()const;
 	void setDistancia(int dist_somar) {
 		distancia += dist_somar;
@@ -17,7 +19,8 @@ public:
 	string getSalas()const;
 
 	void inicio_turno();
+	void fim_turno();
+
 	void check_mov_sala(int id_unidade, string comando_direcao);
-	void avancaNave();
 	void evento();
 };

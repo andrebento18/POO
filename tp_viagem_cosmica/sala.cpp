@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "sala.h"
-
+#include "nave.h"
 int Sala::conta_salas = 1;
 
 Sala::Sala(string tipo):tipo(tipo){
@@ -98,9 +98,15 @@ Unidade* Sala::getUnidade(int id_unidade)const {
 	return nullptr;
 }
 
-void Sala::unidades_actuar() {
+void Sala::unidades_actuar_inicio() {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
-		unidades[i]->actua();
+		unidades[i]->actua_inicio();
+	}
+}
+
+void Sala::unidades_actuar_fim() {
+	for (unsigned int i = 0; i < unidades.size(); i++) {
+		unidades[i]->actua_fim();
 	}
 }
 
@@ -108,6 +114,11 @@ void Sala::unidades_actuar() {
 
 SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
 	cout << "Propulsor Adicional adicionado" << endl;
+}
+
+void SalaPropulsor::salas_actuar_fim(Nave *n) {
+	if(n->getSala(5)->getIntegridade() == 100 /*VER SE PONTE ESTA OPERADA*/)
+		n->setDistancia(getIntegridade());
 }
 
 string SalaPropulsor::toString()const {

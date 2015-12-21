@@ -37,12 +37,17 @@ public:
 	unsigned int countUnidades()const;
 	Unidade *getUnidade(int id_unidade)const;
 
-	void unidades_actuar();
+	virtual void salas_actuar_inicio(Nave *n) {};
+	virtual void salas_actuar_fim(Nave *n) {};
+
+	void unidades_actuar_inicio();
+	void unidades_actuar_fim();
 };
 
 class SalaPropulsor : public Sala {
 public:
 	SalaPropulsor(string tipo);
+	void salas_actuar_fim(Nave *n);
 	string toString()const;
 };
 

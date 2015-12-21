@@ -37,7 +37,7 @@ int Unidade::getPV()const {
 }
 
 void Unidade::LevaDano(int dano_recebido){
-	if (getPV() <= 0) 
+	if (getPV() == 0 || getPV() < 0) 
 		getOndeEstou()->remover_Unidade(this);
 	else
 		ponto_vida -= dano_recebido;
@@ -64,15 +64,29 @@ void Unidade::setCaracteristica(Caracteristica *p) {
 	vect_car.push_back(p);
 }
 
-void Unidade::actua(){
+Caracteristica *Unidade::getCaracteristica(Caracteristica *p) {
+	if (!p)
+		return p;
+}
+
+void Unidade::actua_inicio(){
 	for (unsigned int i = 0; i < vect_car.size(); i++) {
-		vect_car[i]->actua(this);
+		vect_car[i]->actua_car_inicio(this);
+	}
+}
+
+void Unidade::actua_fim() {
+	for (unsigned int i = 0; i < vect_car.size(); i++) {
+		vect_car[i]->actua_car_fim(this);
 	}
 }
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
-	Caracteristica *p = new Respira();
-	setCaracteristica(p);
+	setCaracteristica(new Respira());
+	setCaracteristica(new Reparador(1));
+	/*Combatente 
+	Operador*/
+	setCaracteristica(new Tripulacao());
 	cout << "Membro de Tripulacao criado" << endl;
 }
 

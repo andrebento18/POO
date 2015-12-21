@@ -27,7 +27,10 @@ public:
 	void mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova);
 	
 	void setCaracteristica(Caracteristica *p);
-	void actua();
+	Caracteristica *getCaracteristica(Caracteristica *p);
+	
+	void actua_inicio();
+	void actua_fim();
 };
 
 class MembroTripulacao : public Unidade {

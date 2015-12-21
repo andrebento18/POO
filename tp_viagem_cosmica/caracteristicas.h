@@ -7,8 +7,9 @@ public:
 	virtual ~Caracteristica() {
 		cout << "Caracteristica eliminada" << endl;
 	}
-	virtual void actua(Unidade *u) {
-		cout << "Actua Car" << endl;
+	virtual void actua_car_inicio(Unidade *u) {
+	};
+	virtual void actua_car_fim(Unidade *u) {
 	};
 };
 
@@ -38,7 +39,7 @@ public:
 	Respira() {
 		respira = 2;
 	}
-	void actua(Unidade *u) override{
+	void actua_car_inicio(Unidade *u) {
 		if (u->getOndeEstou()->getOxigenio() <= 0)
 			u->LevaDano(1);
 		else
@@ -46,15 +47,28 @@ public:
 	};
 };
 
-class Operador : public Caracteristica {
-	//bool operador;
+class Reparador : public Caracteristica {
+	int cap_reparar;
 public:
-	Operador() {};
-	void actua(Unidade *u) override {
-		//
+	Reparador(int cap_reparar) {
+		this->cap_reparar = cap_reparar;
+	}
+	void actua_car_fim(Unidade *u) {
+		// FALTA VERIFICAR SE A UNIDADE ESTÁ EM COMBATE ??????
+		if(u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor")
+			u->getOndeEstou()->setIntegridade(u->getOndeEstou()->getIntegridade() + cap_reparar);
 	}
 };
 
-class Reparador : public Caracteristica {
+class Operador : public Caracteristica {
+public:
+	Operador() {};
+	void actua_car_inicio(Unidade *u) {
+		cout << "...IMPLEMENTAR CAR.OPERADOR" << endl;
+	}
+};
 
+class Tripulacao : public Caracteristica {
+public:
+	Tripulacao() {};
 };

@@ -4,8 +4,6 @@
 #include <vector>
 using namespace std;
 
-#include "nave.h"
-
 #define PROPULSORADICIONAL "Propulsor Adicional"
 #define BELICHE "Beliche"
 #define RAIOLASER "Raio Laser"
@@ -15,6 +13,8 @@ using namespace std;
 #define SALAARMAS "Sala de armas"
 #define ALOJCAPITAO "Alojamentos do Capitao"
 #define OFICROBOTICA "Oficina Robotica"
+
+#include "nave.h"
 
 int random(int min, int max);
 
@@ -152,7 +152,7 @@ Nave::Nave() {
 		salas[1][4]->adicionar_Unidade(p);
 		//SETA A SALA ONDE ESTA A UNIDADE
 		p->setOndeEstou(salas[1][4]);
-		cout << "Membro da tripulaçao adicionado a Sala Ponte!\n";
+		cout << "Membro da tripulacao adicionado a Sala Ponte!\n";
 		conta_mebros_trip--;
 	} while (conta_mebros_trip != 0);
 	cout << "Tripulantes adicionados a nave com sucesso comandante!" << endl;
@@ -180,6 +180,14 @@ int Nave::verifica_saudeNave() const
 					verifica_saude = 0;
 		}
 	return verifica_saude;
+}
+
+int Nave::countTripulacao()const {
+	int quant_trip = 0;
+	for (int i = 1; i <= 12; i++) {
+		quant_trip += getSala(i)->countUnidades();
+	}
+	return quant_trip;
 }
 
 Sala *Nave::getSala(int id_sala)const {
@@ -212,8 +220,19 @@ int Nave::getDistancia()const {
 void Nave::inicio_turno() {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
-			if (salas[i][j] != NULL) 
-				salas[i][j]->unidades_actuar();
+			if (salas[i][j] != NULL) {
+				salas[i][j]->unidades_actuar_inicio();
+				salas[i][j]->salas_actuar_inicio(this);
+			}
+}
+
+void Nave::fim_turno() {
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 5; j++)
+			if (salas[i][j] != NULL) {
+				salas[i][j]->unidades_actuar_fim();
+				salas[i][j]->salas_actuar_fim(this);
+			}
 }
 
 void Nave::check_mov_sala(int id_unidade, string comando_direcao){
@@ -225,14 +244,14 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 				if (salas[i][j]->getUnidade(id_unidade) != NULL) {
 					id_sala = salas[i][j]->getID();
 				}
-	cout << "id_unidade " << id_unidade << "id_sala " << id_sala << endl;
+	// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
 	for (int i = 0; i <= 2; i++)
 		for (int j = 0; j <= 4; j++)
 			if(salas[i][j] != NULL)
 				if (salas[i][j]->getID() == id_sala) {
 					if (comando_direcao == "cima") {
 						if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-							cout << "Nao podemos mover a unidade " << id_unidade << "para a sala a norte comandante!" << endl;
+							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
 							break;
 						}
 						else
@@ -240,7 +259,7 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 					}
 					else if (comando_direcao == "baixo") {
 						if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
-							cout << "Nao podemos mover a unidade " << id_unidade << "para a sala a sul comandante!" << endl;
+							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
 							break;
 						}
 						else 
@@ -248,7 +267,7 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 					}
 					else if (comando_direcao == "direita") {
 						if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-							cout << "Nao podemos mover a unidade " << id_unidade << "para a sala a este comandante!" << endl;
+							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
 							break;
 						}
 						else 
@@ -256,7 +275,7 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 					}
 					else if (comando_direcao == "esquerda") {
 						if (j == 0 && j == 1 && i == 1) {
-							cout << "Nao podemos mover a unidade " << id_unidade << "para a sala a este comandante!" << endl;
+							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
 							break;
 						}
 						else 
@@ -265,22 +284,6 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 					else
 						cout << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
 				}
-}
-
-void Nave::avancaNave() {
-	int dist_somar = 0;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 5; j++) {
-			if (salas[i][j] != NULL) {
-				if ((salas[i][j]->getTipo() == "Propulsor" || salas[i][j]->getTipo() == PROPULSORADICIONAL) && salas[1][1]->getIntegridade() == 100 && salas[1][4]->getOperada() == true) {
-					dist_somar += salas[i][j]->getIntegridade();
-				}
-			}
-		}
-	}
-	this->distancia += dist_somar;
-	cout << "A nave avancou " << dist_somar << " milhas" << endl;
-	cout << this->distancia << " milhas percorridas no total" << endl;
 }
 
 void Nave::evento() {
