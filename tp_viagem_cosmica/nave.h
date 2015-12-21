@@ -12,9 +12,12 @@ public:
 	void setDistancia(int dist_somar) {
 		distancia += dist_somar;
 	};
-	//Sala *mover_para_sala(string comando_direcao, int id);
+	
+	Sala *getSala(int id_sala)const;
 	string getSalas()const;
+
 	void inicio_turno();
+	void check_mov_sala(int id_unidade, string comando_direcao);
 	void avancaNave();
 	void evento();
 };

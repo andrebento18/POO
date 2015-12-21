@@ -35,18 +35,14 @@ public:
 	virtual void setOperada() {};
 
 	unsigned int countUnidades()const;
-	Unidade *getUnidade(int id)const;
+	Unidade *getUnidade(int id_unidade)const;
 
-	void unidades_actuar() {
-		for (unsigned int i = 0; i < unidades.size(); i++){
-			unidades[i]->actua();
-		}
-	}
+	void unidades_actuar();
 };
 
 class SalaPropulsor : public Sala {
 public:
-	SalaPropulsor(string tipo, int propulsao);
+	SalaPropulsor(string tipo);
 	string toString()const;
 };
 

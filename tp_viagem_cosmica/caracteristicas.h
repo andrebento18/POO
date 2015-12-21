@@ -47,7 +47,14 @@ public:
 };
 
 class Operador : public Caracteristica {
-	bool operador;
+	//bool operador;
 public:
 	Operador() {};
+	void actua(Unidade *u) override {
+		//
+	}
+};
+
+class Reparador : public Caracteristica {
+
 };

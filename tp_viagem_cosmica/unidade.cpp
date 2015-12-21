@@ -18,6 +18,7 @@ Unidade::Unidade(string tipo, int pv) {
 
 Unidade::~Unidade() {
 	cout << "Unidade " << getNome() << " destruida" << endl;
+	cout << "...IMPLEMENTAR APAGAR AS CARS" << endl;
 }
 
 string Unidade::toString()const {
@@ -36,9 +37,9 @@ int Unidade::getPV()const {
 }
 
 void Unidade::LevaDano(int dano_recebido){
-	if (getPV() <= 0) {
+	if (getPV() <= 0) 
 		getOndeEstou()->remover_Unidade(this);
-	}else
+	else
 		ponto_vida -= dano_recebido;
 }
 
@@ -48,18 +49,16 @@ Sala * Unidade::getOndeEstou()const
 }
 
 void Unidade::setOndeEstou(Sala *s){
-	// Se a unidade tem sala, remover da sala e adicionar à nova
-	if (getOndeEstou() != NULL) {
-		getOndeEstou()->remover_Unidade(this);
-		s->adicionar_Unidade(this);
-	}
-	// Setar sempre a variavel ondestou
 	ondestou = s;
 }
 
-//Caracteristica *Unidade::getCaracteristica()const {
-//
-//}
+void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) {
+	sala_antiga->remover_Unidade(this);
+	setOndeEstou(NULL);
+	sala_nova->adicionar_Unidade(this);
+	setOndeEstou(sala_nova);
+	cout << getNome() << ", id " << getID_Unidade() << " movido de " << sala_antiga->getTipo() << ", para " << sala_nova->getTipo() << endl;
+}
 
 void Unidade::setCaracteristica(Caracteristica *p) {
 	vect_car.push_back(p);

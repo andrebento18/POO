@@ -24,8 +24,8 @@ public:
 	
 	Sala *getOndeEstou()const;
 	void setOndeEstou(Sala *s);
+	void mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova);
 	
-	//Caracteristica *getCaracteristica()const;
 	void setCaracteristica(Caracteristica *p);
 	void actua();
 };

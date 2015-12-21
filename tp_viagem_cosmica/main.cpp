@@ -61,6 +61,30 @@ void viagem(Nave *nave, double nvl) {
 		cout << nave->getSalas();
 
 		// 2. FASE DE ORDENS
+		string cmd;
+		do {
+			cout << "Da as ordens meu comandante...\nCMD> "; cin >> cmd;
+			if (cmd == "mover") {
+				int id_unidade;
+				string dir_mov;
+				cout << "mover "; cin >> id_unidade;
+				cout << "para "; cin >> dir_mov; cout << endl;
+					
+				/* ALGORITMO DE MOVIMENTO
+					1º bool check_mov_sala ---> Verifica se a unidade está na sala
+												e se se pode mover
+					   SE check_mov_sala for VERDADE
+							mover_unidade ---> funcao especifica da unidade que a
+											   movimenta dado id_unidade e o id_nova_sala
+					   SENAO
+							diz que não é possivel mover unidade
+				*/
+
+				nave->check_mov_sala(id_unidade, dir_mov);
+			}
+			else if(cmd != "avancar")
+				cout << "Nao conheco esse comando meu comandante..." << endl;
+		} while (cmd != "avancar");
 
 		// 3. FINAL DO TURNO
 

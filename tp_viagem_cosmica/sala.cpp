@@ -17,6 +17,7 @@ Sala::Sala(string tipo):tipo(tipo){
 
 Sala::~Sala() {
 	cout << "Sala " << this->tipo << ", posicao " << this->id_sala << " destruida" << endl;
+	cout << "...IMPLEMENTAR DESTRUICAO DE UNIDADES" << endl;
 }
 
 string Sala::getTipo()const {
@@ -41,8 +42,10 @@ bool Sala::getOperada()const {
 }
 
 void Sala::setOperada(bool valor) {
-	if (operada != valor)
-		operada = valor;
+	if (valor == true && getIntegridade() == 100/*&& unidade fora de combate*/)
+		operada = true;
+	else
+		operada = false;
 }
 
 int Sala::getOxigenio() const
@@ -58,7 +61,7 @@ string Sala::toString()const {
 	ostringstream os;
 	os << "Tipo: " << getTipo() << ", id " << getID() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << " Unidades:" << endl;
 	for (unsigned int i = 0; i < unidades.size(); i++)
-		os << unidades[i]->getNome() << ", pv" << unidades[i]->getPV() << endl;
+		os << unidades[i]->getNome() << ", id "<< unidades[i]->getID_Unidade() << ", pv " << unidades[i]->getPV() << endl;
 	return os.str();
 }
 
@@ -74,10 +77,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 	if (unidade_a_remover->getOndeEstou() == this) {
 		for (auto p = unidades.begin(); p < unidades.end(); p++) {
 			if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
-				// COM BUG
 				unidades.erase(p);
-				//delete *p;
-				cout << "Unidade removida" << endl;
 				break;
 			}
 		}
@@ -90,24 +90,25 @@ unsigned int Sala::countUnidades()const {
 	return unidades.size();
 }
 
-Unidade* Sala::getUnidade(int id)const {
-	return unidades[id];
+Unidade* Sala::getUnidade(int id_unidade)const {
+	for (unsigned int i = 0; i < unidades.size(); i++) {
+		if (unidades[i]->getID_Unidade() == id_unidade)
+			return unidades[i];
+	}
+	return nullptr;
+}
+
+void Sala::unidades_actuar() {
+	for (unsigned int i = 0; i < unidades.size(); i++) {
+		unidades[i]->actua();
+	}
 }
 
 ////////// SALAS PREDEFINIDAS ///////////
-// Sala Propulsor
-SalaPropulsor::SalaPropulsor(string tipo, int propulsao):Sala(tipo){
-	cout << "Propulsor adicionado" << endl;
-}
 
-//int SalaPropulsor::getPropulsao() const
-//{
-//	return dist_propulsao;
-//}
-//
-//void SalaPropulsor::setPropulsao(){
-//	dist_propulsao = getIntegridade();
-//}
+SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
+	cout << "Propulsor Adicional adicionado" << endl;
+}
 
 string SalaPropulsor::toString()const {
 	ostringstream os;
@@ -151,8 +152,6 @@ SalaPonte::SalaPonte(string tipo):Sala(tipo){
 
 void SalaPonte::setOperada() {
 }
-
-
 
 string SalaPonte::toString()const {
 	ostringstream os;
