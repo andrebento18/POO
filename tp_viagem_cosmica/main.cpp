@@ -138,7 +138,7 @@ void menu_inicial() {
 	string cmd;
 	do {
 		PlaySound(NULL, NULL, 0);
-		//PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
+		PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
 		cout << "VIAGEM-COSMICA" << endl;
 		cout << "Escreva o que deseja fazer: \n\t<jogar> \n\t<ajuda> \n\t<fim>\n" << endl;
