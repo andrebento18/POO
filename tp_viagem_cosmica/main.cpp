@@ -88,14 +88,18 @@ void viagem(Nave *nave, double nvl) {
 			if (cmd == "mover") {
 				int id_unidade;
 				string dir_mov;
-				cout << "mover "; cin >> id_unidade;
-				cout << "para "; cin >> dir_mov; cout << endl;
+				cout << "Que unidade deseja mover? "; cin >> id_unidade;
+				cout << "Para que sala? (Segundo uma orientação) "; cin >> dir_mov; cout << endl;
 
 				nave->check_mov_sala(id_unidade, dir_mov);
 			}
-			else if(cmd != "avancar")
+			/*else if(cmd != "avancar")
 				cout << "Nao conheco esse comando meu comandante..." << endl;
-			system("pause");
+			system("pause");*/
+			else if (cmd == "fim")
+			{
+				exit(0);
+			}
 		} while (cmd != "avancar");
 
 		// 3. FINAL DO TURNO
@@ -112,9 +116,9 @@ void viagem(Nave *nave, double nvl) {
 			cout << "Esta com sorte, nao tivemos precalcos a avancar comandante!" << endl;
 		}
 
-		/*nave->avancaNave();*/
 		cout << "Prime uma tecla pra avancar o turno..." << endl;
 		system("pause");
+		
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);
 }
 
@@ -134,10 +138,10 @@ void menu_inicial() {
 	string cmd;
 	do {
 		PlaySound(NULL, NULL, 0);
-		PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
+		//PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
 		cout << "VIAGEM-COSMICA" << endl;
-		cout << "Insira <jogar> <ajuda> <fim>" << endl;
+		cout << "Escreva o que deseja fazer: \n\t<jogar> \n\t<ajuda> \n\t<fim>\n" << endl;
 		cout << "CMD> "; cin >> cmd;
 		if (cmd == "jogar") {
 			double nvl;

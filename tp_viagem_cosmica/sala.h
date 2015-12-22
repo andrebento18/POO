@@ -42,6 +42,9 @@ public:
 
 	void unidades_actuar_inicio();
 	void unidades_actuar_fim();
+
+	Unidade *getUnidadePosicao(int id_unidade)const;
+
 };
 
 class SalaPropulsor : public Sala {

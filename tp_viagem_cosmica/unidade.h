@@ -31,6 +31,9 @@ public:
 	
 	void actua_inicio();
 	void actua_fim();
+
+	Caracteristica *getCaracteristicaPosicao(int posicao);
+	unsigned int countCaracteristicas()const;
 };
 
 class MembroTripulacao : public Unidade {

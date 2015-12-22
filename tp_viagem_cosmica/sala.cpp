@@ -61,7 +61,7 @@ string Sala::toString()const {
 	ostringstream os;
 	os << "Tipo: " << getTipo() << ", id " << getID() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << " Unidades:" << endl;
 	for (unsigned int i = 0; i < unidades.size(); i++)
-		os << unidades[i]->getNome() << ", id "<< unidades[i]->getID_Unidade() << ", pv " << unidades[i]->getPV() << endl;
+		os <<"\t->"<< unidades[i]->getNome() << ", id "<< unidades[i]->getID_Unidade() << ", pv " << unidades[i]->getPV() << endl;
 	return os.str();
 }
 
@@ -98,6 +98,8 @@ Unidade* Sala::getUnidade(int id_unidade)const {
 	return nullptr;
 }
 
+
+
 void Sala::unidades_actuar_inicio() {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
 		unidades[i]->actua_inicio();
@@ -109,6 +111,12 @@ void Sala::unidades_actuar_fim() {
 		unidades[i]->actua_fim();
 	}
 }
+
+Unidade * Sala::getUnidadePosicao(int posicao) const
+{
+			return unidades[posicao];
+}
+
 
 ////////// SALAS PREDEFINIDAS ///////////
 

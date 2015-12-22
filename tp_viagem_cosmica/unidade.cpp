@@ -39,8 +39,11 @@ int Unidade::getPV()const {
 void Unidade::LevaDano(int dano_recebido){
 	if (getPV() == 0 || getPV() < 0) 
 		getOndeEstou()->remover_Unidade(this);
-	else
+	else {
 		ponto_vida -= dano_recebido;
+		if (getPV() == 0 || getPV() < 0)
+			getOndeEstou()->remover_Unidade(this);
+	}
 }
 
 Sala * Unidade::getOndeEstou()const
@@ -69,6 +72,18 @@ Caracteristica *Unidade::getCaracteristica(Caracteristica *p) {
 		return p;
 }
 
+Caracteristica * Unidade::getCaracteristicaPosicao(int posicao)
+{
+	return vect_car[posicao];
+}
+
+unsigned int Unidade::countCaracteristicas() const
+{
+	return vect_car.size();
+}
+
+
+
 void Unidade::actua_inicio(){
 	for (unsigned int i = 0; i < vect_car.size(); i++) {
 		vect_car[i]->actua_car_inicio(this);
@@ -80,6 +95,8 @@ void Unidade::actua_fim() {
 		vect_car[i]->actua_car_fim(this);
 	}
 }
+
+
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
 	setCaracteristica(new Respira());

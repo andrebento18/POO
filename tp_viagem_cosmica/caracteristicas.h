@@ -72,3 +72,26 @@ class Tripulacao : public Caracteristica {
 public:
 	Tripulacao() {};
 };
+
+class Combatente : public Caracteristica {
+	int capacidade_combate;
+public:
+	Combatente(int dano_que_causa) {
+		this->capacidade_combate=dano_que_causa;
+	}
+	void actua_car_fim(Unidade *u) {
+		Tripulacao *t = new Tripulacao;
+		for (unsigned int j = 0; j < u->countCaracteristicas(); j++)
+			if (u->getCaracteristicaPosicao(j) == t) {
+
+				for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+					for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+						if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) {
+						//Colocar Operador = FALSE
+							//Depois de implementar o Operador
+						}
+					}
+				}
+			}
+	}
+};
