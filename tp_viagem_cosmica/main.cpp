@@ -59,7 +59,7 @@ bool verifica_derrota(Nave *nave) {
 		// sem derrota
 		return 0;
 }
-
+/**/
 void interface_nave(Nave *nave, int turnos) {
 	system("cls");
 	cout << "Turno(s): " << turnos << "\tTripulacao: " << nave->countTripulacao() << " unidade(s)" << endl << nave->getSalas() << endl << "Distancia total percorrida: " << nave->getDistancia() << endl;
