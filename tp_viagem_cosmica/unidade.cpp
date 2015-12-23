@@ -8,11 +8,13 @@ using namespace std;
 #include "sala.h"
 
 int Unidade::conta_unidades = 0;
+int Unidade::ponto_vida_inicial = 0;
 
 Unidade::Unidade(string tipo, int pv) {
 	id_unidade = conta_unidades++;
 	nome = tipo;
 	ponto_vida = pv;
+	ponto_vida_inicial = pv;
 	ondestou = NULL;
 }
 
@@ -34,6 +36,17 @@ string Unidade::getNome() const
 
 int Unidade::getPV()const {
 	return ponto_vida;
+}
+
+int Unidade::getPVInicial()const {
+	return ponto_vida_inicial;
+}
+
+void Unidade::setPV(int new_ponto_vida) {
+	if (new_ponto_vida >= 0)
+		ponto_vida += new_ponto_vida;
+	else
+		ponto_vida -= new_ponto_vida;
 }
 
 void Unidade::LevaDano(int dano_recebido){
@@ -82,8 +95,6 @@ unsigned int Unidade::countCaracteristicas() const
 	return vect_car.size();
 }
 
-
-
 void Unidade::actua_inicio(){
 	for (unsigned int i = 0; i < vect_car.size(); i++) {
 		vect_car[i]->actua_car_inicio(this);
@@ -96,15 +107,13 @@ void Unidade::actua_fim() {
 	}
 }
 
-
-
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
+	cout << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
 	setCaracteristica(new Reparador(1));
-	/*Combatente 
-	Operador*/
+	setCaracteristica(new Combatente(1));
+	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
-	cout << "Membro de Tripulacao criado" << endl;
 }
 
 string MembroTripulacao::toString() const{
@@ -114,19 +123,44 @@ string MembroTripulacao::toString() const{
 }
 
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
-	
-	//respira = true;
+	cout << tipo << " criado" << endl;
+	setCaracteristica(new Respira());
 	//exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
-	//combatente = 2;
-	//operador = true;
-	//tripulacao = true;
+	setCaracteristica(new Combatente(2));
+	setCaracteristica(new Operador());
+	setCaracteristica(new Tripulacao());
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
+	cout << tipo << " criado" << endl;
 	//exoesqueleto = 2;//mete o exosqueleto com o valor a ser ignorado
-	//combatente = 3;
-	//tripulacao = true;
+	setCaracteristica(new Combatente(3));
+	setCaracteristica(new Tripulacao());
 }
 
+Pirata::Pirata(string tipo) :Unidade(tipo, 4) {
+	cout << tipo << " criado" << endl;
+	setCaracteristica(new Respira());
+	//Inimigo(1, 2), Move(15)
+}
 
+Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
+	cout << tipo << " criado" << endl;
+	//Características: Xenomorfo(3), Misterioso, Move(50), Casulo(20), Exoesqueleto(3).
+}
 
+CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo):Unidade(tipo, 6){
+	cout << tipo << " criado" << endl;
+	//Características: Xenomorfo(0), Exoesqueleto(1)
+}
+
+Blob::Blob(string tipo):Unidade(tipo, 8){
+	cout << tipo << " criado" << endl;
+	//Características: Xenomorfo(0), Regenerador(2), Flamejante, Toxico, Reparador(6), operador, Move(15).
+}
+
+Mxyzypykwi::Mxyzypykwi(string tipo):Unidade(tipo, 8){
+	cout << tipo << " criado" << endl;
+	//Características: Xenomorfo(0), Hipnotizador(15), Move(30), Mutatis Mutandis(10)
+	setCaracteristica(new Respira());
+}

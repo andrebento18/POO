@@ -7,6 +7,7 @@ class Sala {
 	int id_sala;
 	static int conta_salas;
 	int integridade;
+	/*int dano;*/
 	bool operada;
 	int oxigenio;
 	vector <Unidade*> unidades;
@@ -22,6 +23,9 @@ public:
 	int getIntegridade()const;
 	void setIntegridade(int valor_integridade);
 	
+	/*int getDano()const;
+	void setDano(int oper_dano);*/
+
 	bool getOperada()const;
 	void setOperada(bool valor);
 
@@ -31,98 +35,81 @@ public:
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 	void remover_Unidade(Unidade *unidade_a_remover);
 
-	// Ponte virtual functions
-	virtual void setOperada() {};
-
 	unsigned int countUnidades()const;
 	Unidade *getUnidade(int id_unidade)const;
+	Unidade *getUnidadePosicao(int pos_unidade)const;
 
 	virtual void salas_actuar_inicio(Nave *n) {};
 	virtual void salas_actuar_fim(Nave *n) {};
 
 	void unidades_actuar_inicio();
 	void unidades_actuar_fim();
-
-	Unidade *getUnidadePosicao(int id_unidade)const;
-
 };
 
 class SalaPropulsor : public Sala {
 public:
 	SalaPropulsor(string tipo);
 	void salas_actuar_fim(Nave *n);
-	string toString()const;
 };
 
 class SaladeMaquinas : public Sala {
 public:
 	SaladeMaquinas(string tipo);
-	virtual string toString()const;
 };
 
 class SalaSuportedeVida : public Sala {
 public:
 	SalaSuportedeVida(string tipo);
-	virtual string toString()const;
 };
 
 class SalaControlodeEscudo : public Sala {
 public:
 	SalaControlodeEscudo(string tipo);
-	virtual string toString()const;
 };
 
 class SalaPonte : public Sala {
 public:
 	SalaPonte(string tipo);
-	virtual void setOperada();
-	virtual string toString()const;
 };
 
 class SalaBeliche : public Sala {
 public:
 	SalaBeliche(string tipo);
-	virtual string toString()const;
 };
 
 class SalaRaioLaser : public Sala {
 public:
 	SalaRaioLaser(string tipo);
-	virtual string toString()const;
 };
 
 class SalaAutoReparador : public Sala {
 public:
 	SalaAutoReparador(string tipo);
-	virtual string toString()const;
+	void salas_actuar_fim(Nave * n);
 };
 
 class SalaSistemadeSegInterno : public Sala {
 public:
 	SalaSistemadeSegInterno(string tipo);
-	virtual string toString()const;
 };
 
 class SalaEnfermaria : public Sala {
 public:
 	SalaEnfermaria(string tipo);
-	virtual string toString()const;
+	void salas_actuar_fim(Nave *n);
 };
 
 class SalaArmas : public Sala {
 public:
 	SalaArmas(string tipo);
-	virtual string toString()const;
 };
 
 class SalaAlojamentosdoCapitao : public Sala {
 public:
 	SalaAlojamentosdoCapitao(string tipo);
-	virtual string toString()const;
 };
 
 class SalaOficinaRobotica : public Sala {
 public:
 	SalaOficinaRobotica(string tipo);
-	virtual string toString()const;
 };

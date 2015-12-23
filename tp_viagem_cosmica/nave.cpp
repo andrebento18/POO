@@ -14,11 +14,14 @@ using namespace std;
 #define ALOJCAPITAO "Alojamentos do Capitao"
 #define OFICROBOTICA "Oficina Robotica"
 
+#include "ConsolaG++.h"
 #include "nave.h"
 
 int random(int min, int max);
 
+
 Nave::Nave() {
+	Consola c;
 	cout << "Vamos preparar a nave para a viagem..." << endl;
 	int contador = 1;
 	for (int i = 0; i < 3; i++) {
@@ -49,10 +52,11 @@ Nave::Nave() {
 			else {
 				string tipo_sala;
 				do {
-					cin.clear();
-					cin.ignore(1000, '\n');
+					//cin.clear();
+					//cin.ignore(1, '\n');
 					cout << "Tipo de sala a adicionar com id " << contador << " : ";
 					getline(cin, tipo_sala);
+					//cin >> "\n";
 					if (tipo_sala == PROPULSORADICIONAL) {
 						contador++;
 						salas[i][j] = new SalaPropulsor(tipo_sala);
@@ -106,8 +110,8 @@ Nave::Nave() {
 	}
 	cout << "Nave criada com sucesso comandante!" << endl;
 	cout << "Prime uma tecla para avancar...";
-	system("pause");
-	system("CLS");
+	c.getch();
+	c.clrscr();
 	cout << "Agora vamos adicionar os tripulantes a tua nave!\n";
 
 	int conta_mebros_trip = 3;
@@ -157,8 +161,8 @@ Nave::Nave() {
 	} while (conta_mebros_trip != 0);
 	cout << "Tripulantes adicionados a nave com sucesso comandante!" << endl;
 	cout << "Prime uma tecla para avancar...";
-	system("pause");
-	system("cls");
+	c.getch();
+	c.clrscr();
 }
 
 Nave::~Nave() {
@@ -215,6 +219,10 @@ string Nave::getSalas()const {
 
 int Nave::getDistancia()const {
 	return distancia;
+}
+
+void Nave::setDistancia(int dist_somar) {
+	distancia += dist_somar;
 }
 
 void Nave::inicio_turno() {

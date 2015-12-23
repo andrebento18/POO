@@ -3,7 +3,9 @@
 #include "sala.h"
 class Caracteristica {
 public:
-	Caracteristica() {};
+	Caracteristica() {
+		cout << "Construtor basico de caracteristicas" << endl;
+	};
 	virtual ~Caracteristica() {
 		cout << "Caracteristica eliminada" << endl;
 	}
@@ -14,7 +16,6 @@ public:
 };
 
 ////LISTA DE CARACTERISTICAS
-//bool flamejante; //0-Nao;1-Sim
 //int toxico; //pontos de vida que cada unidade perde na mesma sala
 //bool indeciso; //0-Nao;1-Sim 50% de prob. de ficar indeciso
 //bool misterioso; //
@@ -36,8 +37,9 @@ public:
 class Respira : public Caracteristica {
 	int respira;
 public:
-	Respira() {
+	Respira(void) {
 		respira = 2;
+		cout << "Esta unidade respira" << endl;
 	}
 	void actua_car_inicio(Unidade *u) {
 		if (u->getOndeEstou()->getOxigenio() <= 0)
@@ -47,6 +49,74 @@ public:
 	};
 };
 
+class Flamejante : public Caracteristica {
+public:
+	Flamejante(void) {
+		cout << "Esta unidade esta envolta em chamas" << endl;
+	};
+	void actua_car_inicio(Unidade *u) {
+		u->getOndeEstou()->reduzOxigenio(5);
+	}
+};
+
+class Toxico : public Caracteristica {
+public:
+	Toxico(void) {
+		cout << "Este ser e toxico" << endl;
+	};
+	void actua_car_inicio(Unidade *u) {
+		/*bool unidade_toxica = false;
+		Sala *p = u->getOndeEstou();
+		for (unsigned int i = 0; i < p->countUnidades(); i++)
+			for (unsigned int j = 0; j < p->getUnidadePosicao(i)->countCaracteristicas(); j++)
+				if(p->getUnidadePosicao(i)->getCaracteristicaPosicao(j) == */
+		cout << "...IMPLEMENTAR CAR.TOXICO" << endl;
+	}
+};
+
+class Indeciso : public Caracteristica {
+public:
+	Indeciso(void) {};
+	/*NAO FACO MINIMA IDEIA COMO SE PODE IMPLEMENTAR ISTO?????????????????????*/
+};
+
+class Misterioso : public Caracteristica {
+	int count_turnos;
+public:
+	Misterioso(void) {
+		count_turnos = 0;
+		cout << "Sou um ser misterioso" << endl;
+	};
+	// NAO SEI BEM COMO SE FAZ
+	/*void actua_car_fim(Unidade *u) {
+		int x = random(1, 4);
+		if (x == 1 && count_turnos == 0) {
+			count_turnos = 1;
+		}
+		else if (count_turnos == 1) {
+			int sala_escolhida = random(1, 12);
+			u->getOndeEstou()->remover_Unidade(u);
+			u->mover_unidade(u->getID_Unidade(), )
+		}
+	}*/
+};
+
+class Regenerador : public Caracteristica {
+	int cap_regenerar;
+public:
+	Regenerador(int cap_regenerar) {
+		this->cap_regenerar = cap_regenerar;
+		cout << "Este ser e capaz de se regenerar" << endl;
+	}
+	void actua_car_inicio(Unidade *u) {
+		if (u->getPV() + cap_regenerar < u->getPVInicial()) {
+			u->setPV(cap_regenerar);
+		}
+	}
+};
+
+//class Exoesqueleto
+
 class Reparador : public Caracteristica {
 	int cap_reparar;
 public:
@@ -55,7 +125,7 @@ public:
 	}
 	void actua_car_fim(Unidade *u) {
 		// FALTA VERIFICAR SE A UNIDADE ESTÁ EM COMBATE ??????
-		if(u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor")
+		if(u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor" && u->getOndeEstou()->getIntegridade() < 100)
 			u->getOndeEstou()->setIntegridade(u->getOndeEstou()->getIntegridade() + cap_reparar);
 	}
 };
@@ -64,13 +134,10 @@ class Operador : public Caracteristica {
 public:
 	Operador() {};
 	void actua_car_inicio(Unidade *u) {
-		cout << "...IMPLEMENTAR CAR.OPERADOR" << endl;
+		//FLATA VERIFICAR TAMBÉM SE A UNIDADE NAO ESTA EM COMBATE ???????
+		if (u->getOndeEstou()->getIntegridade() == 100)
+			u->getOndeEstou()->setOperada(true);
 	}
-};
-
-class Tripulacao : public Caracteristica {
-public:
-	Tripulacao() {};
 };
 
 class Combatente : public Caracteristica {
@@ -80,18 +147,23 @@ public:
 		this->capacidade_combate=dano_que_causa;
 	}
 	void actua_car_fim(Unidade *u) {
-		Tripulacao *t = new Tripulacao;
-		for (unsigned int j = 0; j < u->countCaracteristicas(); j++)
-			if (u->getCaracteristicaPosicao(j) == t) {
+		//Tripulacao *t = new Tripulacao;
+		//for (unsigned int j = 0; j < u->countCaracteristicas(); j++)
+		//	if (u->getCaracteristicaPosicao(j) == t) {
 
-				for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
-					for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
-						if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) {
-						//Colocar Operador = FALSE
-							//Depois de implementar o Operador
-						}
-					}
-				}
-			}
+		//		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+		//			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+		//				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) {
+		//				//Colocar Operador = FALSE
+		//					//Depois de implementar o Operador
+		//				}
+		//			}
+		//		}
+		//	}
 	}
+};
+
+class Tripulacao : public Caracteristica {
+public:
+	Tripulacao() {};
 };

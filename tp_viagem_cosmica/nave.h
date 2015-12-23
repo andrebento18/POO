@@ -11,9 +11,7 @@ public:
 	int countTripulacao()const;
 
 	int getDistancia()const;
-	void setDistancia(int dist_somar) {
-		distancia += dist_somar;
-	};
+	void setDistancia(int dist_somar);
 	
 	Sala *getSala(int id_sala)const;
 	string getSalas()const;

@@ -5,6 +5,7 @@ class Sala;
 class Unidade{
 	string nome;
 	int ponto_vida;
+	static int ponto_vida_inicial;
 	int id_unidade;
 	static int conta_unidades;
 	Sala *ondestou;
@@ -16,6 +17,8 @@ public:
 	string getNome()const;
 	
 	int getPV()const;
+	int getPVInicial()const;
+	void setPV(int new_ponto_vida);
 	void LevaDano(int dano_recebido);
 
 	int getID_Unidade()const {
@@ -28,12 +31,11 @@ public:
 	
 	void setCaracteristica(Caracteristica *p);
 	Caracteristica *getCaracteristica(Caracteristica *p);
-	
-	void actua_inicio();
-	void actua_fim();
-
 	Caracteristica *getCaracteristicaPosicao(int posicao);
 	unsigned int countCaracteristicas()const;
+
+	void actua_inicio();
+	void actua_fim();
 };
 
 class MembroTripulacao : public Unidade {
@@ -45,26 +47,38 @@ public:
 class Capitao : public Unidade {
 public:
 	Capitao(string tipo);
-	/*Exoesqueleto(X): Previne os primeiros X pontos de dano em cada turno
-	(excepto os danos identificados como “não pode ser evitado”).*/
-	//void Exoesqueleto(int pontos_dano, int dano_ignorado);
 };
 
 
 class Robot : public Unidade {
-	//Características: Exoesqueleto(2), Combatente(3), Tripulação
-	
 public:
 	Robot (string tipo);
-	/*Exoesqueleto(X): Previne os primeiros X pontos de dano em cada turno
-	(excepto os danos identificados como “não pode ser evitado”).*/
 };
 
 //Inimigos
 class Pirata : public Unidade {
-	//Características: Respira, Inimigo(1, 2), Move(15)
-	bool respira; //0-Nao;1-Sim
 public:
-	//Pirata(string tipo);
+	Pirata(string tipo);
 	
+};
+
+//Xenomorfos
+class Geigermorfo :public Unidade {
+public:
+	Geigermorfo(string tipo);
+};
+
+class CasulodeGeigermorfo :public Unidade {
+public:
+	CasulodeGeigermorfo(string tipo);
+};
+
+class Blob :public Unidade {
+public:
+	Blob(string tipo);
+};
+
+class Mxyzypykwi :public Unidade {
+public:
+	Mxyzypykwi(string tipo);
 };
