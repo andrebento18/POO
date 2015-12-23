@@ -61,7 +61,18 @@ bool verifica_derrota(Nave *nave) {
 }
 
 void interface_nave(Nave *nave, int turnos) {
-	
+	Consola c;
+	c.clrscr();
+
+	cout << "Turno(s): " << turnos << "\t\t\t\tTripulacao: " << nave->countTripulacao() << " unidade(s)" << "\t\t\t\t\tInterface grafica da nave:" << endl;
+
+	for (int i = 0; i < 48; i++) {
+		c.gotoxy(69, i);
+		cout << (char)179 << endl;
+		c.gotoxy(70, i);
+		cout << (char)179 << endl;
+	}
+
 	c.gotoxy(1, 1);
 	cout << nave->getSalas() << endl << "Distancia total percorrida: " << nave->getDistancia() << endl;
 }
