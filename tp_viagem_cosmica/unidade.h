@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+
+using namespace std;
+
 class Caracteristica;
 class Sala;
 class Unidade{
@@ -44,7 +47,6 @@ public:
 class MembroTripulacao : public Unidade {
 public:
 	MembroTripulacao(string tipo);
-	string toString()const;
 };
 
 class Capitao : public Unidade {
@@ -62,7 +64,6 @@ public:
 class Pirata : public Unidade {
 public:
 	Pirata(string tipo);
-	
 };
 
 //Xenomorfos

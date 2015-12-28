@@ -1,11 +1,9 @@
 #pragma once
-#include "unidade.h"
-#include "sala.h"
 #include "nave.h"
 
-int random_car(int min, int max) {
-	return min + rand() % (max - min + 1);
-}
+using namespace std;
+
+int random(int min, int max);
 
 class Caracteristica {
 public:
@@ -100,7 +98,7 @@ public:
 	};
 	//PENSO QUE SEJA ASSIM
 	void actua_car_inicio(Unidade *u) {
-		int x = random_car(1, 2);
+		int x = random(1, 2);
 
 		if (x == 1 && ignora_actua_inicio == 0) {
 			ignora_actua_inicio = 1;
@@ -129,15 +127,15 @@ public:
 	// RETIREI O REMOVER UNIDADE DA SALA PORQUE A FUNÇÃO MOVER JÁ FAZ ISSO
 	//CRIEI A RANDOM CAR AQUI PORQUE A FUNÇÃO RANDOM ESTAVA A DAR ERRO NÃO SEI PORQUE
 	void actua_car_fim(Unidade *u, Nave *n) {
-		int x = random_car(1, 4);
+		int x = random(1, 4);
 		if (x == 1 && count_turnos == 0) {
 			count_turnos = 1;
 		}
 		else if (count_turnos == 1) {
-			int sala_escolhida = random_car(1, 12);
+			int sala_escolhida = random(1, 12);
 			u->getOndeEstou()->remover_Unidade(u);
 			u->mover_unidade(u->getID_Unidade(), u->getOndeEstou(), n->getSala(sala_escolhida));
-			int indeciso = random_car(1, 2);
+			int indeciso = random(1, 2);
 		}
 	}
 };
@@ -166,6 +164,7 @@ class Reparador : public Caracteristica {
 public:
 	Reparador(int cap_reparar) {
 		this->cap_reparar = cap_reparar;
+		cout << "Esta unidade repara " << cap_reparar << " pontos" << endl;
 	}
 	void actua_car_fim(Unidade *u) {
 		// FALTA VERIFICAR SE A UNIDADE ESTÁ EM COMBATE ??????
@@ -174,22 +173,31 @@ public:
 	}
 };
 
+class Tripulacao : public Caracteristica {
+	string tripulacao;
+public:
+	Tripulacao() {
+		tripulacao = "TRIPULACAO";
+		cout << "Faco parte da tripulacao da nave" << endl;
+	};
+};
+
 class Operador : public Caracteristica {
 public:
 	Operador() {
+		cout << "Esta unidade e capaz de operar salas" << endl;
 	};
 	void actua_car_inicio(Unidade *u) {
-		/*Tripulacao *t = new Tripulacao;
+		Tripulacao *t = new Tripulacao;
 		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
-				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) 
-				{
+				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) {
 					u->getOndeEstou()->setOperada(false);	
 				}
 			}
 		}
 		if (u->getOndeEstou()->getIntegridade() == 100)
-			u->getOndeEstou()->setOperada(true);*/
+			u->getOndeEstou()->setOperada(true);
 	}
 };
 
@@ -197,7 +205,8 @@ class Combatente : public Caracteristica {
 	int capacidade_combate;
 public:
 	Combatente(int dano_que_causa) {
-		this->capacidade_combate=dano_que_causa;
+		this->capacidade_combate = dano_que_causa;
+		cout << "Combatente capaz de causar " << capacidade_combate << " pontos de dano" << endl;
 	}
 	void actua_car_fim(Unidade *u) {
 		//Tripulacao *t = new Tripulacao;
@@ -214,12 +223,4 @@ public:
 		//		}
 		//	}
 	}
-};
-
-class Tripulacao : public Caracteristica {
-	string tripulacao;
-public:
-	Tripulacao() {
-		tripulacao = "TRIPULACAO";
-	};
 };

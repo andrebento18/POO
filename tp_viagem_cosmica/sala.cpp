@@ -13,6 +13,7 @@ Sala::Sala(string tipo):tipo(tipo){
 	//dano = 0;
 	operada = false;
 	oxigenio = 100;
+	brecha = false;
 	cout << "Sala " << this->tipo << " criada" << endl;
 }
 
@@ -36,6 +37,13 @@ int Sala::getIntegridade() const
 
 void Sala::setIntegridade(int valor_integridade) {
 	integridade = valor_integridade;
+}
+
+void Sala::reduzIntegridade(int valor_reduzir){
+	if (getIntegridade() - valor_reduzir < 0)
+		integridade = 0;
+	else
+		integridade -= valor_reduzir;
 }
 
 //int Sala::getDano() const
@@ -66,15 +74,37 @@ int Sala::getOxigenio() const
 	return oxigenio;
 }
 
+void Sala::aumentaOxigenio(int oxig_aumentar){
+	if (getOxigenio() + oxig_aumentar > 100)
+		oxigenio = 100;
+	else
+		oxigenio += oxig_aumentar;
+}
+
 void Sala::reduzOxigenio(int oxig_reduzir) {
-	oxigenio -= oxig_reduzir;
+	if (getOxigenio() - oxig_reduzir < 0)
+		oxigenio = 0;
+	else
+		oxigenio -= oxig_reduzir;
+}
+
+bool Sala::getBrecha() const{
+	return brecha;
+}
+
+void Sala::setBrecha(bool valor){
+	if (valor == true) {
+		brecha = true;
+		reduzOxigenio(100);
+	}
+	else
+		brecha = false;
 }
 
 string Sala::toString()const {
 	ostringstream os;
-	os << "Tipo: " << getTipo() << ", id " << getID() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
+	os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
 	if (unidades.size() != 0) {
-		cout << " Unidades:" << endl;
 		for (unsigned int i = 0; i < unidades.size(); i++)
 			os << "\t->" << unidades[i]->getNome() << ", id " << unidades[i]->getID_Unidade() << ", pv " << unidades[i]->getPV() << endl;
 	}
@@ -139,7 +169,6 @@ Unidade * Sala::getUnidadePosicao(int posicao) const
 	return unidades[posicao];
 }
 
-
 ////////// SALAS PREDEFINIDAS ///////////
 
 SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
@@ -159,8 +188,35 @@ SalaSuportedeVida::SalaSuportedeVida(string tipo):Sala(tipo) {
 	cout << "Sala Suporte de Vida adicionada" << endl;
 }
 
+void SalaSuportedeVida::salas_actuar_fim(Nave * n) {
+	if (getIntegridade() == 100)
+		for (int i = 1; i <= 12; i++) {
+			if (n->getSala(i)->getBrecha() == false)
+				n->getSala(i)->aumentaOxigenio(2);
+			else
+				n->getSala(i)->reduzOxigenio(n->getSala(i)->getOxigenio());
+		}
+}
+
 SalaControlodeEscudo::SalaControlodeEscudo(string tipo):Sala(tipo) {
 	cout << "Sala Controlo de Escudo adicionada" << endl;
+	escudo = 100;
+}
+
+void SalaControlodeEscudo::salas_actuar_fim(Nave * n){
+	if (getOperada() == true)
+		escudo += 5;
+}
+
+int SalaControlodeEscudo::getEscudo() const{
+	return escudo;
+}
+
+void SalaControlodeEscudo::reduzEscudo(int val_reduzir){
+	if (escudo - val_reduzir < 0)
+		escudo = 0;
+	else
+		escudo -= val_reduzir;
 }
 
 SalaPonte::SalaPonte(string tipo):Sala(tipo){

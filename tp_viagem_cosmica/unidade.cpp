@@ -120,7 +120,7 @@ void Unidade::actua_fim() {
 }
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
-	cout << tipo << " criado" << endl;
+	cout << endl << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
 	setCaracteristica(new Reparador(1));
 	setCaracteristica(new Combatente(1));
@@ -128,14 +128,8 @@ MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
 	setCaracteristica(new Tripulacao());
 }
 
-string MembroTripulacao::toString() const{
-	ostringstream os;
-	os << Unidade::toString(); //<< " , respiracao " << getRespira();
-	return os.str();
-}
-
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
-	cout << tipo << " criado" << endl;
+	cout << endl << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
 	//exoesqueleto = 1; //mete o exosqueleto com o valor a ser ignorado
 	setCaracteristica(new Combatente(2));
@@ -144,7 +138,7 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
-	cout << tipo << " criado" << endl;
+	cout << endl << tipo << " criado" << endl;
 	//exoesqueleto = 2;//mete o exosqueleto com o valor a ser ignorado
 	setCaracteristica(new Combatente(3));
 	setCaracteristica(new Tripulacao());

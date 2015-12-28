@@ -10,6 +10,7 @@ class Sala {
 	/*int dano;*/
 	bool operada;
 	int oxigenio;
+	bool brecha;
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
@@ -22,6 +23,7 @@ public:
 	
 	int getIntegridade()const;
 	void setIntegridade(int valor_integridade);
+	void reduzIntegridade(int valor_reduzir);
 	
 	/*int getDano()const;
 	void setDano(int oper_dano);*/
@@ -30,7 +32,11 @@ public:
 	void setOperada(bool valor);
 
 	int getOxigenio()const;
+	void aumentaOxigenio(int oxig_aumentar);
 	void reduzOxigenio(int oxig_reduzir);
+
+	bool getBrecha()const;
+	void setBrecha(bool valor);
 	
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 	void remover_Unidade(Unidade *unidade_a_remover);
@@ -45,6 +51,9 @@ public:
 	void unidades_actuar_inicio();
 	void unidades_actuar_fim();
 
+	// Virtual functions
+	virtual int getEscudo()const { return 0; };
+	virtual void reduzEscudo(int val_reduzir) {};
 };
 
 class SalaPropulsor : public Sala {
@@ -61,11 +70,16 @@ public:
 class SalaSuportedeVida : public Sala {
 public:
 	SalaSuportedeVida(string tipo);
+	void salas_actuar_fim(Nave *n);
 };
 
 class SalaControlodeEscudo : public Sala {
+	int escudo;
 public:
 	SalaControlodeEscudo(string tipo);
+	void salas_actuar_fim(Nave *n);
+	int getEscudo()const;
+	void reduzEscudo(int val_reduzir);
 };
 
 class SalaPonte : public Sala {
