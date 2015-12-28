@@ -73,14 +73,21 @@ public:
 		cout << "Este ser e toxico" << endl;
 	};
 	void actua_car_inicio(Unidade *u) {
+		int existe_toxico;
 		Toxico *t = new Toxico(0);
 		//bool unidade_toxica = false;
 		Sala *p = u->getOndeEstou();
-		for (unsigned int i = 0; i < p->countUnidades(); i++)
-			for (unsigned int j = 0; j < p->getUnidadePosicao(i)->countCaracteristicas(); j++)
-				if (p->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t)
-					p->getUnidadePosicao(i)->LevaDano(dano_toxico);
-
+		for (unsigned int i = 0; i < p->countUnidades(); i++) {
+			existe_toxico = 0;
+			for (unsigned int j = 0; j < p->getUnidadePosicao(i)->countCaracteristicas(); j++) {
+				if (p->getUnidadePosicao(i)->getCaracteristicaPosicao(j) == t) {
+					existe_toxico = 1;
+				}
+			}
+			if (existe_toxico != 1) {
+				p->getUnidadePosicao(i)->LevaDano(dano_toxico);
+			}
+		}
 		
 	}
 };
