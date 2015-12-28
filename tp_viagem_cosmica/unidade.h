@@ -9,6 +9,7 @@ class Unidade{
 	int id_unidade;
 	static int conta_unidades;
 	Sala *ondestou;
+	Sala *ondestava;
 	vector <Caracteristica*> vect_car;
 public:
 	Unidade(string tipo, int pv);
@@ -26,7 +27,9 @@ public:
 	}
 	
 	Sala *getOndeEstou()const;
+	Sala * getOndeEstava() const;
 	void setOndeEstou(Sala *s);
+	void setOndeEstava(Sala * s);
 	void mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova);
 	
 	void setCaracteristica(Caracteristica *p);

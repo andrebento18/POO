@@ -44,6 +44,7 @@ public:
 
 	void unidades_actuar_inicio();
 	void unidades_actuar_fim();
+
 };
 
 class SalaPropulsor : public Sala {

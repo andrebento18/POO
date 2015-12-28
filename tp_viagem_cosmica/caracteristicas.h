@@ -1,6 +1,12 @@
 #pragma once
 #include "unidade.h"
 #include "sala.h"
+#include "nave.h"
+
+int random_car(int min, int max) {
+	return min + rand() % (max - min + 1);
+}
+
 class Caracteristica {
 public:
 	Caracteristica() {
@@ -59,25 +65,50 @@ public:
 	}
 };
 
+//PENSO QUE SEJA ASSIM
 class Toxico : public Caracteristica {
+	int dano_toxico;
 public:
-	Toxico(void) {
+	Toxico(int toxicidade):dano_toxico(toxicidade) {
 		cout << "Este ser e toxico" << endl;
 	};
 	void actua_car_inicio(Unidade *u) {
-		/*bool unidade_toxica = false;
+		Toxico *t = new Toxico(0);
+		//bool unidade_toxica = false;
 		Sala *p = u->getOndeEstou();
 		for (unsigned int i = 0; i < p->countUnidades(); i++)
 			for (unsigned int j = 0; j < p->getUnidadePosicao(i)->countCaracteristicas(); j++)
-				if(p->getUnidadePosicao(i)->getCaracteristicaPosicao(j) == */
-		cout << "...IMPLEMENTAR CAR.TOXICO" << endl;
+				if (p->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t)
+					p->getUnidadePosicao(i)->LevaDano(dano_toxico);
+
+		
 	}
 };
-
+//PENSO QUE SEJA ASSIM
 class Indeciso : public Caracteristica {
+	int ignora_actua_inicio;
 public:
-	Indeciso(void) {};
-	/*NAO FACO MINIMA IDEIA COMO SE PODE IMPLEMENTAR ISTO?????????????????????*/
+	Indeciso(void) {
+		ignora_actua_inicio = 0;
+	};
+	//PENSO QUE SEJA ASSIM
+	void actua_car_inicio(Unidade *u) {
+		int x = random_car(1, 2);
+
+		if (x == 1 && ignora_actua_inicio == 0) {
+			ignora_actua_inicio = 1;
+		}
+		else if (ignora_actua_inicio == 1) {
+			ignora_actua_inicio = 0;
+		}
+	}
+	
+	void actua_car_fim(Unidade *u) {
+		if (ignora_actua_inicio==1)
+		{
+			u->setOndeEstou(u->getOndeEstava());
+		}
+	}
 };
 
 class Misterioso : public Caracteristica {
@@ -87,18 +118,21 @@ public:
 		count_turnos = 0;
 		cout << "Sou um ser misterioso" << endl;
 	};
-	// NAO SEI BEM COMO SE FAZ
-	/*void actua_car_fim(Unidade *u) {
-		int x = random(1, 4);
+	// PENSO QUE SEJA ASSIM QUE FUNCIONE 
+	// RETIREI O REMOVER UNIDADE DA SALA PORQUE A FUNÇÃO MOVER JÁ FAZ ISSO
+	//CRIEI A RANDOM CAR AQUI PORQUE A FUNÇÃO RANDOM ESTAVA A DAR ERRO NÃO SEI PORQUE
+	void actua_car_fim(Unidade *u, Nave *n) {
+		int x = random_car(1, 4);
 		if (x == 1 && count_turnos == 0) {
 			count_turnos = 1;
 		}
 		else if (count_turnos == 1) {
-			int sala_escolhida = random(1, 12);
+			int sala_escolhida = random_car(1, 12);
 			u->getOndeEstou()->remover_Unidade(u);
-			u->mover_unidade(u->getID_Unidade(), )
+			u->mover_unidade(u->getID_Unidade(), u->getOndeEstou(), n->getSala(sala_escolhida));
+			int indeciso = random_car(1, 2);
 		}
-	}*/
+	}
 };
 
 class Regenerador : public Caracteristica {
@@ -115,7 +149,10 @@ public:
 	}
 };
 
-//class Exoesqueleto
+class Exoesqueleto{
+public:
+	Exoesqueleto() {};
+};
 
 class Reparador : public Caracteristica {
 	int cap_reparar;
@@ -132,11 +169,20 @@ public:
 
 class Operador : public Caracteristica {
 public:
-	Operador() {};
+	Operador() {
+	};
 	void actua_car_inicio(Unidade *u) {
-		//FLATA VERIFICAR TAMBÉM SE A UNIDADE NAO ESTA EM COMBATE ???????
+		/*Tripulacao *t = new Tripulacao;
+		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) 
+				{
+					u->getOndeEstou()->setOperada(false);	
+				}
+			}
+		}
 		if (u->getOndeEstou()->getIntegridade() == 100)
-			u->getOndeEstou()->setOperada(true);
+			u->getOndeEstou()->setOperada(true);*/
 	}
 };
 
@@ -154,7 +200,7 @@ public:
 		//		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 		//			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
 		//				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j) != t) {
-		//				//Colocar Operador = FALSE
+		//						u->getOndeEstou()->setOperada(true);
 		//					//Depois de implementar o Operador
 		//				}
 		//			}
@@ -164,6 +210,9 @@ public:
 };
 
 class Tripulacao : public Caracteristica {
+	string tripulacao;
 public:
-	Tripulacao() {};
+	Tripulacao() {
+		tripulacao = "TRIPULACAO";
+	};
 };

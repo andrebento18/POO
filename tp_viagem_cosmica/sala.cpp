@@ -126,12 +126,19 @@ void Sala::unidades_actuar_fim() {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
 		unidades[i]->actua_fim();
 	}
+
+	for (unsigned int i = 0; i < unidades.size(); i++) {
+		if (unidades[i]->getOndeEstava() != NULL) {
+			unidades[i]->setOndeEstava(NULL);
+		}
+	}
 }
 
 Unidade * Sala::getUnidadePosicao(int posicao) const
 {
 	return unidades[posicao];
 }
+
 
 ////////// SALAS PREDEFINIDAS ///////////
 

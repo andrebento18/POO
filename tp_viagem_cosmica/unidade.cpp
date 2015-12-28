@@ -16,6 +16,7 @@ Unidade::Unidade(string tipo, int pv) {
 	ponto_vida = pv;
 	ponto_vida_inicial = pv;
 	ondestou = NULL;
+	ondestava = NULL;
 }
 
 Unidade::~Unidade() {
@@ -64,11 +65,22 @@ Sala * Unidade::getOndeEstou()const
 	return ondestou;
 }
 
+Sala * Unidade::getOndeEstava()const
+{
+	return ondestava;
+}
+
 void Unidade::setOndeEstou(Sala *s){
 	ondestou = s;
 }
 
+void Unidade::setOndeEstava(Sala *s) {
+	ondestava = s;
+}
+
 void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) {
+	
+	this->setOndeEstava(sala_antiga);
 	sala_antiga->remover_Unidade(this);
 	setOndeEstou(NULL);
 	sala_nova->adicionar_Unidade(this);
