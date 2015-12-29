@@ -209,6 +209,7 @@ void Sala::salas_actuar_fim(Nave *n) {
 	sala_a_arder = this->getID();
 	if (getFogo() == true) {
 		// Dano causado pelo Fogo à sala
+																			//PODIA SER ATRAVES DA NAVE******
 		if (random(1, 2) == 1) {
 			reduzIntegridade(10);
 			
@@ -294,15 +295,15 @@ void Sala::salas_actuar_fim(Nave *n) {
 
 }
 
-void Sala::unidades_actuar_inicio() {
+void Sala::unidades_actuar_inicio(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
-		unidades[i]->actua_inicio();
+		unidades[i]->actua_inicio(n);
 	}
 }
 
-void Sala::unidades_actuar_fim() {
+void Sala::unidades_actuar_fim(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
-		unidades[i]->actua_fim();
+		unidades[i]->actua_fim(n);
 	}
 
 	for (unsigned int i = 0; i < unidades.size(); i++) {
@@ -410,11 +411,6 @@ SalaSistemadeSegInterno::SalaSistemadeSegInterno(string tipo):Sala(tipo){
 	cout << "Sistema de Seguranca Interno adicionado" << endl;
 }
 
-//PENSO QUE SEJA ASSIM POIS NO ENUNCIADO DIZ
-/*Esta sala oferece um sistema automático de vigilância e combate.
-No final do turno, dá 1 ponto de dano a todas as entidades inimigas envolvidas 
-em combate com tripulantes nesta sala e nas salas adjacentes (a norte, sul, este e oeste). 
-Este sistema só funciona se não estiver danificado. O dano pode ser prevenido.*/
 void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 	int tripulante_encontrado=0;
 	
@@ -423,8 +419,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 		if (n->getSala(this->getID())->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
 			for (int j = 0; j < n->getSala(this->getID())->countUnidades(); j++) {
 				for (int z = 0; z < n->getSala(this->getID())->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-					if (n->getSala(this->getID())->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+					if (n->getSala(this->getID())->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao"){
 						tripulante_encontrado = 1;
+						break;
+					}
 				}
 
 				if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE

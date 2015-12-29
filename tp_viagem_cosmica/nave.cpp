@@ -233,7 +233,7 @@ void Nave::inicio_turno() {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL) {
-				salas[i][j]->unidades_actuar_inicio();
+				salas[i][j]->unidades_actuar_inicio(this);
 				salas[i][j]->salas_actuar_inicio(this);
 			}
 }
@@ -242,7 +242,7 @@ void Nave::fim_turno() {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL) {
-				salas[i][j]->unidades_actuar_fim();
+				salas[i][j]->unidades_actuar_fim(this);
 				salas[i][j]->salas_actuar_fim(this);
 			}
 }

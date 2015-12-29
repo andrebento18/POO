@@ -20,9 +20,13 @@ public:
 	//void setTipoCaracterisca(string nome) {
 	//	tipo = nome;
 	//}
-	virtual void actua_car_inicio(Unidade *u) {
+	virtual void actua_car_inicio(Unidade *u, Nave *n=NULL) {
 	};
-	virtual void actua_car_fim(Unidade *u) {
+	virtual void actua_car_fim(Unidade *u, Nave *n=NULL) {
+	};
+
+	virtual int getArmacao(void) {
+		return 0;
 	};
 };
 
@@ -219,8 +223,19 @@ public:
 				escolhe_alvo = random(0, u->getOndeEstou()->countUnidades());
 				for (unsigned int j = 0; j < u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->countCaracteristicas(); j++) {
 					if (u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->getCaracteristicaPosicao(j)->getTipoCaracterisca() == "Tripulacao") {
-						continue;
+						elemento_trip = 1;
+						break;
 					}
+				}
+				if (elemento_trip != 1) {
+					int dano_armado = 0;
+					for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+						if (u->getCaracteristicaPosicao(j)->getTipoCaracterisca() == "Armado") {
+							dano_armado = u->getCaracteristicaPosicao(j)->getArmacao();
+						}	
+					}
+					u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->LevaDano(dano_armado + capacidade_combate);
+					break;
 				}
 			} while (ja_ataquei != 1);
 		}
@@ -282,3 +297,65 @@ public:
 		cout << "Faco parte da tripulacao da nave" << endl;
 	}
 };
+
+class Armado : public Caracteristica {
+	int capacidade_armacao;
+public:
+	Armado(int armado) :Caracteristica("Armado"), capacidade_armacao(armado) {
+		cout << "Estou Armado" << endl;
+	}
+	int getArmacao(void) {
+		return capacidade_armacao;
+	};
+};
+
+class Move : public Caracteristica {
+	int prob_movimento;
+public:
+	Move(int pmovimento) :Caracteristica("Move"), prob_movimento(pmovimento) {
+		cout << "Sou capaz de me mover!" << endl;
+	}
+	void actua_car_inicio(Unidade *u, Nave *n) {
+		// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
+		for (int i = 0; i <= 2; i++)
+			for (int j = 0; j <= 4; j++)
+				if (n->getsalas[i][j] != NULL)
+					if (salas[i][j]->getID() == id_sala) {
+						if (comando_direcao == "cima") {
+							if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
+								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
+								break;
+							}
+							else
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
+						}
+						else if (comando_direcao == "baixo") {
+							if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
+								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
+								break;
+							}
+							else
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
+						}
+						else if (comando_direcao == "direita") {
+							if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
+								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+								break;
+							}
+							else
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j + 1]);
+						}
+						else if (comando_direcao == "esquerda") {
+							if (j == 0 && j == 1 && i == 1) {
+								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+								break;
+							}
+							else
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j - 1]);
+						}
+						else
+							cout << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
+					}
+	};
+};
+

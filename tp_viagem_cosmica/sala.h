@@ -57,8 +57,8 @@ public:
 	virtual void salas_actuar_inicio(Nave *n);
 	virtual void salas_actuar_fim(Nave *n);
 
-	void unidades_actuar_inicio();
-	void unidades_actuar_fim();
+	void unidades_actuar_inicio(Nave *n);
+	void unidades_actuar_fim(Nave *n);
 
 	virtual int getEscudo()const { return 0; };
 	virtual void reduzEscudo(int val_reduzir) {};

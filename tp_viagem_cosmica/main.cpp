@@ -204,6 +204,7 @@ void viagem(Nave *nave, double nvl) {
 	/////////////// VIAGEM ///////////////
 	int turnos = 0;
 	int event_ocurr = 0;
+
 	do {
 		c.clrscr();
 		// 1. INICIO DO TURNO

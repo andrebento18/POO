@@ -41,8 +41,8 @@ public:
 	Caracteristica *getCaracteristicaPosicao(int posicao);
 	unsigned int countCaracteristicas()const;
 
-	void actua_inicio();
-	void actua_fim();
+	void actua_inicio(Nave *n);
+	void actua_fim(Nave *n);
 };
 
 class MembroTripulacao : public Unidade {
