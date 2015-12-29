@@ -173,6 +173,7 @@ public:
 };
 
 class Tripulacao : public Caracteristica {
+	// adicionar à base e criar funções getCar()
 	string tripulacao;
 public:
 	Tripulacao() {

@@ -315,12 +315,16 @@ void dano_meteoritos(Nave *n, int n_meteoritos) {
 }
 
 void dano_piratas(Nave *n, int dano_ataque_piratas) {
-	// FALTA COLOCAR INCEDIO CURTO CIRCUITO OU BRECHA NA SALA ???????????????????????????????????????????????????????????????????????????????????????????
-	// VER ENUNCIDAO EVENTO ATAQUE PIRATAS
 	if (dano_ataque_piratas > n->getSala(7)->getEscudo()) {
 		int excesso = dano_ataque_piratas - n->getSala(7)->getEscudo();
 		int sala_random = random(1, 12);
 		n->getSala(sala_random)->reduzIntegridade(excesso);
+		int problema = random(1, 3);
+		switch (problema) {
+			case 1: n->getSala(sala_random)->setFogo(true);
+			case 2: n->getSala(sala_random)->setBrecha(true);
+			case 3: n->getSala(sala_random)->setCurtoCircuito(true);
+		}
 	}
 	else
 		n->getSala(7)->reduzEscudo(dano_ataque_piratas);
@@ -376,6 +380,8 @@ void Nave::evento() {
 		cout << "ATAQUE DOS PIRATAS" << endl;
 		// Dano provocado pelo disparo dos piratas
 		int dano_disparo_piratas = random(30, 60);
+
+		dano_piratas(this, dano_disparo_piratas);
 
 		// Check quantos raio laser operados existem na nave
 		int raio_laser_oper = 0;
