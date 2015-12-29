@@ -113,6 +113,7 @@ public:
 class SalaSistemadeSegInterno : public Sala {
 public:
 	SalaSistemadeSegInterno(string tipo);
+	void salas_actuar_fim(Nave * n);
 };
 
 class SalaEnfermaria : public Sala {

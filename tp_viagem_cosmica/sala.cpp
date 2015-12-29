@@ -5,6 +5,7 @@ using namespace std;
 
 #include "sala.h"
 #include "nave.h"
+#include "caracteristicas.h"
 
 int random(int min, int max);
 
@@ -197,16 +198,84 @@ void Sala::salas_actuar_inicio(Nave *n) {
 
 void Sala::salas_actuar_fim(Nave *n) {
 	// Fogo
+	int sala_a_arder = 0;
+	sala_a_arder = this->getID();
 	if (getFogo() == true) {
 		// Dano causado pelo Fogo à sala
 		if (random(1, 2) == 1) {
 			reduzIntegridade(10);
+			
+			if (sala_a_arder == 8 && random(1, 5) == 1) {//ponte, mas com duvida por causa do escudo???????????????????????????????
+				n->getSala(7)->setFogo(true);
+			}
+			if (sala_a_arder == 1 && random(1, 5) == 1) {
+				n->getSala(2)->setFogo(true);
+			}
+			if (sala_a_arder == 2) {
+				if (random(0, 100) < 5)
+					n->getSala(1)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(3)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(5)->setFogo(true);
+			}
+			if (sala_a_arder == 3) {
+				if (random(0, 100) < 5)
+					n->getSala(2)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(4)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(6)->setFogo(true);
+			}
+			if (sala_a_arder == 4 || this->getID() == 12)
+			{
+				if (random(0, 100) < 5)
+					n->getSala(7)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(sala_a_arder--)->setFogo(true);
+			}
+			if (sala_a_arder == 6) {
+				if (random(0, 100) < 5)
+					n->getSala(3)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(5)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(11)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(7)->setFogo(true);
+			}
+			if (sala_a_arder == 7) {
+				if (random(0, 100) < 5)
+					n->getSala(8)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(6)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(4)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(12)->setFogo(true);
+			}
+			if (sala_a_arder == 9 && random(1, 5) == 1) {
+				n->getSala(10)->setFogo(true);
+			}
+			if (sala_a_arder == 10) {
+				if (random(0, 100) < 5)
+					n->getSala(11)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(9)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(5)->setFogo(true);
+			}
+			if (sala_a_arder == 11) {
+				if (random(0, 100) < 5)
+					n->getSala(10)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(12)->setFogo(true);
+				if (random(0, 100) < 5)
+					n->getSala(6)->setFogo(true);
+			}
 		}
-		// Norte sul este oeste
-		// Dano causado pelo Fogo às salas adjacentes
-		// ?????????????????????????????????????????????????????????????????????????????????????????????????????????
 	}
-
+	
 	// Curto-circuito
 	if (getCurtoCircuito() == true) {
 		if (random(1, 4) == 1) {
@@ -332,6 +401,213 @@ void SalaAutoReparador::salas_actuar_fim(Nave *n) {
 
 SalaSistemadeSegInterno::SalaSistemadeSegInterno(string tipo):Sala(tipo){
 	cout << "Sistema de Seguranca Interno adicionado" << endl;
+}
+
+//PENSO QUE SEJA ASSIM POIS NO ENUNCIADO DIZ
+/*Esta sala oferece um sistema automático de vigilância e combate.
+No final do turno, dá 1 ponto de dano a todas as entidades inimigas envolvidas 
+em combate com tripulantes nesta sala e nas salas adjacentes (a norte, sul, este e oeste). 
+Este sistema só funciona se não estiver danificado. O dano pode ser prevenido.*/
+void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
+	int tripulante_encontrado=0;
+	
+	if (this->getIntegridade() == 100) { // só funciona se estiver sem dano nenhum
+
+		if (n->getSala(this->getID())->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+			for (int j = 0; j < n->getSala(this->getID())->countUnidades(); j++) {
+				for (int z = 0; z < n->getSala(this->getID())->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					if (n->getSala(this->getID())->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+						tripulante_encontrado = 1;
+				}
+
+				if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+					n->getSala(this->getID())->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+				}
+				else
+				{
+					tripulante_encontrado = 0;
+				}
+			}
+		}
+		for (int i = 1; i <= 12; i++) {
+			int sala_seg_interna = n->getSala(i)->getID();
+
+			if (sala_seg_interna == 2 || sala_seg_interna == 3) {
+				sala_seg_interna++; //sala a direita
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+
+
+				sala_seg_interna - 2; //sala da esquerda a começar a partir da sala a direita da sala de segurança interna
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+
+				sala_seg_interna + 4; //sala de baixo a começar da sala à esquerda da sala de segurnaça interna
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+				sala_seg_interna = n->getSala(i)->getID(); // volta a colocar o id da sala de segurança ao original, para não entrar em conflito com as restantes restrições
+			}
+
+			if (sala_seg_interna == 10 || sala_seg_interna == 11) {
+				sala_seg_interna - 5; //sala de cima a começar da sala de segurnaça interna são menos 5 unidades
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+
+				sala_seg_interna + 4; //sala de esquerda a começar da sala a cima da sala segurança interna são mais 4 unidades
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+
+				sala_seg_interna + 2; //sala de direita a começar da sala à esquerda da sala segurança interna são mais 2 unidades
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+				sala_seg_interna = n->getSala(i)->getID();
+			}
+
+			if (sala_seg_interna == 12 || sala_seg_interna == 4) {
+				sala_seg_interna--; //sala a esquerda
+				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+								tripulante_encontrado = 1;
+						}
+
+						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+						}
+						else
+						{
+							tripulante_encontrado = 0;
+						}
+					}
+				}
+
+				sala_seg_interna = n->getSala(i)->getID();
+				if (sala_seg_interna == 4) {
+					sala_seg_interna + 3;
+					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+						for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+							for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+									tripulante_encontrado = 1;
+							}
+
+							if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+								n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+							}
+							else
+							{
+								tripulante_encontrado = 0;
+							}
+						}
+					}
+				}
+				else { // ele na sala 12 tem que dar dano na sala de cima que fica a menos 5 unidades da sala em que está
+					sala_seg_interna - 5;
+					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
+						for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+							for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
+									tripulante_encontrado = 1;
+							}
+
+							if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
+								n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
+							}
+							else
+							{
+								tripulante_encontrado = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 SalaEnfermaria::SalaEnfermaria(string tipo):Sala(tipo){
