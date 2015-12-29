@@ -54,6 +54,13 @@ void Sala::setIntegridade(int valor_integridade) {
 	}
 }
 
+void Sala::aumentaIntergridade(int valor_aumentar){
+	if (getIntegridade() + valor_aumentar > 100)
+		integridade = 100;
+	else
+		integridade += valor_aumentar;
+}
+
 void Sala::reduzIntegridade(int valor_reduzir){
 	if (getIntegridade() - valor_reduzir < 0)
 		integridade = 0;

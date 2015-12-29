@@ -25,6 +25,7 @@ public:
 	
 	int getIntegridade()const;
 	void setIntegridade(int valor_integridade);
+	void aumentaIntergridade(int valor_aumentar);
 	void reduzIntegridade(int valor_reduzir);
 	
 	/*int getDano()const;

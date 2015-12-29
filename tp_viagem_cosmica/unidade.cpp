@@ -30,8 +30,7 @@ string Unidade::toString()const {
 	return os.str();
 }
 
-string Unidade::getNome() const
-{
+string Unidade::getNome() const{
 	return nome;
 }
 
@@ -68,13 +67,11 @@ void Unidade::LevaDano(int dano_recebido){
 	}
 }
 
-Sala * Unidade::getOndeEstou()const
-{
+Sala * Unidade::getOndeEstou()const{
 	return ondestou;
 }
 
-Sala * Unidade::getOndeEstava()const
-{
+Sala * Unidade::getOndeEstava()const{
 	return ondestava;
 }
 
@@ -87,7 +84,6 @@ void Unidade::setOndeEstava(Sala *s) {
 }
 
 void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) {
-	
 	this->setOndeEstava(sala_antiga);
 	sala_antiga->remover_Unidade(this);
 	setOndeEstou(NULL);
