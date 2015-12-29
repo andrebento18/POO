@@ -62,213 +62,138 @@ bool verifica_derrota(Nave *nave) {
 		return 0;
 }
 
-void interface_nave(Nave *nave, int turnos) {
+void interface_nave(Nave *nave, int turnos, int nvl) {
 	Consola c;
 	c.clrscr();
 
 	cout << "Turno(s): " << turnos << "\t\t\t\tTripulacao: " << nave->countTripulacao() << " unidade(s)" << "\t\t\t\t\tInterface grafica da nave:" << endl;
+	c.gotoxy(80, 3);
+	cout << "Distancia total percorrida: " << nave->getDistancia() << " milhas\t\t\tFaltam: " << (4000 + 1000 * nvl) - nave->getDistancia() << " milhas para completar a missao";
 
-	// LINHA VERTICAL
-	for (int i = 0; i < 48; i++) {
-		c.gotoxy(69, i);
-		cout << (char)179 << endl;
-		c.gotoxy(70, i);
-		cout << (char)179 << endl;
-	}
-
-	// 1ª LINHA
-	c.gotoxy(80, 5);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(80, 6);
-	cout << (char)179 << (char)176 << "SALA:1" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 7);
-	cout << (char)179 << (char)176 << "INTG: " << nave->getSala(1)->getIntegridade() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 8);
-	cout << (char)179 << (char)176 << "OXIG: " << nave->getSala(1)->getOxigenio() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 9);
-	cout << (char)179 << (char)176 << "OPER: " << nave->getSala(1)->getOperada() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 10);
-	cout << (char)179 << (char)176 << "BREC: " << nave->getSala(1)->getBrecha() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 11);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(100, 5);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(100, 6);
-	cout << (char)179 << (char)176 << "SALA:2" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 7);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 8);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 9);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 10);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 11);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(120, 5);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(120, 6);
-	cout << (char)179 << (char)176 << "SALA:3" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 7);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 8);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 9);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 10);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 11);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(140, 5);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(140, 6);
-	cout << (char)179 << (char)176 << "SALA:4" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 7);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 8);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 9);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 10);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 11);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	// 2ª LINHA
-
-	c.gotoxy(100, 12);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(100, 13);
-	cout << (char)179 << (char)176 << "SALA:5" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 14);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 15);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 16);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 17);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 18);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(120, 12);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(120, 13);
-	cout << (char)179 << (char)176 << "SALA:6" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 14);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 15);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 16);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 17);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 18);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(140, 12);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(140, 13);
-	cout << (char)179 << (char)176 << "SALA:7" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 14);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 15);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 16);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 17);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 18);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(160, 12);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(160, 13);
-	cout << (char)179 << (char)176 << "SALA:8" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(160, 14);
-	cout << (char)179 << (char)176 << "INTG: " << nave->getSala(8)->getIntegridade() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(160, 15);
-	cout << (char)179 << (char)176 << "OXIG: " << nave->getSala(8)->getOxigenio() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(160, 16);
-	cout << (char)179 << (char)176 << "OPER: " << nave->getSala(8)->getOperada() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(160, 17);
-	cout << (char)179 << (char)176 << "BREC: " << nave->getSala(8)->getBrecha() << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(160, 18);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	// 3ª LINHA
-	c.gotoxy(80, 19);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(80, 20);
-	cout << (char)179 << (char)176 << "SALA:9" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 21);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 22);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 23);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 24);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(80, 25);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(100, 19);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(100, 20);
-	cout << (char)179 << (char)176 << "SALA:10" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 21);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 22);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 23);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 24);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(100, 25);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(120, 19);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(120, 20);
-	cout << (char)179 << (char)176 << "SALA:11" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 21);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 22);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 23);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 24);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(120, 25);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	c.gotoxy(140, 19);
-	cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
-	c.gotoxy(140, 20);
-	cout << (char)179 << (char)176 << "SALA:12" << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 21);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 22);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 23);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 24);
-	cout << (char)179 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)176 << (char)179 << '\n';
-	c.gotoxy(140, 25);
-	cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
-
-	for (int i = 3; i == 33; i += 10) {
-		for (int j = 1; j <= 12; j++) {
-			c.gotoxy(80, i);
-			cout << "INTG: " << nave->getSala(j)->getIntegridade() << endl;
+	// Desenha centro da nave
+	for (int i = 0; i <= 180; i++) {
+		for (int j = 0; j <= 25; j++) {
+			c.gotoxy(i, j);
+			// 1ª linha horizontal
+			if ((i == 80 || i == 100 || i == 120 || i == 140) && j == 5)
+				cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
+			// 2ª linha horizontal
+			if ((i == 80 || i == 100 || i == 120 || i == 140) && j == 11)
+				cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
+			// 3ª linha horizontal
+			if ((i == 100 || i == 120 || i == 140 || i == 160) && j == 12)
+				cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
+			// 4ª linha horizontal
+			if ((i == 100 || i == 120 || i == 140 || i == 160) && j == 18)
+				cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
+			// 5 ªlinha horizontal
+			if ((i == 80 || i == 100 || i == 120 || i == 140) && j == 19)
+				cout << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << '\n';
+			// 6ª linha horizontal
+			if ((i == 80 || i == 100 || i == 120 || i == 140) && j == 25)
+				cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
+			// linhas verticais propulsores
+			if((i == 80 || i == 99) && ((j > 5 && j < 11) || (j > 19 && j < 25)))
+				cout << (char)179;
+			// linhas verticais centro ESQ
+			if ((i == 100 || i == 120 || i == 140) && ((j > 5 && j < 11) || (j > 12 && j < 18) || (j > 19 && j < 25)))
+				cout << (char)179;
+			// linhas verticais centro DIR
+			if ((i == 119 || i == 139 || i == 159) && ((j > 5 && j < 11) || (j > 12 && j < 18) || (j > 19 && j < 25)))
+				cout << (char)179;
+			// linhas verticais ponte
+			if ((i == 160 || i == 179) && (j > 12 && j < 18))
+				cout << (char)179;
 		}
 	}
 
+	// Stats Salas
+	// Sala 1
+	c.gotoxy(81, 6); cout << "SALA 1";
+	c.gotoxy(81, 7); cout << "INTG: " << nave->getSala(1)->getIntegridade();
+	c.gotoxy(81, 8); cout << "OXIG: " << nave->getSala(1)->getOxigenio();
+	c.gotoxy(81, 9); cout << "OPER: " << nave->getSala(1)->getOperada() << "    FOGO: " << nave->getSala(1)->getFogo();
+	c.gotoxy(81, 10); cout << "BREC: " << nave->getSala(1)->getBrecha() << "    CUCR: " << nave->getSala(1)->getCurtoCircuito();
+
+	// Sala 2
+	c.gotoxy(101, 6); cout << "SALA 2";
+	c.gotoxy(101, 7); cout << "INTG: " << nave->getSala(2)->getIntegridade();
+	c.gotoxy(101, 8); cout << "OXIG: " << nave->getSala(2)->getOxigenio();
+	c.gotoxy(101, 9); cout << "OPER: " << nave->getSala(2)->getOperada() << "    FOGO: " << nave->getSala(2)->getFogo();
+	c.gotoxy(101, 10); cout << "BREC: " << nave->getSala(2)->getBrecha() << "    CUCR: " << nave->getSala(2)->getCurtoCircuito();
+
+	// Sala 3
+	c.gotoxy(121, 6); cout << "SALA 3";
+	c.gotoxy(121, 7); cout << "INTG: " << nave->getSala(3)->getIntegridade();
+	c.gotoxy(121, 8); cout << "OXIG: " << nave->getSala(3)->getOxigenio();
+	c.gotoxy(121, 9); cout << "OPER: " << nave->getSala(3)->getOperada() << "    FOGO: " << nave->getSala(3)->getFogo();
+	c.gotoxy(121, 10); cout << "BREC: " << nave->getSala(3)->getBrecha() << "    CUCR: " << nave->getSala(3)->getCurtoCircuito();
+
+	// Sala 4
+	c.gotoxy(141, 6); cout << "SALA 4";
+	c.gotoxy(141, 7); cout << "INTG: " << nave->getSala(4)->getIntegridade();
+	c.gotoxy(141, 8); cout << "OXIG: " << nave->getSala(4)->getOxigenio();
+	c.gotoxy(141, 9); cout << "OPER: " << nave->getSala(4)->getOperada() << "    FOGO: " << nave->getSala(4)->getFogo();
+	c.gotoxy(141, 10); cout << "BREC: " << nave->getSala(4)->getBrecha() << "    CUCR: " << nave->getSala(4)->getCurtoCircuito();
+
+	// Sala 5
+	c.gotoxy(101, 13); cout << "SALA 5";
+	c.gotoxy(101, 14); cout << "INTG: " << nave->getSala(5)->getIntegridade();
+	c.gotoxy(101, 15); cout << "OXIG: " << nave->getSala(5)->getOxigenio();
+	c.gotoxy(101, 16); cout << "OPER: " << nave->getSala(5)->getOperada() << "    FOGO: " << nave->getSala(5)->getFogo();
+	c.gotoxy(101, 17); cout << "BREC: " << nave->getSala(5)->getBrecha() << "    CUCR: " << nave->getSala(5)->getCurtoCircuito();
+
+	// Sala 6
+	c.gotoxy(121, 13); cout << "SALA 6";
+	c.gotoxy(121, 14); cout << "INTG: " << nave->getSala(6)->getIntegridade();
+	c.gotoxy(121, 15); cout << "OXIG: " << nave->getSala(6)->getOxigenio();
+	c.gotoxy(121, 16); cout << "OPER: " << nave->getSala(6)->getOperada() << "    FOGO: " << nave->getSala(6)->getFogo();
+	c.gotoxy(121, 17); cout << "BREC: " << nave->getSala(6)->getBrecha() << "    CUCR: " << nave->getSala(6)->getCurtoCircuito();
+
+	// Sala 7
+	c.gotoxy(141, 13); cout << "SALA 7";
+	c.gotoxy(141, 14); cout << "INTG: " << nave->getSala(7)->getIntegridade();
+	c.gotoxy(141, 15); cout << "OXIG: " << nave->getSala(7)->getOxigenio();
+	c.gotoxy(141, 16); cout << "OPER: " << nave->getSala(7)->getOperada() << "    FOGO: " << nave->getSala(7)->getFogo();
+	c.gotoxy(141, 17); cout << "BREC: " << nave->getSala(7)->getBrecha() << "    CUCR: " << nave->getSala(7)->getCurtoCircuito();
+
+	// Sala 8
+	c.gotoxy(161, 13); cout << "SALA 8";
+	c.gotoxy(161, 14); cout << "INTG: " << nave->getSala(8)->getIntegridade();
+	c.gotoxy(161, 15); cout << "OXIG: " << nave->getSala(8)->getOxigenio();
+	c.gotoxy(161, 16); cout << "OPER: " << nave->getSala(8)->getOperada() << "    FOGO: " << nave->getSala(8)->getFogo();
+	c.gotoxy(161, 17); cout << "BREC: " << nave->getSala(8)->getBrecha() << "    CUCR: " << nave->getSala(8)->getCurtoCircuito();
+
+	// Sala 9
+	c.gotoxy(81, 20); cout << "SALA 9";
+	c.gotoxy(81, 21); cout << "INTG: " << nave->getSala(9)->getIntegridade();
+	c.gotoxy(81, 22); cout << "OXIG: " << nave->getSala(9)->getOxigenio();
+	c.gotoxy(81, 23); cout << "OPER: " << nave->getSala(9)->getOperada() << "    FOGO: " << nave->getSala(9)->getFogo();
+	c.gotoxy(81, 24); cout << "BREC: " << nave->getSala(9)->getBrecha() << "    CUCR: " << nave->getSala(9)->getCurtoCircuito();
+
+	// Sala 10
+	c.gotoxy(101, 20); cout << "SALA 10";
+	c.gotoxy(101, 21); cout << "INTG: " << nave->getSala(10)->getIntegridade();
+	c.gotoxy(101, 22); cout << "OXIG: " << nave->getSala(10)->getOxigenio();
+	c.gotoxy(101, 23); cout << "OPER: " << nave->getSala(10)->getOperada() << "    FOGO: " << nave->getSala(10)->getFogo();
+	c.gotoxy(101, 24); cout << "BREC: " << nave->getSala(10)->getBrecha() << "    CUCR: " << nave->getSala(10)->getCurtoCircuito();
+	
+	// Sala 11
+	c.gotoxy(121, 20); cout << "SALA 11";
+	c.gotoxy(121, 21); cout << "INTG: " << nave->getSala(11)->getIntegridade();
+	c.gotoxy(121, 22); cout << "OXIG: " << nave->getSala(11)->getOxigenio();
+	c.gotoxy(121, 23); cout << "OPER: " << nave->getSala(11)->getOperada() << "    FOGO: " << nave->getSala(11)->getFogo();
+	c.gotoxy(121, 24); cout << "BREC: " << nave->getSala(11)->getBrecha() << "    CUCR: " << nave->getSala(11)->getCurtoCircuito();
+
+	// Sala 12
+	c.gotoxy(141, 20); cout << "SALA 12";
+	c.gotoxy(141, 21); cout << "INTG: " << nave->getSala(12)->getIntegridade();
+	c.gotoxy(141, 22); cout << "OXIG: " << nave->getSala(12)->getOxigenio();
+	c.gotoxy(141, 23); cout << "OPER: " << nave->getSala(12)->getOperada() << "    FOGO: " << nave->getSala(12)->getFogo();
+	c.gotoxy(141, 24); cout << "BREC: " << nave->getSala(12)->getBrecha() << "    CUCR: " << nave->getSala(12)->getCurtoCircuito();
+	
 	c.gotoxy(1, 1);
-	cout << nave->getSalas() << "Distancia total percorrida: " << nave->getDistancia() << endl;
+	cout << nave->getSalas() << endl;
 }
 
 void viagem(Nave *nave, double nvl) {
@@ -289,26 +214,39 @@ void viagem(Nave *nave, double nvl) {
 		// 2. FASE DE ORDENS
 		string cmd;
 		do {
-			interface_nave(nave, turnos);
+			interface_nave(nave, turnos, nvl);
 			
-			cout << "De as ordens meu comandante...\nCMD> "; cin >> cmd;
+			c.gotoxy(80, 40);
+			cout << "De as ordens meu comandante...";
+			c.gotoxy(80, 41);
+			cout << "CMD> "; cin >> cmd;
 			if (cmd == "mover") {
 				int id_unidade;
 				string dir_mov;
+				c.gotoxy(80, 42);
 				cout << "Que unidade deseja mover? "; cin >> id_unidade;
+				c.gotoxy(80, 43);
 				cout << "Para que sala? (Segundo uma orientação) "; cin >> dir_mov; cout << endl;
 
 				nave->check_mov_sala(id_unidade, dir_mov);
 			}
 			else if (cmd == "fim")
 			{
+				c.gotoxy(80, 42);
+				cout << "Desististe do jogo, prime uma tecla para voltar ao menu inicial";
+				c.getch();
 				return;
 			}
 			else if(cmd != "avancar" && cmd != "fim") {
+				c.gotoxy(80, 42);
 				cout << "Nao conheco esse comando meu comandante..." << endl;
 				c.getch();
 			}
 		} while (cmd != "avancar");
+
+		c.clrscr();
+		c.gotoxy(3, 1);
+		cout << "Relatorio do final do turno" << endl;
 
 		// 3. FINAL DO TURNO
 
@@ -332,8 +270,10 @@ void viagem(Nave *nave, double nvl) {
 void ajuda() {
 	Consola c;
 	c.clrscr();
-	c.gotoxy(20, 20);
-	cout << "... IMPLEMENTAR MENU-AJUDA" << endl;
+	c.gotoxy(20, 5);
+	cout << "MENU-AJUDA" << endl;
+	c.gotoxy(1, 8);
+	cout << "\tVais assumir o comando de uma nave espacial que efectua uma perigosa viagem intergalatica.\n\tA nave esta organizada em diferentes salas, cada uma com diversos equipamentos e objectivos para a producao dos recursos necessarios a viagem.\n\tAs salas tem diferentes funcoes (consoante o tipo de sala) e o seu comportamento pode depender de se encontrarem nela tripulantes (ou nao).\n\n\tAs salas que podes adicionar sao:\n\t-> Propulsor Adicional\n\t-> Beliche\n\t-> Raio Laser\n\t-> Auto-reparador\n\t-> Sistema de Seguranca interno\n\t-> Enfermaria\n\t-> Sala de armas\n\t-> Alojamentos do Capitao\n\t-> Oficina Robotica\n\n\tA tripulacao e constituida por varios tipos de tripulantes, cada um com determinadas caracteristicas e que desempenham tarefas essenciais como pilotar a nave, reparar danos, operar\n   as armas, lutar contra invasores e as actividades.\n\n\tTripulantes disponiveis:\n\t-> Membro da Tripulacao\n\t-> Capitao\n\t-> Robot\n\n\tDurante a viagem podem ocorrer diversas situacoes (ataque e invasao de piratas, invasao de alienigenas, chuva de meteoritos, etc.).\n\n\tO jogo consiste em gerir a nave (salas, tripulacao, recursos) e decorre numa grelha, que representa a nave. Esta inclui diferentes salas e equipamentos.\n\tA tripulacao e limitada e deve ser bem gerida para conseguir operar as salas e equipamentos.\n\tO jogo decorre por turnos: em cada turno tens a oportunidade de decidir e dizer o que os teus tripulantes da nave devem fazer.\n\n\tAs indicacoes são dadas segundo comandos escritos.\n\n\t<avancar>\n\t<mover>\n\t<fim>" << endl;
 	c.getch();
 }
 
@@ -345,8 +285,6 @@ void menu_inicial() {
 
 	string cmd;
 	do {
-		PlaySound(NULL, NULL, 0);
-		PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
 		c.gotoxy(21, 18);
 		cout << "VIAGEM-COSMICA" << endl;
@@ -380,7 +318,9 @@ void menu_inicial() {
 }
 
 int main(void) {
-	system("mode 650");
+	PlaySound(NULL, NULL, 0);
+	PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
+	system("mode 800");
 
 	menu_inicial();
 

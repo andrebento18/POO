@@ -10,7 +10,9 @@ class Sala {
 	/*int dano;*/
 	bool operada;
 	int oxigenio;
+	bool fogo;
 	bool brecha;
+	bool curto_circuito;
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
@@ -35,8 +37,14 @@ public:
 	void aumentaOxigenio(int oxig_aumentar);
 	void reduzOxigenio(int oxig_reduzir);
 
+	bool getFogo()const;
+	void setFogo(bool valor);
+
 	bool getBrecha()const;
 	void setBrecha(bool valor);
+
+	bool getCurtoCircuito()const;
+	void setCurtoCircuito(bool valor);
 	
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 	void remover_Unidade(Unidade *unidade_a_remover);
@@ -45,13 +53,12 @@ public:
 	Unidade *getUnidade(int id_unidade)const;
 	Unidade *getUnidadePosicao(int pos_unidade)const;
 
-	virtual void salas_actuar_inicio(Nave *n) {};
-	virtual void salas_actuar_fim(Nave *n) {};
+	virtual void salas_actuar_inicio(Nave *n);
+	virtual void salas_actuar_fim(Nave *n);
 
 	void unidades_actuar_inicio();
 	void unidades_actuar_fim();
 
-	// Virtual functions
 	virtual int getEscudo()const { return 0; };
 	virtual void reduzEscudo(int val_reduzir) {};
 };

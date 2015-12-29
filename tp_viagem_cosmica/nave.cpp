@@ -328,7 +328,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(3, 3);
+	int x = random(1, 4);
 	switch (x) {
 	case 1: {
 		//Evento Chuva de meteoritos

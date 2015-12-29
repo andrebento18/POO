@@ -50,6 +50,14 @@ void Unidade::setPV(int new_ponto_vida) {
 		ponto_vida -= new_ponto_vida;
 }
 
+void Unidade::aumentaPV(int valor_aumentar){
+	if (ponto_vida + valor_aumentar > ponto_vida_inicial) {
+		ponto_vida = ponto_vida_inicial;
+	}
+	else
+		ponto_vida += valor_aumentar;
+}
+
 void Unidade::LevaDano(int dano_recebido){
 	if (getPV() == 0 || getPV() < 0) 
 		getOndeEstou()->remover_Unidade(this);

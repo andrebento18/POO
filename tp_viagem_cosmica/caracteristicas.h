@@ -109,8 +109,7 @@ public:
 	}
 	
 	void actua_car_fim(Unidade *u) {
-		if (ignora_actua_inicio==1)
-		{
+		if (ignora_actua_inicio==1){
 			u->setOndeEstou(u->getOndeEstava());
 		}
 	}
@@ -149,7 +148,7 @@ public:
 	}
 	void actua_car_inicio(Unidade *u) {
 		if (u->getPV() + cap_regenerar < u->getPVInicial()) {
-			u->setPV(cap_regenerar);
+			u->aumentaPV(cap_regenerar);
 		}
 	}
 };
@@ -179,14 +178,14 @@ public:
 	Tripulacao() {
 		tripulacao = "TRIPULACAO";
 		cout << "Faco parte da tripulacao da nave" << endl;
-	};
+	}
 };
 
 class Operador : public Caracteristica {
 public:
 	Operador() {
 		cout << "Esta unidade e capaz de operar salas" << endl;
-	};
+	}
 	void actua_car_inicio(Unidade *u) {
 		Tripulacao *t = new Tripulacao;
 		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {

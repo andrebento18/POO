@@ -5,6 +5,9 @@ using namespace std;
 
 #include "sala.h"
 #include "nave.h"
+
+int random(int min, int max);
+
 int Sala::conta_salas = 1;
 
 Sala::Sala(string tipo):tipo(tipo){
@@ -13,7 +16,9 @@ Sala::Sala(string tipo):tipo(tipo){
 	//dano = 0;
 	operada = false;
 	oxigenio = 100;
+	fogo = false;
 	brecha = false;
+	curto_circuito = false;
 	cout << "Sala " << this->tipo << " criada" << endl;
 }
 
@@ -36,7 +41,16 @@ int Sala::getIntegridade() const
 }
 
 void Sala::setIntegridade(int valor_integridade) {
-	integridade = valor_integridade;
+	if (getIntegridade() + valor_integridade > 100)
+		integridade = 100;
+	else
+		integridade = valor_integridade;
+
+	if (getIntegridade() == 100) {
+		setFogo(false);
+		setBrecha(false);
+		setCurtoCircuito(false);
+	}
 }
 
 void Sala::reduzIntegridade(int valor_reduzir){
@@ -82,10 +96,24 @@ void Sala::aumentaOxigenio(int oxig_aumentar){
 }
 
 void Sala::reduzOxigenio(int oxig_reduzir) {
-	if (getOxigenio() - oxig_reduzir < 0)
+	if (getOxigenio() - oxig_reduzir < 0) {
 		oxigenio = 0;
+		setFogo(false); // Sem oxig. não há fogo
+	}
 	else
 		oxigenio -= oxig_reduzir;
+}
+
+bool Sala::getFogo() const{
+	return fogo;
+}
+
+void Sala::setFogo(bool valor){
+	if (valor == true && getOxigenio() != 0) {
+		fogo = true;
+	}
+	else
+		fogo = false;
 }
 
 bool Sala::getBrecha() const{
@@ -99,6 +127,18 @@ void Sala::setBrecha(bool valor){
 	}
 	else
 		brecha = false;
+}
+
+bool Sala::getCurtoCircuito() const{
+	return curto_circuito;
+}
+
+void Sala::setCurtoCircuito(bool valor){
+	if (valor == true) {
+		curto_circuito = true;
+	}
+	else
+		curto_circuito = false;
 }
 
 string Sala::toString()const {
@@ -144,6 +184,37 @@ Unidade* Sala::getUnidade(int id_unidade)const {
 			return unidades[i];
 	}
 	return nullptr;
+}
+
+void Sala::salas_actuar_inicio(Nave *n) {
+	// Dano causado pelo Fogo às Unidades na sala
+	if (getFogo() == true) {
+		for (unsigned int i = 0; i < unidades.size(); i++) {
+			unidades[i]->LevaDano(2);
+		}
+	}
+}
+
+void Sala::salas_actuar_fim(Nave *n) {
+	// Fogo
+	if (getFogo() == true) {
+		// Dano causado pelo Fogo à sala
+		if (random(1, 2) == 1) {
+			reduzIntegridade(10);
+		}
+		// Dano causado pelo Fogo às salas adjacentes
+		// ?????????????????????????????????????????????????????????????????????????????????????????????????????????
+	}
+
+	// Curto-circuito
+	if (getCurtoCircuito() == true) {
+		if (random(1, 4) == 1) {
+			for (unsigned int i = 0; i < unidades.size(); i++) {
+				unidades[i]->LevaDano(1 * unidades.size());
+			}
+		}
+	}
+
 }
 
 void Sala::unidades_actuar_inicio() {
@@ -270,8 +341,7 @@ SalaEnfermaria::SalaEnfermaria(string tipo):Sala(tipo){
 void SalaEnfermaria::salas_actuar_fim(Nave * n){
 	// VERIFICAR SE É TRIPULANTE
 	for (unsigned int i = 0; i < countUnidades(); i++)
-		if(getUnidadePosicao(i)->getPV() < getUnidadePosicao(i)->getPVInicial())
-			getUnidadePosicao(i)->setPV(1);
+		getUnidadePosicao(i)->aumentaPV(1);
 }
 
 SalaArmas::SalaArmas(string tipo):Sala(tipo){
