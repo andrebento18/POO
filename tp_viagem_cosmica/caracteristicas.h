@@ -17,34 +17,16 @@ public:
 	string getTipoCaracterisca() {
 		return tipo;
 	}
-	//void setTipoCaracterisca(string nome) {
-	//	tipo = nome;
-	//}
-	virtual void actua_car_inicio(Unidade *u, Nave *n=NULL) {
+
+	virtual void actua_car_inicio(Unidade *u, Nave *n) {
 	};
-	virtual void actua_car_fim(Unidade *u, Nave *n=NULL) {
+	virtual void actua_car_fim(Unidade *u, Nave *n) {
 	};
 
 	virtual int getArmacao(void) {
 		return 0;
 	};
 };
-
-////LISTA DE CARACTERISTICAS
-//int exoesqueleto; //se o exoesqueleto estiver a zero o dano é recebido normal, senao recebe dano atraves da funcao exoesqueleto
-//bool robotico; //caso seja robotico não pode executar accções(movimento/combate/etc) em salas com curto-circuito
-//int reparador;
-//int combatente; //caso hajam enimigos na mesma sala, provoca x pontos de dano a um enimigo na sala
-//int xenomorfo; //
-//int casulo;
-//int mutatis_mutandis;//
-//int hipnotizador;
-//bool operador;
-//bool tripulacao;
-//int regenerador; //quantidade de pontos de vida que regenera por turno
-//				 //bool inimigo(x,y)
-//int move;
-//int armado;
 
 class Respira : public Caracteristica {
 	int respira;
@@ -53,11 +35,16 @@ public:
 		respira = 2;
 		cout << "Esta unidade respira" << endl;
 	}
-	void actua_car_inicio(Unidade *u) {
-		if (u->getOndeEstou()->getOxigenio() <= 0)
+	void actua_car_inicio(Unidade *u, Nave *n) {
+		if (u->getOndeEstou()->getOxigenio() <= 0) {
 			u->LevaDano(1);
-		else
+			// O ultimo sobrevivente não está a levar dano
+			cout << "leva dano";
+			system("pause");
+		}
+		else {
 			u->getOndeEstou()->reduzOxigenio(respira);
+		}
 	};
 };
 
@@ -66,7 +53,7 @@ public:
 	Flamejante(void):Caracteristica("Flamejante") {
 		cout << "Esta unidade esta envolta em chamas" << endl;
 	};
-	void actua_car_inicio(Unidade *u) {
+	void actua_car_inicio(Unidade *u, Nave *n) {
 		u->getOndeEstou()->reduzOxigenio(5);
 	}
 };
@@ -77,7 +64,7 @@ public:
 	Toxico(int toxicidade):Caracteristica("Toxico"), dano_toxico(toxicidade) {
 		cout << "Este ser e toxico" << endl;
 	};
-	void actua_car_inicio(Unidade *u) {
+	void actua_car_inicio(Unidade *u, Nave *n) {
 		bool existe_toxico;
 		bool unidade_toxica = false;
 		Sala *p = u->getOndeEstou();
@@ -103,7 +90,7 @@ public:
 	Indeciso(void):Caracteristica("Indeciso") {
 		ignora_actua_inicio = false;
 	};
-	void actua_car_inicio(Unidade *u) {
+	void actua_car_inicio(Unidade *u, Nave *n) {
 		int x = random(1, 2);
 
 		if (x == 1 && ignora_actua_inicio == false) {
@@ -114,7 +101,7 @@ public:
 		}
 	}
 	
-	void actua_car_fim(Unidade *u) {
+	void actua_car_fim(Unidade *u, Nave *n) {
 		if (ignora_actua_inicio == true){
 			u->setOndeEstou(u->getOndeEstava());
 		}
@@ -150,7 +137,7 @@ public:
 		this->cap_regenerar = cap_regenerar;
 		cout << "Este ser e capaz de regenerar " << cap_regenerar << " pontos de vida por turno" << endl;
 	}
-	void actua_car_inicio(Unidade *u) {
+	void actua_car_inicio(Unidade *u, Nave *n) {
 		if (u->getPV() + cap_regenerar < u->getPVInicial()) {
 			u->aumentaPV(cap_regenerar);
 		}
@@ -174,23 +161,21 @@ public:
 		this->cap_reparar = cap_reparar;
 		cout << "Esta unidade repara " << cap_reparar << " pontos, por turno, da sala onde esta" << endl;
 	}
-	void actua_car_fim(Unidade *u) {
+	void actua_car_fim(Unidade *u, Nave *n) {
 		bool existe_inimigos = false;
 		if (u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor" && u->getOndeEstou()->getIntegridade() < 100){
 			for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 				for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
 					if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() != "Tripulacao") {
 						existe_inimigos = true;
-					}
-					else if (u->getNome() == "Blob") {
-						u->getOndeEstou()->aumentaIntergridade(cap_reparar);
-						break;
+						cout << "Passei";
 					}
 				}
 			}
-			if (existe_inimigos == false) {
+			if (existe_inimigos == false)
 				u->getOndeEstou()->aumentaIntergridade(cap_reparar);
-			}
+			if (u->getNome() == "Blob")
+				u->getOndeEstou()->aumentaIntergridade(cap_reparar);
 		}
 	}
 };
@@ -202,7 +187,7 @@ public:
 		this->capacidade_combate = dano_que_causa;
 		cout << "Combatente capaz de causar " << capacidade_combate << " pontos de dano" << endl;
 	}
-	void actua_car_fim(Unidade *u) {
+	void actua_car_fim(Unidade *u, Nave *n) {
 		int	escolhe_alvo = 0, elemento_trip = 0;
 		int ja_ataquei = 0;
 			
@@ -221,12 +206,12 @@ public:
 		if (u->getOndeEstou()->getOperada() == false) {
 			do {
 				escolhe_alvo = random(0, u->getOndeEstou()->countUnidades());
-				for (unsigned int j = 0; j < u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->countCaracteristicas(); j++) {
+				/*for (unsigned int j = 0; j < u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->countCaracteristicas(); j++) {
 					if (u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->getCaracteristicaPosicao(j)->getTipoCaracterisca() == "Tripulacao") {
 						elemento_trip = 1;
 						break;
 					}
-				}
+				}*/
 				if (elemento_trip != 1) {
 					int dano_armado = 0;
 					for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
@@ -234,27 +219,28 @@ public:
 							dano_armado = u->getCaracteristicaPosicao(j)->getArmacao();
 						}	
 					}
-					u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->LevaDano(dano_armado + capacidade_combate);
+					//u->getOndeEstou()->getUnidadePosicao(escolhe_alvo)->LevaDano(dano_armado + capacidade_combate);
 					break;
 				}
 			} while (ja_ataquei != 1);
 		}
 	}
 };
-
+//??????????????????????????????????????????????????????????????????????????????????????????
 class Xenomorfo : public Caracteristica {
 	int cap_dano;
 public:
 	Xenomorfo(int cap_dano) :Caracteristica("Xenomorfo") {
 		this->cap_dano = cap_dano;
 	}
-	void actua_car_fim(Unidade *u) {
+	void actua_car_fim(Unidade *u, Nave *n) {
 		bool existe_inimigo = false;
 		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
-			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
-				if(u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca != "Xenomorfo")
-					// Verificar se é enimigo, caso sim atacar um aleatório
-			}
+			//for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+			//	if(u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca != "Xenomorfo")
+			//		// Verificar se é enimigo, caso sim atacar um aleatório
+			//		// Aproveitar combatente
+			//}
 		}
 	}
 };
@@ -267,18 +253,19 @@ public:
 		cout << "Esta unidade é capaz de alterar a sala onde se encontra com " << prob << " % probabilidade" << endl;
 	}
 	// Não sei se esta caracteristica actua no inicio ou no fim
-	void actua_car_inicio(Unidade *u) {
-		if()
+	void actua_car_inicio(Unidade *u, Nave *n) {
+		//if()
+		//	// Copiar a sala para outro tipo de sala aleatório
 	}
 };
-
+//??????????????????????????????????????????????????????????????????????????????????????????????????????
 
 class Operador : public Caracteristica {
 public:
 	Operador(void):Caracteristica("Operador") {
 		cout << "Esta unidade e capaz de operar salas" << endl;
 	}
-	void actua_car_inicio(Unidade *u) {
+	void actua_car_inicio(Unidade *u, Nave *n) {
 		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
 				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() != "Tripulacao") {
@@ -298,6 +285,68 @@ public:
 	}
 };
 
+class Move : public Caracteristica {
+	int prob_movimento;
+public:
+	Move(int pmovimento) :Caracteristica("Move"), prob_movimento(pmovimento) {
+		cout << "Sou capaz de me mover!" << endl;
+	}
+	void actua_car_inicio(Unidade *u, Nave *n) {
+		if (random(1, 100) < prob_movimento){
+			// Obter id_sala onde se encontra a unidade
+			int id_sala = u->getOndeEstou()->getID();
+			// Sortear o movimento "cima", "baixo", "esquerda", "direita"
+			string comando_direcao;
+			switch (random(1, 4)) {
+				case 1: comando_direcao = "cima";
+						break;
+				case 2: comando_direcao = "baixo";
+						break;
+				case 3: comando_direcao = "esquerda";
+						break;
+				case 4: comando_direcao = "direita";
+						break;
+			}
+			// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
+			for (int i = 0; i <= 2; i++)
+				for (int j = 0; j <= 4; j++)
+					if (n->getSalaMatriz(i, j) != NULL)
+						if (n->getSalaMatriz(i, j)->getID() == id_sala) {
+							if (comando_direcao == "cima") {
+								if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
+									break;
+								}
+								else
+									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i + 1, j));
+							}
+							else if (comando_direcao == "baixo") {
+								if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
+									break;
+								}
+								else
+									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i - 1, j));
+							}
+							else if (comando_direcao == "direita") {
+								if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
+									break;
+								}
+								else
+									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j + 1));
+							}
+							else if (comando_direcao == "esquerda") {
+								if (j == 0 && j == 1 && i == 1) {
+									break;
+								}
+								else
+									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j - 1));
+							}
+							else
+								break;
+						}
+		}
+	};
+};
+
 class Armado : public Caracteristica {
 	int capacidade_armacao;
 public:
@@ -308,54 +357,3 @@ public:
 		return capacidade_armacao;
 	};
 };
-
-class Move : public Caracteristica {
-	int prob_movimento;
-public:
-	Move(int pmovimento) :Caracteristica("Move"), prob_movimento(pmovimento) {
-		cout << "Sou capaz de me mover!" << endl;
-	}
-	void actua_car_inicio(Unidade *u, Nave *n) {
-		// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
-		for (int i = 0; i <= 2; i++)
-			for (int j = 0; j <= 4; j++)
-				if (n->getsalas[i][j] != NULL)
-					if (salas[i][j]->getID() == id_sala) {
-						if (comando_direcao == "cima") {
-							if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
-								break;
-							}
-							else
-								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
-						}
-						else if (comando_direcao == "baixo") {
-							if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
-								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
-								break;
-							}
-							else
-								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
-						}
-						else if (comando_direcao == "direita") {
-							if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
-								break;
-							}
-							else
-								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j + 1]);
-						}
-						else if (comando_direcao == "esquerda") {
-							if (j == 0 && j == 1 && i == 1) {
-								cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
-								break;
-							}
-							else
-								salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j - 1]);
-						}
-						else
-							cout << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
-					}
-	};
-};
-

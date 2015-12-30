@@ -5,6 +5,7 @@ using namespace std;
 
 class Caracteristica;
 class Sala;
+class Nave;
 class Unidade{
 	string nome;
 	int ponto_vida;

@@ -207,6 +207,10 @@ Sala *Nave::getSala(int id_sala)const {
 			}
 }
 
+Sala * Nave::getSalaMatriz(int i, int j) const{
+	return salas[i][j];
+}
+
 string Nave::getSalas()const {
 	ostringstream os;
 	os << "Nave com: " << endl;

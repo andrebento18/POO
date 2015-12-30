@@ -14,6 +14,7 @@ public:
 	void setDistancia(int dist_somar);
 	
 	Sala *getSala(int id_sala)const;
+	Sala *getSalaMatriz(int i, int j)const;
 	string getSalas()const;
 
 	void inicio_turno();
