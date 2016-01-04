@@ -159,14 +159,14 @@ public:
 	void actua_car_fim(Unidade *u, Nave *n) {
 		bool existe_inimigos = false;
 		if (u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor" && u->getOndeEstou()->getIntegridade() < 100){
-			for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+			/*for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 				for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
 					if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() != "Tripulacao") {
 						existe_inimigos = true;
 						cout << "Passei";
 					}
 				}
-			}
+			}*/
 			if (existe_inimigos == false)
 				u->getOndeEstou()->aumentaIntergridade(cap_reparar);
 			if (u->getNome() == "Blob")
@@ -305,57 +305,10 @@ public:
 					break;
 				}
 				// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
-				for (int i = 0; i <= 2; i++)
-					for (int j = 0; j <= 4; j++)
-						if (n->getSalaMatriz(i, j) != NULL)
-							if (n->getSalaMatriz(i, j)->getID() == id_sala) {
-								if (comando_direcao == "cima") {
-									if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0 || n->getSalaMatriz(i + 1, j) == NULL) {
-										break;
-									}
-									else {
-										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i + 1, j));
-										moveu = true;
-										cout << "movi" << endl;
-										system("pause");
-									}
-								}
-								else if (comando_direcao == "baixo") {
-									if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4 || n->getSalaMatriz(i - 1, j) == NULL) {
-										break;
-									}
-									else {
-										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i - 1, j));
-										moveu = true;
-										cout << "movi" << endl;
-										system("pause");
-									}
-								}
-								else if (comando_direcao == "direita") {
-									if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2 || n->getSalaMatriz(i, j + 1) == NULL) {
-										break;
-									}
-									else {
-										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j + 1));
-										moveu = true;
-										cout << "movi" << endl;
-										system("pause");
-									}
-								}
-								else if (comando_direcao == "esquerda") {
-									if (j == 0 && j == 1 && i == 1 || n->getSalaMatriz(i, j - 1) == NULL) {
-										break;
-									}
-									else {
-										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j - 1));
-										moveu = true;
-										cout << "movi" << endl;
-										system("pause");
-									}
-								}
-								else
-									break;
-							}
+				if (n->check_mov_sala(u->getID_Unidade(), comando_direcao) == true)
+					moveu = true;
+				else
+					continue;
 			} while (moveu == false);
 		}
 	}

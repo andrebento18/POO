@@ -251,62 +251,59 @@ void Nave::fim_turno() {
 			}
 }
 
-void Nave::check_mov_sala(int id_unidade, string comando_direcao){
+bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 	// Obter id_sala onde se encontra a unidade
 	int id_sala;
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL)
-				if (salas[i][j]->getUnidade(id_unidade) != NULL) 
+				if (salas[i][j]->getUnidade(id_unidade) != NULL)
 					id_sala = salas[i][j]->getID();
 
 	// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
 	for (int i = 0; i <= 2; i++)
 		for (int j = 0; j <= 4; j++)
-			if(salas[i][j] != NULL)
-				if (salas[i][j]->getID() == id_sala) {
-					if (comando_direcao == "cima") {
-						if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
-							system("pause");
-							break;
-						}
-						else
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
-					}
-					else if (comando_direcao == "baixo") {
-						if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
-							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
-							system("pause");
-							break;
-						}
-						else 
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
-					}
-					else if (comando_direcao == "direita") {
-						if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
-							system("pause");
-							break;
-						}
-						else 
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j + 1]);
-					}
-					else if (comando_direcao == "esquerda") {
-						if (j == 0 && j == 1 && i == 1) {
-							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
-							system("pause");
-							break;
-						}
-						else 
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j - 1]);
+			if (salas[i][j] != NULL && salas[i][j]->getID() == id_sala) {
+				if (comando_direcao == "cima") {
+					if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
+						return false;
 					}
 					else {
-						cout << endl << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
-						system("pause");
-						break;
+						salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
+						return true;
 					}
 				}
+				else if (comando_direcao == "baixo") {
+					if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
+						return false;
+					}
+					else {
+						salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
+						return true;
+					}
+				}
+				else if (comando_direcao == "direita") {
+					if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
+						return false;
+					}
+					else {
+						salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j + 1]);
+						return true;
+					}
+				}
+				else if (comando_direcao == "esquerda") {
+					if (j == 0 && j == 1 && i == 1) {
+						return false;
+					}
+					else {
+						salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j - 1]);
+						return true;
+					}
+				}
+				else {
+					return false;
+				}
+			}
 }
 
 void dano_meteoritos(Nave *n, int n_meteoritos) {
@@ -343,7 +340,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(2, 2);
+	int x = random(1, 4);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos
@@ -388,7 +385,6 @@ void Nave::evento() {
 		}
 
 		case 2: {
-			//Evento Ataque dos piratas
 			cout << "ATAQUE DOS PIRATAS" << endl;
 			// Dano provocado pelo disparo dos piratas
 			int dano_disparo_piratas = random(30, 60);
@@ -418,7 +414,6 @@ void Nave::evento() {
 		}
 
 		case 3: {
-			//Evento Ataque Xenomorfo
 			cout << "ATAQUE XENOMORFO" << endl;
 			int alien_random = random(1, 3);
 			int sala_random = random(1, 12);
@@ -437,22 +432,19 @@ void Nave::evento() {
 				getSala(sala_random)->adicionar_Unidade(p);
 				p->setOndeEstou(getSala(sala_random));
 			}
-			cout << "Fomos invadidos por um ser alienisna comandante" << endl;
+			cout << "Fomos invadidos por um ser alienigena comandante" << endl;
 			break;
 		}
 		
 		case 4: {
-			// Evento pó cósmico
-			// falta implemnentar não calhar na mesma sala
+			// falta implementar não calhar na mesma sala
+			cout << "PO COSMICO" << endl;
 			int n_salas_afetadas = random(3, 5);
 			while (n_salas_afetadas != 0) {
-				int i = random(0, 2);
-				int j = random(0, 4);
-				if (salas[i][j] != NULL) {
-					n_salas_afetadas--;
-					salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
-					cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
-				}
+				int sala_random = (1, 12);
+				n_salas_afetadas--;
+				getSala(sala_random)->reduzIntegridade(10);
+				cout << "A sala " << getSala(sala_random)->getTipo() << ", " << getSala(sala_random)->getID() << " recebeu um dano de 10 pontos de integridade!" << endl;
 			}
 			break;
 		}

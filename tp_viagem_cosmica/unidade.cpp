@@ -105,9 +105,7 @@ Caracteristica * Unidade::getCaracteristicaPosicao(int posicao){
 }
 
 unsigned int Unidade::countCaracteristicas() const{
-	// Problemas em converter int para unsigned int?
-	unsigned int size = vect_car.size();
-	return size;
+	return (unsigned)vect_car.size();
 }
 
 void Unidade::actua_inicio(Nave *n){

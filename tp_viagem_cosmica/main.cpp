@@ -225,15 +225,20 @@ void viagem(Nave *nave, double nvl) {
 			cout << "De as ordens meu comandante...";
 			c.gotoxy(80, 41);
 			cout << "CMD> "; cin >> cmd;
-			if (cmd == "mover") {
+			if (cmd.find("mover", 0)) {
 				int id_unidade;
 				string dir_mov;
 				c.gotoxy(80, 42);
 				cout << "Que unidade deseja mover? "; cin >> id_unidade;
 				c.gotoxy(80, 43);
-				cout << "Para que sala? (Segundo uma orientação) "; cin >> dir_mov; cout << endl;
+				cout << "Para que sala? (Segundo uma orientacao) "; cin >> dir_mov; cout << endl;
 
-				nave->check_mov_sala(id_unidade, dir_mov);
+				if ((nave->check_mov_sala(id_unidade, dir_mov)) == false) {
+					cout << "Impossivel mover a unidade " << id_unidade << " para " << dir_mov << " comandante!" << endl;
+					system("pause");
+				}
+				else
+					cout << "Unidade " << id_unidade << " movida para " << dir_mov << " com sucesso comandante!" << endl;
 			}
 			else if (cmd == "fim")
 			{
@@ -325,6 +330,7 @@ void menu_inicial() {
 int main(void) {
 	PlaySound(NULL, NULL, 0);
 	PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
+	system("title VIAGEM COSMICA");
 	system("mode 800");
 	srand(time(NULL));
 

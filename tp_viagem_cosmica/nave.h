@@ -20,7 +20,7 @@ public:
 	void inicio_turno();
 	void fim_turno();
 
-	void check_mov_sala(int id_unidade, string comando_direcao);
+	bool check_mov_sala(int id_unidade, string comando_direcao);
 
 	void evento();
 };

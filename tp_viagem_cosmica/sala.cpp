@@ -25,7 +25,8 @@ Sala::Sala(string tipo):tipo(tipo){
 
 Sala::~Sala() {
 	cout << "Sala " << this->tipo << ", posicao " << this->id_sala << " destruida" << endl;
-	cout << "...IMPLEMENTAR DESTRUICAO DE UNIDADES" << endl;
+	for (unsigned int i = 0; i < unidades.size(); i++)
+		delete unidades[i];
 }
 
 string Sala::getTipo()const {
@@ -151,7 +152,11 @@ void Sala::setCurtoCircuito(bool valor){
 
 string Sala::toString()const {
 	ostringstream os;
-	os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
+	if(getID() == 7)
+		os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << ", cap. escudo " << getEscudo() << endl;
+	else
+		os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
+	
 	if (unidades.size() != 0) {
 		for (unsigned int i = 0; i < unidades.size(); i++)
 			os << "\t->" << unidades[i]->toString() << endl;
@@ -304,11 +309,6 @@ void Sala::unidades_actuar_fim(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
 		unidades[i]->actua_fim(n);
 	}
-	//for (unsigned int i = 0; i < unidades.size(); i++) {
-	//	if (unidades[i]->getOndeEstava() != NULL) {
-	//		unidades[i]->setOndeEstava(NULL);
-	//	}
-	//}
 }
 
 Unidade * Sala::getUnidadePosicao(int posicao) const
@@ -387,19 +387,19 @@ void SalaAutoReparador::salas_actuar_fim(Nave *n) {
 		Sala *s = n->getSala(getID());
 		if ((s + 5) != NULL) {
 			if ((s++)->getIntegridade() <= 95)
-				(s++)->setIntegridade((s++)->getIntegridade() + 5);
+				(s++)->aumentaIntergridade(5);
 		}
 		else if ((s + 5) != NULL) {
 			if ((s--)->getIntegridade() <= 95)
-				(s--)->setIntegridade((s++)->getIntegridade() + 5);
+				(s--)->aumentaIntergridade(5);
 		}
 		else if ((s + 5) != NULL) {
 			if ((s + 5)->getIntegridade() <= 95)
-				(s + 5)->setIntegridade((s++)->getIntegridade() + 5);
+				(s + 5)->aumentaIntergridade(5);
 		}
 		else if ((s - 5) != NULL) {
 			if((s-5)->getIntegridade() <= 95)
-				(s-5)->setIntegridade((s++)->getIntegridade() + 5);
+				(s-5)->aumentaIntergridade(5);
 		}
 		cout << "Salas reparadas usando o Auto-Reparador" << endl;
 	}
