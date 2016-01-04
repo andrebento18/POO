@@ -60,8 +60,8 @@ public:
 	void unidades_actuar_inicio(Nave *n);
 	void unidades_actuar_fim(Nave *n);
 
-	virtual int getEscudo()const { return 0; };
-	virtual void reduzEscudo(int val_reduzir) {};
+	virtual int getEscudo()const { return 0; }
+	virtual void reduzEscudo(int val_reduzir) {}
 };
 
 class SalaPropulsor : public Sala {

@@ -10,7 +10,7 @@ class Caracteristica {
 public:
 	Caracteristica(string tipo) {
 		this->tipo = tipo;
-	};
+	}
 	virtual ~Caracteristica() {
 		cout << "Caracteristica eliminada" << endl;
 	}
@@ -18,14 +18,10 @@ public:
 		return tipo;
 	}
 
-	virtual void actua_car_inicio(Unidade *u, Nave *n) {
-	};
-	virtual void actua_car_fim(Unidade *u, Nave *n) {
-	};
+	virtual void actua_car_inicio(Unidade *u, Nave *n) {}
+	virtual void actua_car_fim(Unidade *u, Nave *n) {}
 
-	virtual int getArmacao(void) {
-		return 0;
-	};
+	virtual int getArmacao(void) { return 0; }
 };
 
 class Respira : public Caracteristica {
@@ -35,7 +31,7 @@ public:
 		respira = 2;
 		cout << "Esta unidade respira" << endl;
 	}
-	void actua_car_inicio(Unidade *u, Nave *n) {
+	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
 		if (u->getOndeEstou()->getOxigenio() <= 0)
 			u->LevaDano(1);
 		else 
@@ -47,8 +43,8 @@ class Flamejante : public Caracteristica {
 public:
 	Flamejante(void):Caracteristica("Flamejante") {
 		cout << "Esta unidade esta envolta em chamas" << endl;
-	};
-	void actua_car_inicio(Unidade *u, Nave *n) {
+	}
+	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
 		u->getOndeEstou()->reduzOxigenio(5);
 	}
 };
@@ -58,8 +54,8 @@ class Toxico : public Caracteristica {
 public:
 	Toxico(int toxicidade):Caracteristica("Toxico"), dano_toxico(toxicidade) {
 		cout << "Este ser e toxico" << endl;
-	};
-	void actua_car_inicio(Unidade *u, Nave *n) {
+	}
+	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
 		bool existe_toxico;
 		bool unidade_toxica = false;
 		Sala *p = u->getOndeEstou();
@@ -322,5 +318,5 @@ public:
 	}
 	int getArmacao(void) {
 		return capacidade_armacao;
-	};
+	}
 };

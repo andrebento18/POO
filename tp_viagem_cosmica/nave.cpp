@@ -116,21 +116,18 @@ Nave::Nave() {
 	cout << "Prime uma tecla para avancar...";
 	c.getch();
 	c.clrscr();
-	cout << "Agora vamos adicionar os tripulantes a tua nave!\n";
+	cout << "Agora vamos adicionar os tripulantes a tua nave!" << endl;
 
 	int conta_mebros_trip = 3;
 
-	for (int i = 0; i < 3; i++){
-		for (int j = 0; j < 5; j++) {
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 5; j++) 
 			if(salas[i][j] != NULL)
-				if (salas[i][j]->getTipo() == BELICHE) {
+				if (salas[i][j]->getTipo() == BELICHE) 
 					conta_mebros_trip++;
-				}
-		}
-	}
 
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 5; j++) {
+	for (int i = 0; i < 3; i++) 
+		for (int j = 0; j < 5; j++) 
 			if (salas[i][j] != NULL) {
 				if (salas[i][j]->getTipo() == ALOJCAPITAO) {
 					Unidade *p = new Capitao("Capitao");
@@ -151,8 +148,6 @@ Nave::Nave() {
 					conta_mebros_trip--;
 				}
 			}
-		}
-	}
 
 	do{
 		Unidade *p = new MembroTripulacao("Membro de Tripulacao");
@@ -171,22 +166,21 @@ Nave::Nave() {
 
 Nave::~Nave() {
 	for (int i = 0; i < 3; i++) 
-		for (int j = 0; j < 5; j++) {
+		for (int j = 0; j < 5; j++) 
 				delete salas[i][j];
-		}
+
 	cout << "Nave destruida" << endl;
 }
 
 // Devolve 0 - Nave destruida; 1 - Saúde da Nave OK
-int Nave::verifica_saudeNave() const
-{
+int Nave::verifica_saudeNave() const {
 	int verifica_saude = 1;
 	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 5; j++) {
+		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL)
 				if (salas[i][j]->getIntegridade() == 0)
 					verifica_saude = 0;
-		}
+
 	return verifica_saude;
 }
 
@@ -207,7 +201,7 @@ Sala *Nave::getSala(int id_sala)const {
 			}
 }
 
-Sala * Nave::getSalaMatriz(int i, int j) const{
+Sala * Nave::getSalaMatriz(int i, int j) const {
 	return salas[i][j];
 }
 
@@ -216,7 +210,7 @@ string Nave::getSalas()const {
 	os << "Nave com: " << endl;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 5; j++) {
-			if (salas[i][j] != NULL) 
+			if (salas[i][j] != NULL)
 				os << salas[i][j]->toString() << endl;
 			else
 				continue;

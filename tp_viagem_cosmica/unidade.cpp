@@ -109,15 +109,13 @@ unsigned int Unidade::countCaracteristicas() const{
 }
 
 void Unidade::actua_inicio(Nave *n){
-	for (unsigned int i = 0; i < vect_car.size(); i++) {
+	for (unsigned int i = 0; i < vect_car.size(); i++)
 		vect_car[i]->actua_car_inicio(this, n);
-	}
 }
 
 void Unidade::actua_fim(Nave *n) {
-	for (unsigned int i = 0; i < vect_car.size(); i++) {
+	for (unsigned int i = 0; i < vect_car.size(); i++) 
 		vect_car[i]->actua_car_fim(this, n);
-	}
 }
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){

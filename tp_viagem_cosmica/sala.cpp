@@ -37,8 +37,7 @@ int Sala::getID()const {
 	return id_sala;
 }
 
-int Sala::getIntegridade() const
-{
+int Sala::getIntegridade() const{
 	return integridade;
 }
 
@@ -92,8 +91,7 @@ void Sala::setOperada(bool valor) {
 		operada = false;
 }
 
-int Sala::getOxigenio() const
-{
+int Sala::getOxigenio() const {
 	return oxigenio;
 }
 
@@ -113,7 +111,7 @@ void Sala::reduzOxigenio(int oxig_reduzir) {
 		oxigenio -= oxig_reduzir;
 }
 
-bool Sala::getFogo() const{
+bool Sala::getFogo() const {
 	return fogo;
 }
 
@@ -143,9 +141,8 @@ bool Sala::getCurtoCircuito() const{
 }
 
 void Sala::setCurtoCircuito(bool valor){
-	if (valor == true) {
+	if (valor == true) 
 		curto_circuito = true;
-	}
 	else
 		curto_circuito = false;
 }
@@ -167,20 +164,19 @@ string Sala::toString()const {
 }
 
 void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
-	if (unidade_a_adicionar->getOndeEstou() == NULL) {
+	if (unidade_a_adicionar->getOndeEstou() == NULL) 
 		unidades.push_back(unidade_a_adicionar);
-	}else
+	else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
 
 void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 	if (unidade_a_remover->getOndeEstou() == this) {
-		for (auto p = unidades.begin(); p < unidades.end(); p++) {
+		for (auto p = unidades.begin(); p < unidades.end(); p++) 
 			if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 				unidades.erase(p);
 				break;
 			}
-		}
 		if (unidades.size() == 0)
 			setOperada(false);
 	}
@@ -200,11 +196,9 @@ Unidade* Sala::getUnidade(int id_unidade)const {
 
 void Sala::salas_actuar_inicio(Nave *n) {
 	// Dano causado pelo Fogo às Unidades na sala
-	if (getFogo() == true) {
-		for (unsigned int i = 0; i < unidades.size(); i++) {
+	if (getFogo() == true) 
+		for (unsigned int i = 0; i < unidades.size(); i++) 
 			unidades[i]->LevaDano(2);
-		}
-	}
 }
 
 void Sala::salas_actuar_fim(Nave *n) {
@@ -300,19 +294,16 @@ void Sala::salas_actuar_fim(Nave *n) {
 }
 
 void Sala::unidades_actuar_inicio(Nave *n) {
-	for (unsigned int i = 0; i < unidades.size(); i++) {
+	for (unsigned int i = 0; i < unidades.size(); i++)
 		unidades[i]->actua_inicio(n);
-	}
 }
 
 void Sala::unidades_actuar_fim(Nave *n) {
-	for (unsigned int i = 0; i < unidades.size(); i++) {
+	for (unsigned int i = 0; i < unidades.size(); i++)
 		unidades[i]->actua_fim(n);
-	}
 }
 
-Unidade * Sala::getUnidadePosicao(int posicao) const
-{
+Unidade * Sala::getUnidadePosicao(int posicao) const {
 	return unidades[posicao];
 }
 
@@ -618,7 +609,7 @@ SalaEnfermaria::SalaEnfermaria(string tipo):Sala(tipo){
 }
 
 void SalaEnfermaria::salas_actuar_fim(Nave * n){
-	// VERIFICAR SE É TRIPULANTE
+	// FALTA VERIFICAR SE É TRIPULANTE
 	for (unsigned int i = 0; i < countUnidades(); i++)
 		getUnidadePosicao(i)->aumentaPV(1);
 }

@@ -19,6 +19,7 @@ bool verifica_vitoria(Nave *nave, double nvl) {
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 10; j++) {
 				c.gotoxy(i, j);
+				c.setTextColor(c.VERMELHO_CLARO);
 				cout << "-----VITORIA-----";
 			}
 			cout << endl;
@@ -39,6 +40,7 @@ bool verifica_derrota(Nave *nave) {
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
 				c.gotoxy(i, j);
+				c.setTextColor(c.BRANCO_CLARO);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
@@ -53,6 +55,7 @@ bool verifica_derrota(Nave *nave) {
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
 				c.gotoxy(i, j);
+				c.setTextColor(c.BRANCO_CLARO);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
@@ -70,10 +73,13 @@ void interface_nave(Nave *nave, int turnos, int nvl) {
 	Consola c;
 	c.clrscr();
 
+	c.setTextColor(c.VERMELHO_CLARO);
 	cout << "Turno(s): " << turnos << "\t\t\t\tTripulacao: " << nave->countTripulacao() << " unidade(s)" << "\t\t\t\t\tInterface grafica da nave:" << endl;
 	c.gotoxy(80, 3);
+	c.setTextColor(c.AZUL_CLARO);
 	cout << "Distancia total percorrida: " << nave->getDistancia() << " milhas\t\t\tFaltam: " << (4000 + 1000 * nvl) - nave->getDistancia() << " milhas para completar a missao";
 
+	c.setTextColor(c.COR_DE_ROSA);
 	// Desenha centro da nave
 	for (int i = 0; i <= 180; i++) {
 		for (int j = 0; j <= 25; j++) {
@@ -111,6 +117,7 @@ void interface_nave(Nave *nave, int turnos, int nvl) {
 		}
 	}
 
+	c.setTextColor(c.VERDE_CLARO);
 	// Stats Salas
 	// Sala 1
 	c.gotoxy(81, 6); cout << "SALA 1";
@@ -196,8 +203,10 @@ void interface_nave(Nave *nave, int turnos, int nvl) {
 	c.gotoxy(141, 23); cout << "OPER: " << nave->getSala(12)->getOperada() << "    FOGO: " << nave->getSala(12)->getFogo();
 	c.gotoxy(141, 24); cout << "BREC: " << nave->getSala(12)->getBrecha() << "    CUCR: " << nave->getSala(12)->getCurtoCircuito();
 	
-	c.gotoxy(1, 1);
+	c.gotoxy(0, 1);
 	cout << nave->getSalas() << endl;
+
+	c.setTextColor(c.VERDE_CLARO);
 }
 
 void viagem(Nave *nave, double nvl) {
@@ -225,7 +234,7 @@ void viagem(Nave *nave, double nvl) {
 			cout << "De as ordens meu comandante...";
 			c.gotoxy(80, 41);
 			cout << "CMD> "; cin >> cmd;
-			if (cmd.find("mover", 0)) {
+			if (cmd == "mover") {
 				int id_unidade;
 				string dir_mov;
 				c.gotoxy(80, 42);
@@ -295,12 +304,17 @@ void menu_inicial() {
 
 	string cmd;
 	do {
+		PlaySound(NULL, NULL, 0);
+		PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
 		c.gotoxy(21, 18);
+
 		cout << "VIAGEM-COSMICA" << endl;
 		c.gotoxy(15, 21);
+		c.setTextColor(c.AZUL_CLARO);
 		cout << "Escreva o que deseja fazer: \n\t\t\t<jogar> \n\t\t\t<ajuda> \n\t\t\t<fim>\n" << endl;
 		c.gotoxy(15, 25);
+		c.setTextColor(c.VERDE_CLARO);
 		cout << "CMD> "; cin >> cmd;
 		if (cmd == "jogar") {
 			double nvl;
@@ -328,8 +342,6 @@ void menu_inicial() {
 }
 
 int main(void) {
-	PlaySound(NULL, NULL, 0);
-	PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 	system("title VIAGEM COSMICA");
 	system("mode 800");
 	srand(time(NULL));
