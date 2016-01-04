@@ -18,7 +18,7 @@ class Unidade{
 public:
 	Unidade(string tipo, int pv);
 	virtual ~Unidade();
-	virtual string toString()const;
+	string toString()const;
 	string getNome()const;
 	
 	int getPV()const;

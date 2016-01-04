@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <time.h>
 #include <windows.h>
 #include <MMSystem.h>
 using namespace std;
@@ -16,7 +17,8 @@ bool verifica_vitoria(Nave *nave, double nvl) {
 		PlaySound(TEXT("./SOUND/Victory.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
 		for (int i = 0; i <= 30; i++) {
-			for (int j = 0; j <= 3; j++) {
+			for (int j = 0; j <= 10; j++) {
+				c.gotoxy(i, j);
 				cout << "-----VITORIA-----";
 			}
 			cout << endl;
@@ -36,6 +38,7 @@ bool verifica_derrota(Nave *nave) {
 		c.clrscr();
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
+				c.gotoxy(i, j);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
@@ -49,6 +52,7 @@ bool verifica_derrota(Nave *nave) {
 		c.clrscr();
 		for (int i = 0; i <= 30; i++) {
 			for (int j = 0; j <= 3; j++) {
+				c.gotoxy(i, j);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
@@ -247,7 +251,7 @@ void viagem(Nave *nave, double nvl) {
 
 		c.clrscr();
 		c.gotoxy(3, 1);
-		cout << "Relatorio do final do turno" << endl;
+		cout << "Relatorio do final do turno" << endl << endl;
 
 		// 3. FINAL DO TURNO
 
@@ -263,7 +267,7 @@ void viagem(Nave *nave, double nvl) {
 			cout << "Estamos com sorte, nao tivemos precalcos a avancar comandante!" << endl;
 		}
 
-		cout << "Prime uma tecla pra avancar o turno..." << endl;
+		cout << endl << "Prime uma tecla pra avancar o turno..." << endl;
 		c.getch();
 	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);
 }
@@ -322,10 +326,9 @@ int main(void) {
 	PlaySound(NULL, NULL, 0);
 	PlaySound(TEXT("./SOUND/Cosmos.wav"), NULL, SND_LOOP | SND_ASYNC);
 	system("mode 800");
+	srand(time(NULL));
 
 	menu_inicial();
 
 	return 0;
 }
-
-

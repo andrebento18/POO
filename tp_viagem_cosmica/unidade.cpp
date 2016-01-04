@@ -27,7 +27,7 @@ Unidade::~Unidade() {
 
 string Unidade::toString()const {
 	ostringstream os;
-	os << "Unidade " << getNome() << ", pv: " << getPV();
+	os << "Unidade " << getNome() << ", id: " << getID_Unidade() << ", pv: " << getPV();
 	return os.str();
 }
 
@@ -59,13 +59,9 @@ void Unidade::aumentaPV(int valor_aumentar){
 }
 
 void Unidade::LevaDano(int dano_recebido){
-	if (getPV() == 0 || getPV() < 0) 
+	ponto_vida -= dano_recebido;
+	if (getPV() <= 0)
 		getOndeEstou()->remover_Unidade(this);
-	else {
-		ponto_vida -= dano_recebido;
-		if (getPV() == 0 || getPV() < 0)
-			getOndeEstou()->remover_Unidade(this);
-	}
 }
 
 Sala * Unidade::getOndeEstou()const{

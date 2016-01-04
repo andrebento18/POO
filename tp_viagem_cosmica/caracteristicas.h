@@ -36,15 +36,10 @@ public:
 		cout << "Esta unidade respira" << endl;
 	}
 	void actua_car_inicio(Unidade *u, Nave *n) {
-		if (u->getOndeEstou()->getOxigenio() <= 0) {
+		if (u->getOndeEstou()->getOxigenio() <= 0)
 			u->LevaDano(1);
-			// O ultimo sobrevivente não está a levar dano
-			cout << "leva dano";
-			system("pause");
-		}
-		else {
+		else 
 			u->getOndeEstou()->reduzOxigenio(respira);
-		}
 	};
 };
 
@@ -233,16 +228,16 @@ public:
 	Xenomorfo(int cap_dano) :Caracteristica("Xenomorfo") {
 		this->cap_dano = cap_dano;
 	}
-	void actua_car_fim(Unidade *u, Nave *n) {
-		bool existe_inimigo = false;
-		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
-			//for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
-			//	if(u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca != "Xenomorfo")
-			//		// Verificar se é enimigo, caso sim atacar um aleatório
-			//		// Aproveitar combatente
-			//}
-		}
-	}
+	//void actua_car_fim(Unidade *u, Nave *n) {
+	//	bool existe_inimigo = false;
+	//	for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+	//		//for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
+	//		//	if(u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca != "Xenomorfo")
+	//		//		// Verificar se é enimigo, caso sim atacar um aleatório
+	//		//		// Aproveitar combatente
+	//		//}
+	//	}
+	//}
 };
 
 class Mutantis_Mutandis : public Caracteristica {
@@ -253,10 +248,10 @@ public:
 		cout << "Esta unidade é capaz de alterar a sala onde se encontra com " << prob << " % probabilidade" << endl;
 	}
 	// Não sei se esta caracteristica actua no inicio ou no fim
-	void actua_car_inicio(Unidade *u, Nave *n) {
-		//if()
-		//	// Copiar a sala para outro tipo de sala aleatório
-	}
+	//void actua_car_inicio(Unidade *u, Nave *n) {
+	//	//if()
+	//	//	// Copiar a sala para outro tipo de sala aleatório
+	//}
 };
 //??????????????????????????????????????????????????????????????????????????????????????????????????????
 
@@ -297,54 +292,73 @@ public:
 			int id_sala = u->getOndeEstou()->getID();
 			// Sortear o movimento "cima", "baixo", "esquerda", "direita"
 			string comando_direcao;
-			switch (random(1, 4)) {
+			bool moveu = false;
+			do {
+				switch (random(1, 4)) {
 				case 1: comando_direcao = "cima";
-						break;
+					break;
 				case 2: comando_direcao = "baixo";
-						break;
+					break;
 				case 3: comando_direcao = "esquerda";
-						break;
+					break;
 				case 4: comando_direcao = "direita";
-						break;
-			}
-			// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
-			for (int i = 0; i <= 2; i++)
-				for (int j = 0; j <= 4; j++)
-					if (n->getSalaMatriz(i, j) != NULL)
-						if (n->getSalaMatriz(i, j)->getID() == id_sala) {
-							if (comando_direcao == "cima") {
-								if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-									break;
+					break;
+				}
+				// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
+				for (int i = 0; i <= 2; i++)
+					for (int j = 0; j <= 4; j++)
+						if (n->getSalaMatriz(i, j) != NULL)
+							if (n->getSalaMatriz(i, j)->getID() == id_sala) {
+								if (comando_direcao == "cima") {
+									if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0 || n->getSalaMatriz(i + 1, j) == NULL) {
+										break;
+									}
+									else {
+										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i + 1, j));
+										moveu = true;
+										cout << "movi" << endl;
+										system("pause");
+									}
+								}
+								else if (comando_direcao == "baixo") {
+									if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4 || n->getSalaMatriz(i - 1, j) == NULL) {
+										break;
+									}
+									else {
+										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i - 1, j));
+										moveu = true;
+										cout << "movi" << endl;
+										system("pause");
+									}
+								}
+								else if (comando_direcao == "direita") {
+									if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2 || n->getSalaMatriz(i, j + 1) == NULL) {
+										break;
+									}
+									else {
+										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j + 1));
+										moveu = true;
+										cout << "movi" << endl;
+										system("pause");
+									}
+								}
+								else if (comando_direcao == "esquerda") {
+									if (j == 0 && j == 1 && i == 1 || n->getSalaMatriz(i, j - 1) == NULL) {
+										break;
+									}
+									else {
+										u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j - 1));
+										moveu = true;
+										cout << "movi" << endl;
+										system("pause");
+									}
 								}
 								else
-									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i + 1, j));
-							}
-							else if (comando_direcao == "baixo") {
-								if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
 									break;
-								}
-								else
-									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i - 1, j));
 							}
-							else if (comando_direcao == "direita") {
-								if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-									break;
-								}
-								else
-									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j + 1));
-							}
-							else if (comando_direcao == "esquerda") {
-								if (j == 0 && j == 1 && i == 1) {
-									break;
-								}
-								else
-									u->mover_unidade(u->getID_Unidade(), n->getSalaMatriz(i, j), n->getSalaMatriz(i, j - 1));
-							}
-							else
-								break;
-						}
+			} while (moveu == false);
 		}
-	};
+	}
 };
 
 class Armado : public Caracteristica {

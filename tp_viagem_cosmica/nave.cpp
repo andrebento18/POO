@@ -257,9 +257,9 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL)
-				if (salas[i][j]->getUnidade(id_unidade) != NULL) {
+				if (salas[i][j]->getUnidade(id_unidade) != NULL) 
 					id_sala = salas[i][j]->getID();
-				}
+
 	// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
 	for (int i = 0; i <= 2; i++)
 		for (int j = 0; j <= 4; j++)
@@ -267,23 +267,26 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 				if (salas[i][j]->getID() == id_sala) {
 					if (comando_direcao == "cima") {
 						if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
+							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a norte comandante!" << endl;
+							system("pause");
 							break;
 						}
 						else
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
+							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
 					}
 					else if (comando_direcao == "baixo") {
 						if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
-							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
+							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a sul comandante!" << endl;
+							system("pause");
 							break;
 						}
 						else 
-							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i - 1][j]);
+							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i + 1][j]);
 					}
 					else if (comando_direcao == "direita") {
 						if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+							system("pause");
 							break;
 						}
 						else 
@@ -291,14 +294,18 @@ void Nave::check_mov_sala(int id_unidade, string comando_direcao){
 					}
 					else if (comando_direcao == "esquerda") {
 						if (j == 0 && j == 1 && i == 1) {
-							cout << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+							cout << endl << "Nao podemos mover a unidade " << id_unidade << " para a sala a este comandante!" << endl;
+							system("pause");
 							break;
 						}
 						else 
 							salas[i][j]->getUnidade(id_unidade)->mover_unidade(id_unidade, salas[i][j], salas[i][j - 1]);
 					}
-					else
-						cout << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
+					else {
+						cout << endl << "Comandante, essa unidade ou esse movimento nao e possivel" << endl;
+						system("pause");
+						break;
+					}
 				}
 }
 
@@ -336,115 +343,118 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(1, 4);
+	int x = random(2, 2);
 	switch (x) {
-	case 1: {
-		//Evento Chuva de meteoritos
-		cout << "CHUVA DE METEORITOS" << endl;
-		//Check quantos raio laser operados existem na nave
-		int raio_laser_oper = 0;
-		for (int i = 1; i <= 12; i++)
-			if (getSala(i)->getTipo() == RAIOLASER && getSala(i)->getOperada() == true)
-				raio_laser_oper += 1;
+		case 1: {
+			//Evento Chuva de meteoritos
+			cout << "CHUVA DE METEORITOS" << endl;
+			//Check quantos raio laser operados existem na nave
+			int raio_laser_oper = 0;
+			for (int i = 1; i <= 12; i++)
+				if (getSala(i)->getTipo() == RAIOLASER && getSala(i)->getOperada() == true)
+					raio_laser_oper += 1;
 
-		if (getSala(8)->getOperada() == false) {
-			int n_meteoritos = random(6, 12);
-			if (raio_laser_oper > 0) {
-				for (int i = raio_laser_oper; i > 0; i--) {
-					int n_ciclos = n_meteoritos;
-					//Contra-ataque do raio laser
-					for (int i = n_ciclos; i > 0; i--) {
-						int prob = random(0, 1);
-						if (prob == 1)
-							n_meteoritos -= 1;
+			if (getSala(8)->getOperada() == false) {
+				int n_meteoritos = random(6, 12);
+				if (raio_laser_oper > 0) {
+					for (int i = raio_laser_oper; i > 0; i--) {
+						int n_ciclos = n_meteoritos;
+						//Contra-ataque do raio laser
+						for (int i = n_ciclos; i > 0; i--) {
+							int prob = random(0, 1);
+							if (prob == 1)
+								n_meteoritos -= 1;
+						}
 					}
 				}
+				dano_meteoritos(this, n_meteoritos);
 			}
-			dano_meteoritos(this, n_meteoritos);
-		}
-		else {
-			int n_meteoritos = random(4, 8);
-			if (raio_laser_oper > 0) {
-				for (int i = raio_laser_oper; i > 0; i--) {
-					int n_ciclos = n_meteoritos;
-					//Contra-ataque do raio laser
-					for (int i = n_ciclos; i > 0; i--) {
-						int prob = random(0, 1);
-						if (prob == 1)
-							n_meteoritos -= 1;
+			else {
+				int n_meteoritos = random(4, 8);
+				if (raio_laser_oper > 0) {
+					for (int i = raio_laser_oper; i > 0; i--) {
+						int n_ciclos = n_meteoritos;
+						//Contra-ataque do raio laser
+						for (int i = n_ciclos; i > 0; i--) {
+							int prob = random(0, 1);
+							if (prob == 1)
+								n_meteoritos -= 1;
+						}
 					}
 				}
+				dano_meteoritos(this, n_meteoritos);
 			}
-			dano_meteoritos(this, n_meteoritos);
-		}
-		break;
-	}
-	case 2: {
-		//Evento Ataque dos piratas
-		cout << "ATAQUE DOS PIRATAS" << endl;
-		// Dano provocado pelo disparo dos piratas
-		int dano_disparo_piratas = random(30, 60);
-
-		dano_piratas(this, dano_disparo_piratas);
-
-		// Check quantos raio laser operados existem na nave
-		int raio_laser_oper = 0;
-		for (int i = 1; i <= 12; i++)
-			if (getSala(i)->getTipo() == RAIOLASER && getSala(i)->getOperada() == true)
-				raio_laser_oper += 1;
-
-		// Retaliação da Nave ou invasão dos Piratas
-		if (raio_laser_oper > 0)
 			break;
-		else {
-			int n_piratas = random(3, 5);
+		}
+
+		case 2: {
+			//Evento Ataque dos piratas
+			cout << "ATAQUE DOS PIRATAS" << endl;
+			// Dano provocado pelo disparo dos piratas
+			int dano_disparo_piratas = random(30, 60);
+
+			dano_piratas(this, dano_disparo_piratas);
+
+			// Check quantos raio laser operados existem na nave
+			int raio_laser_oper = 0;
+			for (int i = 1; i <= 12; i++)
+				if (getSala(i)->getTipo() == RAIOLASER && getSala(i)->getOperada() == true)
+					raio_laser_oper += 1;
+
+			// Retaliação da Nave ou invasão dos Piratas
+			if (raio_laser_oper > 0)
+				break;
+			else {
+				int n_piratas = random(3, 5);
+				int sala_random = random(1, 12);
+				for (int i = n_piratas; i > 0; i--) {
+					Unidade *p = new Pirata("Pirata");
+					getSala(sala_random)->adicionar_Unidade(p);
+					p->setOndeEstou(getSala(sala_random));
+				}
+				cout << n_piratas << " invadiram a nossa nave comandante, temos que ter cuidado" << endl;
+			}
+			break;
+		}
+
+		case 3: {
+			//Evento Ataque Xenomorfo
+			cout << "ATAQUE XENOMORFO" << endl;
+			int alien_random = random(1, 3);
 			int sala_random = random(1, 12);
-			for (int i = n_piratas; i > 0; i--) {
-				Unidade *p = new Pirata("Pirata");
+			if (alien_random == 1) {
+				Unidade *p = new Geigermorfo("Geigermorfo");
 				getSala(sala_random)->adicionar_Unidade(p);
 				p->setOndeEstou(getSala(sala_random));
 			}
-			cout << n_piratas << " invadiram a nossa nave comandante, temos que ter cuidado" << endl;
-		}
-		break;
-	}
-	case 3: {
-		//Evento Ataque Xenomorfo
-		cout << "ATAQUE XENOMORFO" << endl;
-		int alien_random = random(1, 3);
-		int sala_random = random(1, 12);
-		if (alien_random == 1) {
-			Unidade *p = new Geigermorfo("Geigermorfo");
-			getSala(sala_random)->adicionar_Unidade(p);
-			p->setOndeEstou(getSala(sala_random));
-		}
-		else if (alien_random == 2) {
-			Unidade *p = new Blob("Blob");
-			getSala(sala_random)->adicionar_Unidade(p);
-			p->setOndeEstou(getSala(sala_random));
-		}
-		else if (alien_random == 3) {
-			Unidade *p = new Mxyzypykwi("Mxyzypykwi");
-			getSala(sala_random)->adicionar_Unidade(p);
-			p->setOndeEstou(getSala(sala_random));
-		}
-		cout << "Fomos invadidos por um ser alienisna comandante" << endl;
-		break;
-	}
-	case 4: {
-		// Evento pó cósmico
-		// falta implemnentar não calhar na mesma sala
-		int n_salas_afetadas = random(3, 5);
-		while (n_salas_afetadas != 0) {
-			int i = random(0, 2);
-			int j = random(0, 4);
-			if (salas[i][j] != NULL) {
-				n_salas_afetadas--;
-				salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
-				cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
+			else if (alien_random == 2) {
+				Unidade *p = new Blob("Blob");
+				getSala(sala_random)->adicionar_Unidade(p);
+				p->setOndeEstou(getSala(sala_random));
 			}
+			else if (alien_random == 3) {
+				Unidade *p = new Mxyzypykwi("Mxyzypykwi");
+				getSala(sala_random)->adicionar_Unidade(p);
+				p->setOndeEstou(getSala(sala_random));
+			}
+			cout << "Fomos invadidos por um ser alienisna comandante" << endl;
+			break;
 		}
-		break;
-	}
+		
+		case 4: {
+			// Evento pó cósmico
+			// falta implemnentar não calhar na mesma sala
+			int n_salas_afetadas = random(3, 5);
+			while (n_salas_afetadas != 0) {
+				int i = random(0, 2);
+				int j = random(0, 4);
+				if (salas[i][j] != NULL) {
+					n_salas_afetadas--;
+					salas[i][j]->setIntegridade(salas[i][j]->getIntegridade() - 10);
+					cout << "A sala " << salas[i][j]->getTipo() << ", " << salas[i][j]->getID() << " recebeu um dano de 10" << endl;
+				}
+			}
+			break;
+		}
 	}
 }

@@ -154,7 +154,7 @@ string Sala::toString()const {
 	os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
 	if (unidades.size() != 0) {
 		for (unsigned int i = 0; i < unidades.size(); i++)
-			os << "\t->" << unidades[i]->getNome() << ", id " << unidades[i]->getID_Unidade() << ", pv " << unidades[i]->getPV() << endl;
+			os << "\t->" << unidades[i]->toString() << endl;
 	}
 	else
 		os << "\t->Sala sem unidades" << endl;
@@ -164,7 +164,6 @@ string Sala::toString()const {
 void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
 	if (unidade_a_adicionar->getOndeEstou() == NULL) {
 		unidades.push_back(unidade_a_adicionar);
-		setOperada(true);
 	}else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
@@ -183,7 +182,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 }
 
 unsigned int Sala::countUnidades()const {
-	return unidades.size();
+	return (unsigned)unidades.size();
 }
 
 Unidade* Sala::getUnidade(int id_unidade)const {
@@ -288,7 +287,7 @@ void Sala::salas_actuar_fim(Nave *n) {
 	if (getCurtoCircuito() == true) {
 		if (random(1, 4) == 1) {
 			for (unsigned int i = 0; i < unidades.size(); i++) {
-				unidades[i]->LevaDano(1 * unidades.size());
+				unidades[i]->LevaDano(1 * (unsigned)unidades.size());
 			}
 		}
 	}
@@ -305,12 +304,11 @@ void Sala::unidades_actuar_fim(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++) {
 		unidades[i]->actua_fim(n);
 	}
-
-	for (unsigned int i = 0; i < unidades.size(); i++) {
-		if (unidades[i]->getOndeEstava() != NULL) {
-			unidades[i]->setOndeEstava(NULL);
-		}
-	}
+	//for (unsigned int i = 0; i < unidades.size(); i++) {
+	//	if (unidades[i]->getOndeEstava() != NULL) {
+	//		unidades[i]->setOndeEstava(NULL);
+	//	}
+	//}
 }
 
 Unidade * Sala::getUnidadePosicao(int posicao) const
@@ -417,8 +415,8 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 	if (this->getIntegridade() == 100) { // só funciona se estiver sem dano nenhum
 
 		if (n->getSala(this->getID())->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-			for (int j = 0; j < n->getSala(this->getID())->countUnidades(); j++) {
-				for (int z = 0; z < n->getSala(this->getID())->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+			for (unsigned int j = 0; j < n->getSala(this->getID())->countUnidades(); j++) {
+				for (unsigned int z = 0; z < n->getSala(this->getID())->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 					if (n->getSala(this->getID())->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao"){
 						tripulante_encontrado = 1;
 						break;
@@ -440,8 +438,8 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 			if (sala_seg_interna == 2 || sala_seg_interna == 3) {
 				sala_seg_interna++; //sala a direita
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -457,10 +455,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 				}
 
 
-				sala_seg_interna - 2; //sala da esquerda a começar a partir da sala a direita da sala de segurança interna
+				sala_seg_interna -= 2; //sala da esquerda a começar a partir da sala a direita da sala de segurança interna
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -475,10 +473,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 					}
 				}
 
-				sala_seg_interna + 4; //sala de baixo a começar da sala à esquerda da sala de segurnaça interna
+				sala_seg_interna += 4; //sala de baixo a começar da sala à esquerda da sala de segurnaça interna
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -496,10 +494,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 			}
 
 			if (sala_seg_interna == 10 || sala_seg_interna == 11) {
-				sala_seg_interna - 5; //sala de cima a começar da sala de segurnaça interna são menos 5 unidades
+				sala_seg_interna -= 5; //sala de cima a começar da sala de segurnaça interna são menos 5 unidades
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -514,10 +512,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 					}
 				}
 
-				sala_seg_interna + 4; //sala de esquerda a começar da sala a cima da sala segurança interna são mais 4 unidades
+				sala_seg_interna += 4; //sala de esquerda a começar da sala a cima da sala segurança interna são mais 4 unidades
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -532,10 +530,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 					}
 				}
 
-				sala_seg_interna + 2; //sala de direita a começar da sala à esquerda da sala segurança interna são mais 2 unidades
+				sala_seg_interna += 2; //sala de direita a começar da sala à esquerda da sala segurança interna são mais 2 unidades
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -555,8 +553,8 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 			if (sala_seg_interna == 12 || sala_seg_interna == 4) {
 				sala_seg_interna--; //sala a esquerda
 				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 								tripulante_encontrado = 1;
 						}
@@ -573,10 +571,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 
 				sala_seg_interna = n->getSala(i)->getID();
 				if (sala_seg_interna == 4) {
-					sala_seg_interna + 3;
+					sala_seg_interna += 3;
 					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-						for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-							for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+						for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+							for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 									tripulante_encontrado = 1;
 							}
@@ -592,10 +590,10 @@ void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
 					}
 				}
 				else { // ele na sala 12 tem que dar dano na sala de cima que fica a menos 5 unidades da sala em que está
-					sala_seg_interna - 5;
+					sala_seg_interna -= 5;
 					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-						for (int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-							for (int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
+						for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
+							for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
 								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
 									tripulante_encontrado = 1;
 							}
