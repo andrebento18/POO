@@ -27,9 +27,7 @@ public:
 	void aumentaPV(int valor_aumentar);
 	void LevaDano(int dano_recebido);
 
-	int getID_Unidade()const {
-		return id_unidade;
-	}
+	int getID_Unidade()const;
 	
 	Sala *getOndeEstou()const;
 	Sala * getOndeEstava() const;

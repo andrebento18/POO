@@ -3,9 +3,9 @@
 #include <sstream>
 using namespace std;
 
+#include "caracteristicas.h"
 #include "sala.h"
 #include "nave.h"
-#include "caracteristicas.h"
 
 int random(int min, int max);
 
@@ -20,7 +20,6 @@ Sala::Sala(string tipo):tipo(tipo){
 	fogo = false;
 	brecha = false;
 	curto_circuito = false;
-	cout << "Sala " << this->tipo << " criada" << endl;
 }
 
 Sala::~Sala() {
@@ -310,7 +309,10 @@ Unidade * Sala::getUnidadePosicao(int posicao) const {
 ////////// SALAS PREDEFINIDAS ///////////
 
 SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
-	cout << "Propulsor Adicional adicionado" << endl;
+	if (tipo == "Propulsor")
+		cout << "Propulsor adicionado" << endl;
+	else
+		cout << "Propulsor adicional adicionado" << endl;
 }
 
 void SalaPropulsor::salas_actuar_fim(Nave *n) {

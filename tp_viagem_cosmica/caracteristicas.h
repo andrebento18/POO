@@ -1,25 +1,18 @@
 #pragma once
 #include "nave.h"
 
-using namespace std;
-
 int random(int min, int max);
 
 class Caracteristica {
 	string tipo;
 public:
-	Caracteristica(string tipo) {
-		this->tipo = tipo;
-	}
-	virtual ~Caracteristica() {
-		cout << "Caracteristica eliminada" << endl;
-	}
-	string getTipoCaracterisca() {
-		return tipo;
-	}
+	Caracteristica(string tipo);
+	virtual ~Caracteristica();
 
-	virtual void actua_car_inicio(Unidade *u, Nave *n) {}
-	virtual void actua_car_fim(Unidade *u, Nave *n) {}
+	string getTipoCaracterisca();
+
+	virtual void actua_car_inicio(Unidade *u, Nave *n) {};
+	virtual void actua_car_fim(Unidade *u, Nave *n) {};
 
 	virtual int getArmacao(void) { return 0; }
 };
@@ -27,76 +20,34 @@ public:
 class Respira : public Caracteristica {
 	int respira;
 public:
-	Respira(void):Caracteristica("Respira") {
-		respira = 2;
-		cout << "Esta unidade respira" << endl;
-	}
-	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
-		if (u->getOndeEstou()->getOxigenio() <= 0)
-			u->LevaDano(1);
-		else 
-			u->getOndeEstou()->reduzOxigenio(respira);
-	};
+	Respira(void);
+
+	void actua_car_inicio(Unidade *u, Nave *n);
 };
 
 class Flamejante : public Caracteristica {
 public:
-	Flamejante(void):Caracteristica("Flamejante") {
-		cout << "Esta unidade esta envolta em chamas" << endl;
-	}
-	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
-		u->getOndeEstou()->reduzOxigenio(5);
-	}
+	Flamejante(void);
+
+	void actua_car_inicio(Unidade *u, Nave *n = nullptr);
 };
 
 class Toxico : public Caracteristica {
 	int dano_toxico;
 public:
-	Toxico(int toxicidade):Caracteristica("Toxico"), dano_toxico(toxicidade) {
-		cout << "Este ser e toxico" << endl;
-	}
-	void actua_car_inicio(Unidade *u, Nave *n = nullptr) {
-		bool existe_toxico;
-		bool unidade_toxica = false;
-		Sala *p = u->getOndeEstou();
-		for (unsigned int i = 0; i < p->countUnidades(); i++) {
-			existe_toxico = false;
-			for (unsigned int j = 0; j < p->getUnidadePosicao(i)->countCaracteristicas(); j++) {
-				if (p->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() == "Toxico") {
-					existe_toxico = true;
-					break;
-				}
-			}
-			if (existe_toxico != true) {
-				p->getUnidadePosicao(i)->LevaDano(dano_toxico);
-			}
-		}
-		
-	}
+	Toxico(int nvl_toxicd);
+
+	void actua_car_inicio(Unidade *u, Nave *n = nullptr);
 };
 
 class Indeciso : public Caracteristica {
 	bool ignora_actua_inicio;
 public:
-	Indeciso(void):Caracteristica("Indeciso") {
-		ignora_actua_inicio = false;
-	};
-	void actua_car_inicio(Unidade *u, Nave *n) {
-		int x = random(1, 2);
+	Indeciso(void);
 
-		if (x == 1 && ignora_actua_inicio == false) {
-			ignora_actua_inicio = true;
-		}
-		else if (ignora_actua_inicio == true) {
-			ignora_actua_inicio = false;
-		}
-	}
+	void actua_car_inicio(Unidade *u, Nave *n);
 	
-	void actua_car_fim(Unidade *u, Nave *n) {
-		if (ignora_actua_inicio == true){
-			u->setOndeEstou(u->getOndeEstava());
-		}
-	}
+	void actua_car_fim(Unidade *u, Nave *n);
 };
 
 class Misterioso : public Caracteristica {
@@ -257,13 +208,14 @@ public:
 		cout << "Esta unidade e capaz de operar salas" << endl;
 	}
 	void actua_car_inicio(Unidade *u, Nave *n) {
-		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
+		/*for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
 			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
 				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() != "Tripulacao") {
 					u->getOndeEstou()->setOperada(false);
 				}
 			}
-		}
+		}*/
+		// FALATA VERIFICAR SE ESTÁ EM COMBATE ????????
 		if (u->getOndeEstou()->getIntegridade() == 100)
 			u->getOndeEstou()->setOperada(true);
 	}
@@ -280,7 +232,7 @@ class Move : public Caracteristica {
 	int prob_movimento;
 public:
 	Move(int pmovimento) :Caracteristica("Move"), prob_movimento(pmovimento) {
-		cout << "Sou capaz de me mover!" << endl;
+		cout << "Esta unidade pode mover-se para outra sala com prob. " << prob_movimento << " %"<< endl;
 	}
 	void actua_car_inicio(Unidade *u, Nave *n) {
 		if (random(1, 100) < prob_movimento){

@@ -4,7 +4,9 @@
 #include <time.h>
 #include <windows.h>
 #include <MMSystem.h>
+
 using namespace std;
+
 #include "util.h"
 #include "ConsolaG++.h"
 #include "nave.h"
@@ -16,16 +18,17 @@ bool verifica_vitoria(Nave *nave, double nvl) {
 		PlaySound(NULL, NULL, 0);
 		PlaySound(TEXT("./SOUND/Victory.wav"), NULL, SND_LOOP | SND_ASYNC);
 		c.clrscr();
-		for (int i = 0; i <= 30; i++) {
-			for (int j = 0; j <= 10; j++) {
+		for (int i = 0; i <= 153; i += 17) {
+			for (int j = 0; j <= 30; j++) {
 				c.gotoxy(i, j);
 				c.setTextColor(c.VERMELHO_CLARO);
 				cout << "-----VITORIA-----";
 			}
 			cout << endl;
 		}
-		cout << "Parabens, prime uma tecla para voltar ao menu inicial" << endl;
+		cout << endl << "\t\t\tParabens, prime uma tecla para voltar ao menu inicial" << endl;
 		c.getch();
+		c.setTextColor(c.VERDE_CLARO);
 		return 1;
 	}else
 		// sem vitória
@@ -37,31 +40,33 @@ bool verifica_derrota(Nave *nave) {
 	if (nave->verifica_saudeNave() == 0) {
 		// derrota devido a destruicao de uma sala 
 		c.clrscr();
-		for (int i = 0; i <= 30; i++) {
-			for (int j = 0; j <= 3; j++) {
+		for (int i = 0; i <= 171; i += 19) {
+			for (int j = 0; j <= 30; j++) {
 				c.gotoxy(i, j);
 				c.setTextColor(c.BRANCO_CLARO);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
 		}
-		cout << "Uma sala da tua nave foi destruida, prime uma tecla para voltar ao menu inicial e tentar novamente" << endl;
+		cout << endl << "\t\t\tUma sala da tua nave foi destruida, prime uma tecla para voltar ao menu inicial e tentar novamente" << endl;
 		c.getch();
+		c.setTextColor(c.VERDE_CLARO);
 		return 1;
 	}
 	else if (nave->countTripulacao() == 0) {
 		// derrota devido a perda da tripulacao
 		c.clrscr();
-		for (int i = 0; i <= 30; i++) {
-			for (int j = 0; j <= 3; j++) {
+		for (int i = 0; i <= 171; i += 19) {
+			for (int j = 0; j <= 30; j++) {
 				c.gotoxy(i, j);
 				c.setTextColor(c.BRANCO_CLARO);
 				cout << "-----GAME-OVER-----";
 			}
 			cout << endl;
 		}
-		cout << "Ficaste sem tripulacao, prime uma tecla para voltar ao menu inicial e tentar novamente" << endl;
+		cout << endl << "\t\t\tFicaste sem tripulacao, prime uma tecla para voltar ao menu inicial e tentar novamente" << endl;
 		c.getch();
+		c.setTextColor(c.VERDE_CLARO);
 		return 1;
 	}
 	else
@@ -205,8 +210,6 @@ void interface_nave(Nave *nave, int turnos, int nvl) {
 	
 	c.gotoxy(0, 1);
 	cout << nave->getSalas() << endl;
-
-	c.setTextColor(c.VERDE_CLARO);
 }
 
 void viagem(Nave *nave, double nvl) {
@@ -218,7 +221,7 @@ void viagem(Nave *nave, double nvl) {
 	int turnos = 0;
 	int event_ocurr = 0;
 
-	do {
+	while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0) {
 		c.clrscr();
 		// 1. INICIO DO TURNO
 		turnos++;
@@ -227,6 +230,12 @@ void viagem(Nave *nave, double nvl) {
 
 		// 2. FASE DE ORDENS
 		string cmd;
+		
+		int unidades_movidas[10];
+		for (int i = 0; i < 10; i++) unidades_movidas[i] = 0;
+		int n_unidades_mov = 0;
+		bool pode_mover = true;
+		
 		do {
 			interface_nave(nave, turnos, nvl);
 			
@@ -242,12 +251,25 @@ void viagem(Nave *nave, double nvl) {
 				c.gotoxy(80, 43);
 				cout << "Para que sala? (Segundo uma orientacao) "; cin >> dir_mov; cout << endl;
 
-				if ((nave->check_mov_sala(id_unidade, dir_mov)) == false) {
+				for (int i = 0; i <= n_unidades_mov; i++) 
+					if (id_unidade == unidades_movidas[i]) {
+						pode_mover = false;
+						break;
+					}
+
+				if (pode_mover == false) {
 					cout << "Impossivel mover a unidade " << id_unidade << " para " << dir_mov << " comandante!" << endl;
 					system("pause");
 				}
-				else
-					cout << "Unidade " << id_unidade << " movida para " << dir_mov << " com sucesso comandante!" << endl;
+				else {
+					if ((nave->check_mov_sala(id_unidade, dir_mov)) == true) {
+						unidades_movidas[n_unidades_mov] = id_unidade;
+						n_unidades_mov++;
+						cout << "Unidade: " << id_unidade << " movida para " << dir_mov << " com sucesso comandante!" << endl;
+						system("pause");
+					}
+				}
+				pode_mover = true;
 			}
 			else if (cmd == "fim")
 			{
@@ -265,16 +287,18 @@ void viagem(Nave *nave, double nvl) {
 
 		c.clrscr();
 		c.gotoxy(3, 1);
-		cout << "Relatorio do final do turno" << endl << endl;
+		cout << "Relatorio do final do turno:" << endl << endl;
 
 		// 3. FINAL DO TURNO
-
+		
 		nave->fim_turno();
 
 		// 4. EVENTOS
 		if (event_ocurr == 0) {
+			c.setTextColor(c.CINZENTO);
 			nave->evento();
 			event_ocurr = random(5, 10);
+			c.setTextColor(c.VERDE_CLARO);
 		}
 		else {
 			event_ocurr--;
@@ -283,7 +307,7 @@ void viagem(Nave *nave, double nvl) {
 
 		cout << endl << "Prime uma tecla pra avancar o turno..." << endl;
 		c.getch();
-	} while (verifica_vitoria(nave, nvl) == 0 && verifica_derrota(nave) == 0);
+	}
 }
 
 void ajuda() {
@@ -311,9 +335,9 @@ void menu_inicial() {
 
 		cout << "VIAGEM-COSMICA" << endl;
 		c.gotoxy(15, 21);
-		c.setTextColor(c.AZUL_CLARO);
+		c.setTextColor(c.CINZENTO);
 		cout << "Escreva o que deseja fazer: \n\t\t\t<jogar> \n\t\t\t<ajuda> \n\t\t\t<fim>\n" << endl;
-		c.gotoxy(15, 25);
+		c.gotoxy(15, 26);
 		c.setTextColor(c.VERDE_CLARO);
 		cout << "CMD> "; cin >> cmd;
 		if (cmd == "jogar") {

@@ -16,8 +16,6 @@
 #include "ConsolaG++.h"
 #include "nave.h"
 
-using namespace std;
-
 int random(int min, int max);
 
 Nave::Nave() {
@@ -56,6 +54,9 @@ Nave::Nave() {
 				do {
 					//cin.clear();
 					//cin.ignore(1, '\n');
+					c.setTextColor(c.CINZENTO);
+					cout << "Salas possiveis de adicionar: " << endl << "\t->Propulsor Adicional" << "\t->Beliche" << "\t->Raio Laser" << "\t->Auto-reparador" << endl << "\t->Sistema de Seguranca interno" << "\t->Enfermaria" << "\t->Sala de armas" << "\t->Alojamentos do Capitao" << endl << "\t->Oficina Robotica" << endl;
+					c.setTextColor(c.VERDE_CLARO);
 					cout << "Tipo de sala a adicionar com id " << contador << " : ";
 					getline(cin, tipo_sala);
 					//cin >> "\n";
@@ -107,7 +108,7 @@ Nave::Nave() {
 						break;
 					}
 					else
-						cout << "A sala que pretende criar nao e possivel!" << endl;
+						cout << "A sala que pretende adicionar nao e possivel!" << endl;
 				} while (tipo_sala != BELICHE || tipo_sala != PROPULSORADICIONAL || tipo_sala != RAIOLASER || tipo_sala == AUTOREPARADOR || tipo_sala == SISTEMASEGINTERNO || tipo_sala == ENFERMARIA || tipo_sala != SALAARMAS || tipo_sala != ALOJCAPITAO || tipo_sala != OFICROBOTICA);
 			}
 		}
@@ -116,6 +117,7 @@ Nave::Nave() {
 	cout << "Prime uma tecla para avancar...";
 	c.getch();
 	c.clrscr();
+
 	cout << "Agora vamos adicionar os tripulantes a tua nave!" << endl;
 
 	int conta_mebros_trip = 3;
@@ -305,13 +307,13 @@ void dano_meteoritos(Nave *n, int n_meteoritos) {
 		if (n->getSala(7)->getEscudo() == 0) {
 			int sala_random = random(1, 12);
 			n->getSala(sala_random)->reduzIntegridade(10);
-			cout << "Dano de 10 pontos provocado na sala " << n->getSala(sala_random)->getID() << "   " << n->getSala(sala_random)->getTipo() << endl;
+			cout << "A integridade da Sala: " << n->getSala(sala_random)->getID() << "   " << n->getSala(sala_random)->getTipo() << " foi reduzida em 10 pontos" << endl;
 			n->getSala(sala_random)->setBrecha(true);
-			cout << "Brecha provocada na sala " << n->getSala(sala_random)->getID() << "   " << n->getSala(sala_random)->getTipo() << endl;
+			cout << "Oh nao!!! Foi provocada uma brecha na sala " << n->getSala(sala_random)->getID() << "   " << n->getSala(sala_random)->getTipo() << endl;
 		}
 		else {
 			n->getSala(7)->reduzEscudo(10);
-			cout << "Escudo danificado em 10 pontos" << endl;
+			cout << "O Escudo danificado em 10 pontos" << endl;
 		}
 	}
 }
@@ -330,15 +332,15 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 	}
 	else
 		n->getSala(7)->reduzEscudo(dano_ataque_piratas);
-	cout << "Os piratas atacaram a nave comandante, foram provocados " << dano_ataque_piratas << " pontos de dano" << endl;
+	cout << "Os piratas atacaram a nossa nave comandante, foram provocados " << dano_ataque_piratas << " pontos de dano" << endl;
 }
 
 void Nave::evento() {
-	int x = random(1, 4);
+	int x = random(4, 4);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos
-			cout << "CHUVA DE METEORITOS" << endl;
+			cout << "\tCHUVA DE METEORITOS" << endl << endl;
 			//Check quantos raio laser operados existem na nave
 			int raio_laser_oper = 0;
 			for (int i = 1; i <= 12; i++)
@@ -379,7 +381,7 @@ void Nave::evento() {
 		}
 
 		case 2: {
-			cout << "ATAQUE DOS PIRATAS" << endl;
+			cout << "\tATAQUE DOS PIRATAS" << endl << endl;
 			// Dano provocado pelo disparo dos piratas
 			int dano_disparo_piratas = random(30, 60);
 
@@ -402,13 +404,13 @@ void Nave::evento() {
 					getSala(sala_random)->adicionar_Unidade(p);
 					p->setOndeEstou(getSala(sala_random));
 				}
-				cout << n_piratas << " invadiram a nossa nave comandante, temos que ter cuidado" << endl;
+				cout << n_piratas << " piratas invadiram a nossa nave comandante, temos que ter cuidado" << endl;
 			}
 			break;
 		}
 
 		case 3: {
-			cout << "ATAQUE XENOMORFO" << endl;
+			cout << "\tATAQUE XENOMORFO" << endl;
 			int alien_random = random(1, 3);
 			int sala_random = random(1, 12);
 			if (alien_random == 1) {
@@ -426,19 +428,19 @@ void Nave::evento() {
 				getSala(sala_random)->adicionar_Unidade(p);
 				p->setOndeEstou(getSala(sala_random));
 			}
-			cout << "Fomos invadidos por um ser alienigena comandante" << endl;
+			cout << endl << "Fomos invadidos por um ser alienigena comandante" << endl;
 			break;
 		}
 		
 		case 4: {
 			// falta implementar não calhar na mesma sala
-			cout << "PO COSMICO" << endl;
+			cout << "\tPO COSMICO" << endl;
 			int n_salas_afetadas = random(3, 5);
 			while (n_salas_afetadas != 0) {
-				int sala_random = (1, 12);
+				int sala_random = random(1, 12);
 				n_salas_afetadas--;
 				getSala(sala_random)->reduzIntegridade(10);
-				cout << "A sala " << getSala(sala_random)->getTipo() << ", " << getSala(sala_random)->getID() << " recebeu um dano de 10 pontos de integridade!" << endl;
+				cout << "Devido ao po cosmico que atravessamos, a sala: " << getSala(sala_random)->getID() << ", " << getSala(sala_random)->getTipo() << " recebeu um dano de 10 pontos comandante." << endl;
 			}
 			break;
 		}

@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="caracteristicas.cpp" />
     <ClCompile Include="ConsolaG++.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="nave.cpp" />

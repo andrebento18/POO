@@ -7,7 +7,7 @@ using namespace std;
 #include "unidade.h"
 #include "sala.h"
 
-int Unidade::conta_unidades = 0;
+int Unidade::conta_unidades = 1;
 int Unidade::ponto_vida_inicial = 0;
 
 Unidade::Unidade(string tipo, int pv) {
@@ -64,6 +64,10 @@ void Unidade::LevaDano(int dano_recebido){
 		getOndeEstou()->remover_Unidade(this);
 }
 
+int Unidade::getID_Unidade() const{
+		return id_unidade;
+}
+
 Sala * Unidade::getOndeEstou()const{
 	return ondestou;
 }
@@ -86,7 +90,6 @@ void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) 
 	setOndeEstou(NULL);
 	sala_nova->adicionar_Unidade(this);
 	setOndeEstou(sala_nova);
-	cout << getNome() << ", id " << getID_Unidade() << " movido de " << sala_antiga->getTipo() << ", para " << sala_nova->getTipo() << endl;
 }
 
 void Unidade::setCaracteristica(Caracteristica *p) {
