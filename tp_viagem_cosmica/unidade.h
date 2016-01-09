@@ -73,8 +73,9 @@ public:
 };
 
 class CasulodeGeigermorfo :public Unidade {
+	Unidade *unidade_aprisionada;
 public:
-	CasulodeGeigermorfo(string tipo);
+	CasulodeGeigermorfo(string tipo, Unidade *u);
 };
 
 class Blob :public Unidade {

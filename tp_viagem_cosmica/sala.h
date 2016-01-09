@@ -16,6 +16,7 @@ class Sala {
 	vector <Unidade*> unidades;
 public:
 	Sala(string tipo);
+	Sala(const Sala *s);
 	virtual ~Sala();
 	
 	virtual string toString()const;
@@ -62,6 +63,8 @@ public:
 
 	virtual int getEscudo()const { return 0; };
 	virtual void reduzEscudo(int val_reduzir) {};
+
+	Sala &operator=(Sala *s);
 };
 
 class SalaPropulsor : public Sala {
@@ -126,6 +129,7 @@ public:
 class SalaArmas : public Sala {
 public:
 	SalaArmas(string tipo);
+	void salas_actuar_fim(Nave *n);
 };
 
 class SalaAlojamentosdoCapitao : public Sala {

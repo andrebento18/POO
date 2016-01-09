@@ -22,6 +22,10 @@ Sala::Sala(string tipo):tipo(tipo){
 	curto_circuito = false;
 }
 
+Sala::Sala(const Sala * s){
+	*this = s;
+}
+
 Sala::~Sala() {
 	cout << "Sala " << this->tipo << ", posicao " << this->id_sala << " destruida" << endl;
 	for (unsigned int i = 0; i < unidades.size(); i++)
@@ -148,10 +152,10 @@ void Sala::setCurtoCircuito(bool valor){
 
 string Sala::toString()const {
 	ostringstream os;
-	if(getID() == 7)
-		os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << ", cap. escudo " << getEscudo() << endl;
+	if (getID() == 7)
+		os << "Sala: " << getID() << "   " << getTipo() << endl; //<< ", intg " << getIntegridade() << ", oxig " << getOxigenio() << ", cap. escudo " << getEscudo() << endl;
 	else
-		os << "Sala: " << getID() << "   " << getTipo() << ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
+		os << "Sala: " << getID() << "   " << getTipo() << endl; // ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
 	
 	if (unidades.size() != 0) {
 		for (unsigned int i = 0; i < unidades.size(); i++)
@@ -206,7 +210,7 @@ void Sala::salas_actuar_fim(Nave *n) {
 	sala_a_arder = this->getID();
 	if (getFogo() == true) {
 		// Dano causado pelo Fogo à sala
-																			//PODIA SER ATRAVES DA NAVE******
+																			//PODIA SER ATRAVES DA NAVE****** ?????????????????????
 		if (random(1, 2) == 1) {
 			reduzIntegridade(10);
 			
@@ -302,11 +306,26 @@ void Sala::unidades_actuar_fim(Nave *n) {
 		unidades[i]->actua_fim(n);
 }
 
+Sala & Sala::operator=(Sala *s){
+	if (this == s) {
+		for (int i = 0; i < unidades.size(); i++)
+			delete unidades[i];
+		system("pause");
+		unidades.clear();
+
+		tipo = s->getTipo();
+		integridade = 100;
+		id_sala = s->getID();
+
+		for (int i = 0; i < s->unidades.size(); i++) 
+			unidades.push_back(s->unidades[i]);
+	}
+	return *this;
+}
+
 Unidade * Sala::getUnidadePosicao(int posicao) const {
 	return unidades[posicao];
 }
-
-////////// SALAS PREDEFINIDAS ///////////
 
 SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
 	if (tipo == "Propulsor")
@@ -333,7 +352,7 @@ void SalaSuportedeVida::salas_actuar_fim(Nave * n) {
 		for (int i = 1; i <= 12; i++) {
 			if (n->getSala(i)->getBrecha() == false)
 				n->getSala(i)->aumentaOxigenio(2);
-			else
+			else // só pra controlar melhor a brecha
 				n->getSala(i)->reduzOxigenio(n->getSala(i)->getOxigenio());
 		}
 }
@@ -377,24 +396,33 @@ SalaAutoReparador::SalaAutoReparador(string tipo):Sala(tipo) {
 
 void SalaAutoReparador::salas_actuar_fim(Nave *n) {
 	if (getIntegridade() == 100) {
-		Sala *s = n->getSala(getID());
-		if ((s + 5) != NULL) {
-			if ((s++)->getIntegridade() <= 95)
-				(s++)->aumentaIntergridade(5);
+		// FALTA IMPLEMENTAR O AUTO-REPARADOR ????????????????????????????
+		/*
+		if ((n->getSala(this->getID() + 1)) != NULL) {
+			if ((n->getSala(this->getID() + 1))->getIntegridade() < 100) {
+				(n->getSala(this->getID() + 1))->aumentaIntergridade(5);
+				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+			}
+		}/*
+		else if ((n->getSala(getID() - 1)) != NULL) {
+			if ((n->getSala(getID() - 1))->getIntegridade() < 100) {
+				(n->getSala(getID() - 1))->aumentaIntergridade(5);
+				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+			}
 		}
-		else if ((s + 5) != NULL) {
-			if ((s--)->getIntegridade() <= 95)
-				(s--)->aumentaIntergridade(5);
+		else if ((n->getSala(getID() + 5)) != NULL) {
+			if ((n->getSala(getID() + 5))->getIntegridade() < 100) {
+				(n->getSala(getID() + 5))->aumentaIntergridade(5);
+				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+			}
 		}
-		else if ((s + 5) != NULL) {
-			if ((s + 5)->getIntegridade() <= 95)
-				(s + 5)->aumentaIntergridade(5);
-		}
-		else if ((s - 5) != NULL) {
-			if((s-5)->getIntegridade() <= 95)
-				(s-5)->aumentaIntergridade(5);
-		}
-		cout << "Salas reparadas usando o Auto-Reparador" << endl;
+		else if ((n->getSala(getID() - 5)) != NULL) {
+			if ((n->getSala(getID() - 5))->getIntegridade() < 100) {
+				(n->getSala(getID() - 5))->aumentaIntergridade(5);
+				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+			}
+		}*/
+		//////////////////////////////////////////////////////////////////
 	}
 }
 
@@ -611,13 +639,43 @@ SalaEnfermaria::SalaEnfermaria(string tipo):Sala(tipo){
 }
 
 void SalaEnfermaria::salas_actuar_fim(Nave * n){
-	// FALTA VERIFICAR SE É TRIPULANTE
 	for (unsigned int i = 0; i < countUnidades(); i++)
-		getUnidadePosicao(i)->aumentaPV(1);
+		for (unsigned int j = 0; j < getUnidadePosicao(i)->countCaracteristicas(); j++)
+			if(getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() == "Tripulacao")
+				getUnidadePosicao(i)->aumentaPV(1);
 }
 
 SalaArmas::SalaArmas(string tipo):Sala(tipo){
 	cout << "Sala de Armas adicionada" << endl;
+}
+
+void SalaArmas::salas_actuar_fim(Nave *n) {
+	bool pode_armar = false;
+	int id_unidade = 0;
+
+	for (unsigned int i = 0; i < countUnidades(); i++) {
+		for (unsigned int j = 0; j < getUnidadePosicao(i)->countCaracteristicas(); j++) {
+			string tipo_car = getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca();
+			cout << "i " << i << "j " << j << endl;
+			if (tipo_car == "Tripulacao") {
+				pode_armar = true;
+				id_unidade = getUnidadePosicao(i)->getID_Unidade();
+				cout << id_unidade;
+			}
+			else if (tipo_car == "Armado") { // Já se encontra armado
+				pode_armar = false;
+			}
+		}
+	}
+
+	cout << "Acabei o ciclo armado" << endl;
+
+	if (pode_armar == true) {
+		// ESTOIRA AQUI POR CAUSA DA ADIÇÃO DE CARACTERISTICA NAO SEI PORQUE ??????????
+		//getUnidadePosicao(id_unidade)->setCaracteristica(new Armado(1));
+		cout << "Unidade " << id_unidade << " armada" << endl;
+		system("pause");
+	}
 }
 
 SalaAlojamentosdoCapitao::SalaAlojamentosdoCapitao(string tipo):Sala(tipo){

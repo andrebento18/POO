@@ -53,13 +53,13 @@ Nave::Nave() {
 				string tipo_sala;
 				do {
 					//cin.clear();
-					//cin.ignore(1, '\n');
+					//cin.ignore(1, '\r\n');
 					c.setTextColor(c.CINZENTO);
 					cout << "Salas possiveis de adicionar: " << endl << "\t->Propulsor Adicional" << "\t->Beliche" << "\t->Raio Laser" << "\t->Auto-reparador" << endl << "\t->Sistema de Seguranca interno" << "\t->Enfermaria" << "\t->Sala de armas" << "\t->Alojamentos do Capitao" << endl << "\t->Oficina Robotica" << endl;
 					c.setTextColor(c.VERDE_CLARO);
 					cout << "Tipo de sala a adicionar com id " << contador << " : ";
 					getline(cin, tipo_sala);
-					//cin >> "\n";
+
 					if (tipo_sala == PROPULSORADICIONAL) {
 						contador++;
 						salas[i][j] = new SalaPropulsor(tipo_sala);
@@ -336,7 +336,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(4, 4);
+	int x = random(1, 4);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos
@@ -433,7 +433,7 @@ void Nave::evento() {
 		}
 		
 		case 4: {
-			// falta implementar não calhar na mesma sala
+			// FALTA IMPLEMENTAR NAO CALHAR NAO CALHAR NA MESMA SALA ??????????????????
 			cout << "\tPO COSMICO" << endl;
 			int n_salas_afetadas = random(3, 5);
 			while (n_salas_afetadas != 0) {

@@ -251,6 +251,7 @@ void viagem(Nave *nave, double nvl) {
 				c.gotoxy(80, 43);
 				cout << "Para que sala? (Segundo uma orientacao) "; cin >> dir_mov; cout << endl;
 
+				// Verifica se a unidade já se moveu
 				for (int i = 0; i <= n_unidades_mov; i++) 
 					if (id_unidade == unidades_movidas[i]) {
 						pode_mover = false;

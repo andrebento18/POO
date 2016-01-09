@@ -20,7 +20,7 @@ Unidade::Unidade(string tipo, int pv) {
 }
 
 Unidade::~Unidade() {
-	cout << "Unidade " << getNome() << " destruida" << endl;
+	cout << "Unidade " << getNome() << ", " << getID_Unidade() <<  " destruida" << endl;
 	for (unsigned int i = 0; i < vect_car.size(); i++)
 		delete vect_car[i];
 }
@@ -44,10 +44,7 @@ int Unidade::getPVInicial()const {
 }
 
 void Unidade::setPV(int new_ponto_vida) {
-	if (new_ponto_vida >= 0)
-		ponto_vida += new_ponto_vida;
-	else
-		ponto_vida -= new_ponto_vida;
+	ponto_vida = new_ponto_vida;
 }
 
 void Unidade::aumentaPV(int valor_aumentar){
@@ -60,8 +57,11 @@ void Unidade::aumentaPV(int valor_aumentar){
 
 void Unidade::LevaDano(int dano_recebido){
 	ponto_vida -= dano_recebido;
-	if (getPV() <= 0)
+	if (getPV() <= 0) {
 		getOndeEstou()->remover_Unidade(this);
+		cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << endl;
+		system("pause");
+	}
 }
 
 int Unidade::getID_Unidade() const{
@@ -149,31 +149,37 @@ Robot::Robot(string tipo) : Unidade(tipo, 8) {
 Pirata::Pirata(string tipo) :Unidade(tipo, 4) {
 	cout << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
-	//setCaracteristica(new Inimigo(1, 2));
+	setCaracteristica(new Inimigo(1, 2));
 	setCaracteristica(new Move(15));
 }
 
 Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	cout << tipo << " criado" << endl;
-	//setCaracteristica(new Xenomorfo(3);
+	setCaracteristica(new Xenomorfo(3));
 	setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
-	//setCaracteristica(new Casulo(20);
+	setCaracteristica(new Casulo(99));//Casulo(20));
 	//setCaracteristica(new Exoesqueleto(3);
 }
 
-CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo):Unidade(tipo, 6){
+CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo, Unidade *u):Unidade(tipo, 6){
 	cout << tipo << " criado" << endl;
-	//setCaracteristica(new Xenomorfo(0);
+	setCaracteristica(new Xenomorfo(0));
 	//setCaracteristica(new Exoesqueleto(1);
+	// Aprisionar a unidade
+	unidade_aprisionada = u;
+	// Set localização do Casulo na mesma sala da unidade
+	u->getOndeEstou()->adicionar_Unidade(this);
+	// Remover a unidade da sala
+	u->getOndeEstou()->remover_Unidade(u);
 }
 
 Blob::Blob(string tipo):Unidade(tipo, 8){
 	cout << tipo << " criado" << endl;
-	//setCaracteristica(new Xenomorfo(0);
+	setCaracteristica(new Xenomorfo(0));
 	setCaracteristica(new Regenerador(2));
 	setCaracteristica(new Flamejante());
-	setCaracteristica(new Toxico(2)); // NAO DIZ NADA NO ENUNCIADO SOBRE A TOXICIDADE DO BLOB QUANTO É?????????????
+	setCaracteristica(new Toxico(2)); // NAO DIZ NADA NO ENUNCIADO SOBRE A TOXICIDADE DO BLOB QUANTO É ??????????
 	setCaracteristica(new Reparador(6));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Move(15));
@@ -181,8 +187,8 @@ Blob::Blob(string tipo):Unidade(tipo, 8){
 
 Mxyzypykwi::Mxyzypykwi(string tipo):Unidade(tipo, 8){
 	cout << tipo << " criado" << endl;
-	//setCaracteristica(new Xenomorfo(0));
-	//setCaracteristica(new Hipnotizador(15));
+	setCaracteristica(new Xenomorfo(0));
+	setCaracteristica(new Hipnotizador(15));
 	setCaracteristica(new Move(30));
 	setCaracteristica(new Mutantis_Mutandis(10));
 	setCaracteristica(new Respira());
