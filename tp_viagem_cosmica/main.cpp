@@ -291,8 +291,11 @@ void viagem(Nave *nave, double nvl) {
 		cout << "Relatorio do final do turno:" << endl << endl;
 
 		// 3. FINAL DO TURNO
-		
+		int dist_antiga = nave->getDistancia();
+
 		nave->fim_turno();
+
+		cout << "Avancamos " << nave->getDistancia() - dist_antiga << " milhas comandante" << endl << endl;
 
 		// 4. EVENTOS
 		if (event_ocurr == 0) {

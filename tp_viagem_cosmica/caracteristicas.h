@@ -14,6 +14,12 @@ public:
 	virtual void actua_car_inicio(Unidade *u, Nave *n) {};
 	virtual void actua_car_fim(Unidade *u, Nave *n) {};
 
+	// virtual Exoesqueleto
+	virtual bool verifica_exoesqueleto(Sala *s, int id_unidade) { return 0; };
+	virtual void reduzExoesqueleto(int valor_reduzir) {};
+	virtual int getExoesqueleto()const { return 0; };
+	void setExoesqueleto(int cap_exoesqueleto) {};
+
 	// virtual Combatente
 	virtual void setCapCombate(int arma) {};
 };
@@ -66,17 +72,25 @@ public:
 	void actua_car_inicio(Unidade *u, Nave *n);
 };
 
-// FALATA IMPLEMENTAR ESTA ????????????????????
 class Exoesqueleto : public Caracteristica{
-	//int cap_exoesqueleto;
+	int cap_exoesqueleto;
+	int cap_exoesqueleto_inicial;
 public:
-	Exoesqueleto(/*x pontos de dano*/):Caracteristica("Exoesqueleto") {
-	};
+	Exoesqueleto(int cap_exoesqueleto);
+	
+	void actua_car_inicio(Unidade *u, Nave *n);
+
+	bool verifica_exoesqueleto(Sala *s, int id_unidade);
+	void reduzExoesqueleto(int valor_reduzir);
+	int getExoesqueleto()const;
+	void setExoesqueleto(int cap_exoesqueleto);
 };
-///////////////////////////////////////////////
 
 // Talvez arranjar outra maneira de implementar isto...
-//class Robotico : public Caracteristica;
+class Robotico : public Caracteristica {
+public:
+	Robotico(void);
+};
 
 class Reparador : public Caracteristica {
 	int cap_reparar;

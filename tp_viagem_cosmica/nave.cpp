@@ -189,7 +189,9 @@ int Nave::verifica_saudeNave() const {
 int Nave::countTripulacao()const {
 	int quant_trip = 0;
 	for (int i = 1; i <= 12; i++) {
-		quant_trip += getSala(i)->countUnidades();
+		for (unsigned int j = 0; j < getSala(i)->countUnidades(); j++)
+			if(getSala(i)->getUnidadePosicao(j)->getCaracteristicaTipo("Tripulacao") != NULL)
+				quant_trip += 1;
 	}
 	return quant_trip;
 }

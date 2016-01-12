@@ -106,12 +106,51 @@ void Regenerador::actua_car_inicio(Unidade *u, Nave *n) {
 	u->aumentaPV(cap_regenerar);
 }
 
+// FALATA IMPLEMENTAR "BEM" ESTA ????????????????????
+Exoesqueleto::Exoesqueleto(int cap_exoesqueleto):Caracteristica("Exoesqueleto") {
+	this->cap_exoesqueleto = cap_exoesqueleto;
+	cap_exoesqueleto_inicial = cap_exoesqueleto;
+	cout << "Esta unidade esta protegida por um exoesqueleto " << this->cap_exoesqueleto << " pontos de capacidade" << endl;
+}
+
+void Exoesqueleto::actua_car_inicio(Unidade * u, Nave * n){
+	setExoesqueleto(cap_exoesqueleto_inicial);
+}
+
+bool Exoesqueleto::verifica_exoesqueleto(Sala *s, int id_unidade) {
+	for (unsigned int i = 0; i < s->getUnidade(id_unidade)->countCaracteristicas(); i++) {
+			string tipo_car = s->getUnidadePosicao(id_unidade)->getCaracteristicaPosicao(i)->getTipoCaracterisca();
+			if (tipo_car == "Exoesqueleto") {
+				return true;
+			}
+	}
+	return false;
+}
+
+void Exoesqueleto::reduzExoesqueleto(int valor_reduzir) {
+	if (cap_exoesqueleto - valor_reduzir <= 0)
+		cap_exoesqueleto = 0;
+	else
+		cap_exoesqueleto -= valor_reduzir;
+}
+
+int Exoesqueleto::getExoesqueleto()const {
+	return cap_exoesqueleto;
+}
+
+void Exoesqueleto::setExoesqueleto(int cap_exoesqueleto){
+	this->cap_exoesqueleto = cap_exoesqueleto;
+}
+
 Reparador::Reparador(int cap_reparar) :Caracteristica("Reparador") {
 	this->cap_reparar = cap_reparar;
 	cout << "Esta unidade repara " << cap_reparar << " pontos, por turno, da sala onde esta" << endl;
 }
 
-// ROBOTICO ???
+// FALAT IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
+Robotico::Robotico(void):Caracteristica("Robotico"){
+	cout << "Esta unidade e do tipo robotico" << endl;
+}
 
 void Reparador::actua_car_fim(Unidade *u, Nave *n) {
 	bool existe_inimigos = false;
@@ -159,7 +198,14 @@ void Combatente::actua_car_fim(Unidade *u, Nave *n) {
 			if (tipo_car == "Inimigo" || tipo_car == "Xenomorfo") {
 				id_inimigo = s->getUnidadePosicao(i)->getID_Unidade();
 				s->setOperada(false);
-				s->getUnidade(id_inimigo)->LevaDano(capacidade_combate);
+				if (verifica_exoesqueleto(s, id_inimigo) == true) {
+					int cap_exoesqueleto = s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
+					s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->reduzExoesqueleto(capacidade_combate);
+					if (s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto() == 0)
+						s->getUnidade(id_inimigo)->LevaDano(capacidade_combate - cap_exoesqueleto);
+				}
+				else
+					s->getUnidade(id_inimigo)->LevaDano(capacidade_combate);
 				break;
 			}
 		}
@@ -183,9 +229,14 @@ void Xenomorfo::actua_car_fim(Unidade *u, Nave *n) {
 			string tipo_car = s->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca();
 			if (tipo_car == "Tripulacao" || tipo_car == "Inimigo") {
 				id_inimigo = s->getUnidadePosicao(i)->getID_Unidade();
-				s->setOperada(false);
-				s->getUnidade(id_inimigo)->LevaDano(cap_dano);
-				break;
+				if (verifica_exoesqueleto(s, id_inimigo) == true) {
+					int cap_exoesqueleto = s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
+					s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->reduzExoesqueleto(cap_dano);
+					if (s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto() == 0)
+						s->getUnidade(id_inimigo)->LevaDano(cap_dano - cap_exoesqueleto);
+				}
+				else
+					s->getUnidade(id_inimigo)->LevaDano(cap_dano);
 			}
 		}
 	}
@@ -288,7 +339,6 @@ void Hipnotizador::actua_car_inicio(Unidade *u, Nave *n) {
 	}
 }
 
-
 Operador::Operador(void) :Caracteristica("Operador") {
 	cout << "Esta unidade e capaz de operar salas" << endl;
 }
@@ -326,7 +376,14 @@ void Inimigo::actua_car_inicio(Unidade *u, Nave *n) {
 	}
 
 	if(existe_inimigo == true){
-		s->getUnidade(id_inimigo)->LevaDano(dano_unidade);
+		if (verifica_exoesqueleto(s, id_inimigo) == true) {
+			int cap_exoesqueleto = s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
+			s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->reduzExoesqueleto(dano_unidade);
+			if (s->getUnidade(id_inimigo)->getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto() == 0)
+				s->getUnidade(id_inimigo)->LevaDano(dano_unidade - cap_exoesqueleto);
+		}
+		else
+			s->getUnidade(id_inimigo)->LevaDano(dano_unidade);
 	}
 	else {
 		u->getOndeEstou()->reduzIntegridade(dano_sala);
@@ -343,8 +400,8 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 		int id_sala = u->getOndeEstou()->getID();
 		// Sortear o movimento "cima", "baixo", "esquerda", "direita"
 		string comando_direcao;
-		bool moveu = false;
-		do {
+		/*bool moveu = false;
+		do {*/
 			switch (random(1, 4)) {
 			case 1: comando_direcao = "cima";
 				break;
@@ -355,12 +412,14 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 			case 4: comando_direcao = "direita";
 				break;
 			}
+			n->check_mov_sala(u->getID_Unidade(), comando_direcao);
+			// RETIRADO POR ESTAR A FAZER INTERFERENCIA...
 			// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
-			if (n->check_mov_sala(u->getID_Unidade(), comando_direcao) == true)
+			/*if (n->check_mov_sala(u->getID_Unidade(), comando_direcao) == true)
 				moveu = true;
 			else
 				continue;
-		} while (moveu == false);
+		} while (moveu == false);*/
 	}
 }
 

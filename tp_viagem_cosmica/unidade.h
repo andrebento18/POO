@@ -18,7 +18,7 @@ class Unidade{
 public:
 	Unidade(string tipo, int pv);
 	virtual ~Unidade();
-	string toString()const;
+	string toString();
 	string getNome()const;
 	
 	int getPV()const;
@@ -38,6 +38,7 @@ public:
 	void setCaracteristica(Caracteristica *p);
 	Caracteristica *getCaracteristica(Caracteristica *p);
 	Caracteristica *getCaracteristicaPosicao(int posicao);
+	Caracteristica *getCaracteristicaTipo(string tipo);
 	unsigned int countCaracteristicas()const;
 
 	void actua_inicio(Nave *n);
