@@ -25,7 +25,7 @@ public:
 	int getPVInicial()const;
 	void setPV(int new_ponto_vida);
 	void aumentaPV(int valor_aumentar);
-	void LevaDano(int dano_recebido);
+	virtual void LevaDano(int dano_recebido);
 
 	int getID_Unidade()const;
 	

@@ -84,6 +84,8 @@ public:
 	void reduzExoesqueleto(int valor_reduzir);
 	int getExoesqueleto()const;
 	void setExoesqueleto(int cap_exoesqueleto);
+
+	void LevaDano(Unidade *u, int dano_recebido);
 };
 
 // Talvez arranjar outra maneira de implementar isto...

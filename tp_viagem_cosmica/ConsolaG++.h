@@ -7,6 +7,9 @@
 #define __CONSOLA_H__
 
 #include <windows.h>
+#include <string>
+#include <fstream>
+using namespace std;
 
 class Consola {
 
@@ -41,13 +44,15 @@ public:
 	const static char ENTER    = 13;
 	const static char ESCAPE   = 27;
 
-	Consola();
+	istream *entrada;
+
+	Consola(string nome_fich = "");
 	void gotoxy(int x, int y);
 	void clrscr();
 	void setTextColor(WORD color);
 	void setBackgroundColor(WORD color);
 	void setScreenSize(int nLinhas, int nCols);
-	char getch (void);	
+	char getch (void);
 };
 
 #endif

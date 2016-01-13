@@ -167,8 +167,10 @@ string Sala::toString()const {
 }
 
 void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
-	if (unidade_a_adicionar->getOndeEstou() == NULL) 
+	if (unidade_a_adicionar->getOndeEstou() == NULL) {
 		unidades.push_back(unidade_a_adicionar);
+		unidade_a_adicionar->setOndeEstou(this);
+	}
 	else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
@@ -310,15 +312,15 @@ Sala & Sala::operator=(Sala *s){
 	if (this == s) {
 		for (int i = 0; i < unidades.size(); i++)
 			delete unidades[i];
-		system("pause");
 		unidades.clear();
 
-		tipo = s->getTipo();
 		integridade = 100;
 		id_sala = s->getID();
 
 		for (int i = 0; i < s->unidades.size(); i++) 
 			unidades.push_back(s->unidades[i]);
+
+		s->unidades.clear();
 	}
 	return *this;
 }
@@ -672,7 +674,7 @@ void SalaArmas::salas_actuar_fim(Nave *n) {
 
 	if (pode_armar == true) {
 		// ESTOIRA AQUI POR CAUSA DA ADIÇÃO DE CARACTERISTICA NAO SEI PORQUE ??????????
-		//getUnidadePosicao(id_unidade)->setCaracteristica(new Armado(1));
+		getUnidadePosicao(id_unidade)->setCaracteristica(new Armado(1));
 		cout << "Unidade " << id_unidade << " armada" << endl;
 		system("pause");
 	}

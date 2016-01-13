@@ -3,11 +3,17 @@
 
 /* Pequenas correcoes. Nov. 2013 */
 
+#include <iostream>
 #include "ConsolaG++.h"                      
 #include <windows.h>
 #include <stdio.h>
 
-Consola::Consola() {
+Consola::Consola(string nome_fich)  {
+	if (nome_fich != "")
+		entrada = new ifstream(nome_fich);
+	else
+		entrada = &cin;
+	
 	hconsola = GetStdHandle(STD_OUTPUT_HANDLE);
 	hStdin = GetStdHandle (STD_INPUT_HANDLE);	
 }

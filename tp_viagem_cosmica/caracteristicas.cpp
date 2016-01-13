@@ -142,12 +142,22 @@ void Exoesqueleto::setExoesqueleto(int cap_exoesqueleto){
 	this->cap_exoesqueleto = cap_exoesqueleto;
 }
 
+void Exoesqueleto::LevaDano(Unidade *u, int dano_recebido){
+	if (cap_exoesqueleto - dano_recebido <= 0) {
+		cap_exoesqueleto = 0;
+		u->LevaDano(dano_recebido - cap_exoesqueleto);
+	}
+	else {
+		cap_exoesqueleto -= dano_recebido;
+	}
+}
+
 Reparador::Reparador(int cap_reparar) :Caracteristica("Reparador") {
 	this->cap_reparar = cap_reparar;
 	cout << "Esta unidade repara " << cap_reparar << " pontos, por turno, da sala onde esta" << endl;
 }
 
-// FALAT IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
+// FALTA IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
 Robotico::Robotico(void):Caracteristica("Robotico"){
 	cout << "Esta unidade e do tipo robotico" << endl;
 }
@@ -248,18 +258,18 @@ Casulo::Casulo(int prob):Caracteristica("Casulo"), prob_casulo(prob){
 
 void Casulo::actua_car_fim(Unidade * u, Nave * n){
 	// ESTA A REBENTAR, TENTAR VER O QUE SE PASSA ????????????
-	/*Sala *s = u->getOndeEstou();
+	Sala *s = u->getOndeEstou();
 	for (unsigned int i = 0; i < s->countUnidades(); i++) {
 		for (unsigned int j = 0; j < s->getUnidadePosicao(i)->countCaracteristicas(); j++) {
 			string tipo_car = s->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca();
 			if (tipo_car == "Tripulacao") {
-				if (random(1, 100) <= prob_casulo) {
+				if (random(0, 99) <= prob_casulo) {
 					new CasulodeGeigermorfo("Casulo de Geigermorfo", s->getUnidadePosicao(i));
-					break;
+					return;
 				}
 			}
 		}
-	}*/
+	}
 }
 
 
@@ -269,53 +279,53 @@ Mutantis_Mutandis::Mutantis_Mutandis(int prob) :Caracteristica("Mutantis_Mutandi
 }
 
 void Mutantis_Mutandis::actua_car_inicio(Unidade * u, Nave * n){
-	if (random(1, 100) <= prob) {
+	if (random(0, 99) <= prob) {
 		if (u->getOndeEstou() == n->getSala(2) || u->getOndeEstou() == n->getSala(3) || u->getOndeEstou() == n->getSala(4) || u->getOndeEstou() == n->getSala(10) || u->getOndeEstou() == n->getSala(11) || u->getOndeEstou() == n->getSala(12)) {
-			int escolha_sala = 1; // random(1, 9);
+			int escolha_sala = random(1, 9);
+			Sala *s = NULL;
 			switch (escolha_sala) {
 				case 1: {
-					// Propulsor Adicional
-					cout << "Construo sala 1";
-					Sala *s = new SalaPropulsor("Propulsor Adicional");
-					//s = u->getOndeEstou();
-					cout << s->toString();
-					system("pause");
+					s = new SalaPropulsor("Propulsor Adicional");
 					break; 
 				}
-						// COMO CONTRUIR SALAS IGUAIS MAS COM TIPO DIFERENTE ?????????
-				/*case 2:
-					cout << "Construo sala 2";
-					system("pause");
+				case 2: {
+					s = new SalaBeliche("Beliche");
 					break;
-				case 3:
-					cout << "Construo sala 3";
-					system("pause");
+				}
+				case 3: {
+					s = new SalaRaioLaser("Raio Laser");
 					break;
-				case 4:
-					cout << "Construo sala 4";
-					system("pause");
+				}
+				case 4: {
+					s = new SalaAutoReparador("Auto-reparador");
 					break;
-				case 5:
-					cout << "Construo sala 5";
-					system("pause");
+				}
+				case 5: {
+					s = new SalaSistemadeSegInterno("Sistema de Seguranca interno");
 					break;
-				case 6:
-					cout << "Construo sala 6";
-					system("pause");
+				}
+				case 6: {
+					s = new SalaEnfermaria("Enfermaria");
 					break;
-				case 7:
-					cout << "Construo sala 7";
-					system("pause");
+				}
+				case 7: {
+					s = new SalaArmas("Sala de armas");
 					break;
-				case 8:
-					cout << "Construo sala 8";
-					system("pause");
+				}
+				case 8: {
+					s = new SalaAlojamentosdoCapitao("Alojamentos do Capitao");
 					break;
-				case 9:
-					cout << "Construo sala 9";
-					system("pause");
-					break;*/
+				}
+				case 9: {
+					s = new SalaOficinaRobotica("Oficina Robotica");
+					break;
+				}
 			}
+			// PROBLEMAS ???????????????????????????????
+			*(n->getSala(u->getOndeEstou()->getID())) = s;
+			cout << "Sala " << u->getOndeEstou()->getTipo() << " alterada para um " << s->getTipo() << endl;
+			cout << s->toString();
+			system("pause");
 		}
 	}
 }
@@ -395,7 +405,7 @@ Move::Move(int pmovimento):Caracteristica("Move"), prob_movimento(pmovimento) {
 }
 
 void Move::actua_car_inicio(Unidade *u, Nave *n) {
-	if (random(1, 100) < prob_movimento) {
+	if (random(0, 99) < prob_movimento) {
 		// Obter id_sala onde se encontra a unidade
 		int id_sala = u->getOndeEstou()->getID();
 		// Sortear o movimento "cima", "baixo", "esquerda", "direita"

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include <sstream>
 #include <vector>
 
@@ -19,7 +20,8 @@
 int random(int min, int max);
 
 Nave::Nave() {
-	Consola c;
+	//Consola c;
+	Consola c("comandos.txt");
 	cout << "Vamos preparar a nave para a viagem..." << endl;
 	int contador = 1;
 	bool ck_aloj_cap = false;
@@ -58,7 +60,7 @@ Nave::Nave() {
 					cout << "Salas possiveis de adicionar: " << endl << "\t->Propulsor Adicional" << "\t->Beliche" << "\t->Raio Laser" << "\t->Auto-reparador" << endl << "\t->Sistema de Seguranca interno" << "\t->Enfermaria" << "\t->Sala de armas" << "\t->Alojamentos do Capitao" << endl << "\t->Oficina Robotica" << endl;
 					c.setTextColor(c.VERDE_CLARO);
 					cout << "Tipo de sala a adicionar com id " << contador << " : ";
-					getline(cin, tipo_sala);
+					getline(*c.entrada, tipo_sala);
 
 					if (tipo_sala == PROPULSORADICIONAL) {
 						contador++;
@@ -135,8 +137,6 @@ Nave::Nave() {
 					Unidade *p = new Capitao("Capitao");
 					//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
 					salas[i][j]->adicionar_Unidade(p);
-					//SETA A SALA ONDE ESTA A UNIDADE
-					p->setOndeEstou(salas[i][j]);
 					cout << "Capitao adicionado a Sala Alojamento do Capitao!\n";
 					conta_mebros_trip--;
 				}
@@ -144,8 +144,6 @@ Nave::Nave() {
 					Unidade *p = new Robot("Robot");
 					//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
 					salas[i][j]->adicionar_Unidade(p);
-					//SETA A SALA ONDE ESTA A UNIDADE
-					p->setOndeEstou(salas[i][j]);
 					cout << "Robot adicionado a Sala Oficina Robotica!\n";
 					conta_mebros_trip--;
 				}
@@ -156,7 +154,6 @@ Nave::Nave() {
 		//AGREGA A UNIDADE AO VECTOR DE UNIDADES DA SALA
 		salas[1][4]->adicionar_Unidade(p);
 		//SETA A SALA ONDE ESTA A UNIDADE
-		p->setOndeEstou(salas[1][4]);
 		cout << "Membro da tripulacao adicionado a Sala Ponte!\n";
 		conta_mebros_trip--;
 	} while (conta_mebros_trip != 0);
@@ -290,7 +287,7 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 					}
 				}
 				else if (comando_direcao == "esquerda") {
-					if (j == 0 && j == 1 && i == 1) {
+					if (j == 0 || j == 1 && i == 1) {
 						return false;
 					}
 					else {
@@ -302,6 +299,8 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 					return false;
 				}
 			}
+			/*else
+				return false;*/
 }
 
 void dano_meteoritos(Nave *n, int n_meteoritos) {
@@ -338,7 +337,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(1, 4);
+	int x = random(3, 3);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos
@@ -413,7 +412,7 @@ void Nave::evento() {
 
 		case 3: {
 			cout << "\tATAQUE XENOMORFO" << endl;
-			int alien_random = random(1, 3);
+			int alien_random = random(1, 1);
 			int sala_random = random(1, 12);
 			if (alien_random == 1) {
 				Unidade *p = new Geigermorfo("Geigermorfo");

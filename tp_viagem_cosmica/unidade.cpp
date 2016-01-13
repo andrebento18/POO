@@ -7,7 +7,7 @@ using namespace std;
 #include "unidade.h"
 #include "sala.h"
 
-int Unidade::conta_unidades = 1;
+int Unidade::conta_unidades = 0;
 int Unidade::ponto_vida_inicial = 0;
 
 Unidade::Unidade(string tipo, int pv) {
@@ -28,9 +28,9 @@ Unidade::~Unidade() {
 string Unidade::toString() {
 	ostringstream os;
 	if(getCaracteristicaTipo("Exoesqueleto") != NULL)
-		os << "Unidade " << getNome() << ", id: " << getID_Unidade() << ", pv: " << getPV() << ", exoesq: " << getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
+		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV() << ", exoesq: " << getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
 	else
-		os << "Unidade " << getNome() << ", id: " << getID_Unidade() << ", pv: " << getPV();
+		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV();
 	return os.str();
 }
 
@@ -92,7 +92,6 @@ void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) 
 	sala_antiga->remover_Unidade(this);
 	setOndeEstou(NULL);
 	sala_nova->adicionar_Unidade(this);
-	setOndeEstou(sala_nova);
 }
 
 void Unidade::setCaracteristica(Caracteristica *p) {
@@ -147,6 +146,8 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	setCaracteristica(new Combatente(2));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
+
+	setCaracteristica(new Mutantis_Mutandis(90));
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
@@ -168,7 +169,7 @@ Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	setCaracteristica(new Xenomorfo(3));
 	setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
-	setCaracteristica(new Casulo(99));//Casulo(20));
+	setCaracteristica(new Casulo(80));//Casulo(20));
 	setCaracteristica(new Exoesqueleto(3));
 }
 
