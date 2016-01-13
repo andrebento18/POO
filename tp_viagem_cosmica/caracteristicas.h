@@ -124,7 +124,6 @@ class Casulo : public Caracteristica {
 	int prob_casulo;
 public:
 	Casulo(int prob);
-
 	void actua_car_fim(Unidade *u, Nave *n);
 };
 

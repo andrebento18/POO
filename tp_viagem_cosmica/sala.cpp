@@ -14,7 +14,6 @@ int Sala::conta_salas = 1;
 Sala::Sala(string tipo):tipo(tipo){
 	id_sala = conta_salas++;
 	integridade = 100;
-	//dano = 0;
 	operada = false;
 	oxigenio = 100;
 	fogo = false;
@@ -70,18 +69,6 @@ void Sala::reduzIntegridade(int valor_reduzir){
 	else
 		integridade -= valor_reduzir;
 }
-
-//int Sala::getDano() const
-//{
-//	return 0;
-//}
-//
-//void Sala::setDano(int oper_dano) {
-//	if (oper_dano >= 0)
-//		dano += oper_dano;
-//	else
-//		dano -= oper_dano;
-//}
 
 bool Sala::getOperada()const {
 	return operada;
@@ -153,13 +140,21 @@ void Sala::setCurtoCircuito(bool valor){
 string Sala::toString()const {
 	ostringstream os;
 	if (getID() == 7)
-		os << "Sala: " << getID() << "   " << getTipo() << endl; //<< ", intg " << getIntegridade() << ", oxig " << getOxigenio() << ", cap. escudo " << getEscudo() << endl;
+		os << "Sala: " << getID() << "   " << getTipo() << ", cap. escudo " << getEscudo()  << endl;
 	else
-		os << "Sala: " << getID() << "   " << getTipo() << endl; // ", intg " << getIntegridade() << ", oxig " << getOxigenio() << endl;
+		os << "Sala: " << getID() << "   " << getTipo() << endl;
 	
 	if (unidades.size() != 0) {
 		for (unsigned int i = 0; i < unidades.size(); i++)
 			os << "\t->" << unidades[i]->toString() << endl;
+	}
+	else if (piratas.size() != 0) {
+		for (unsigned int i = 0; i < piratas.size(); i++)
+			os << "\t->" << piratas[i]->toString() << endl;
+	}
+	else if (xenomorfos.size() != 0) {
+		for (unsigned int i = 0; i < xenomorfos.size(); i++)
+			os << "\t->" << xenomorfos[i]->toString() << endl;
 	}
 	else
 		os << "\t->Sala sem unidades" << endl;
@@ -167,23 +162,57 @@ string Sala::toString()const {
 }
 
 void Sala::adicionar_Unidade(Unidade *unidade_a_adicionar) {
-	if (unidade_a_adicionar->getOndeEstou() == NULL) {
-		unidades.push_back(unidade_a_adicionar);
-		unidade_a_adicionar->setOndeEstou(this);
+	if (unidade_a_adicionar->getCaracteristicaTipo("Tripulacao") != NULL) {
+		if (unidade_a_adicionar->getOndeEstou() == NULL) {
+			unidades.push_back(unidade_a_adicionar);
+			unidade_a_adicionar->setOndeEstou(this);
+		}
+	}
+	else if (unidade_a_adicionar->getCaracteristicaTipo("Inimigo") != NULL) {
+		if (unidade_a_adicionar->getOndeEstou() == NULL) {
+			piratas.push_back(unidade_a_adicionar);
+			unidade_a_adicionar->setOndeEstou(this);
+		}
+	}
+	else if (unidade_a_adicionar->getCaracteristicaTipo("Xenomorfo") != NULL) {
+		if (unidade_a_adicionar->getOndeEstou() == NULL) {
+			xenomorfos.push_back(unidade_a_adicionar);
+			unidade_a_adicionar->setOndeEstou(this);
+		}
 	}
 	else
 		cout << "[WARNING]Erro[WARNING]\n";
 }
 
 void Sala::remover_Unidade(Unidade *unidade_a_remover) {
-	if (unidade_a_remover->getOndeEstou() == this) {
-		for (auto p = unidades.begin(); p < unidades.end(); p++) 
-			if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
-				unidades.erase(p);
-				break;
-			}
-		if (unidades.size() == 0)
-			setOperada(false);
+	if(unidade_a_remover->getCaracteristicaTipo("Tripulacao") != NULL){
+		if (unidade_a_remover->getOndeEstou() == this) {
+			for (auto p = unidades.begin(); p < unidades.end(); p++)
+				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
+					unidades.erase(p);
+					break;
+				}
+			if (unidades.size() == 0)
+				setOperada(false);
+		}
+	}
+	else if (unidade_a_remover->getCaracteristicaTipo("Inimigo") != NULL) {
+		if (unidade_a_remover->getOndeEstou() == this) {
+			for (auto p = piratas.begin(); p < piratas.end(); p++)
+				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
+					piratas.erase(p);
+					break;
+				}
+		}
+	}
+	else if (unidade_a_remover->getCaracteristicaTipo("Xenomorfo") != NULL) {
+		if (unidade_a_remover->getOndeEstou() == this) {
+			for (auto p = xenomorfos.begin(); p < xenomorfos.end(); p++)
+				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
+					xenomorfos.erase(p);
+					break;
+				}
+		}
 	}
 }
 
@@ -197,6 +226,42 @@ Unidade* Sala::getUnidade(int id_unidade)const {
 			return unidades[i];
 	}
 	return nullptr;
+}
+
+Unidade * Sala::getUnidadePosicao(int posicao) const {
+	return unidades[posicao];
+}
+
+unsigned int Sala::countPiratas() const {
+	return (unsigned)piratas.size();
+}
+
+Unidade *Sala::getPirata(int id_pirata)const {
+	for (unsigned int i = 0; i < piratas.size(); i++) {
+		if (piratas[i]->getID_Unidade() == id_pirata)
+			return piratas[i];
+	}
+	return nullptr;
+}
+
+Unidade *Sala::getPirataPosicao(int pos_pirata)const {
+	return piratas[pos_pirata];
+}
+
+unsigned int Sala::countXenomorfo()const {
+	return (unsigned)xenomorfos.size();
+}
+
+Unidade *Sala::getXenomorfo(int id_xenomorfo)const {
+	for (unsigned int i = 0; i < xenomorfos.size(); i++) {
+		if (xenomorfos[i]->getID_Unidade() == id_xenomorfo)
+			return xenomorfos[i];
+	}
+	return nullptr;
+}
+
+Unidade *Sala::getXenomorfoPosicao(int pos_xenomorfo)const {
+	return xenomorfos[pos_xenomorfo];
 }
 
 void Sala::salas_actuar_inicio(Nave *n) {
@@ -301,11 +366,19 @@ void Sala::salas_actuar_fim(Nave *n) {
 void Sala::unidades_actuar_inicio(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++)
 		unidades[i]->actua_inicio(n);
+	for (unsigned int i = 0; i < piratas.size(); i++)
+		piratas[i]->actua_inicio(n);
+	for (unsigned int i = 0; i < xenomorfos.size(); i++)
+		xenomorfos[i]->actua_inicio(n);
 }
 
 void Sala::unidades_actuar_fim(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++)
 		unidades[i]->actua_fim(n);
+	for (unsigned int i = 0; i < piratas.size(); i++)
+		piratas[i]->actua_inicio(n);
+	for (unsigned int i = 0; i < xenomorfos.size(); i++)
+		xenomorfos[i]->actua_inicio(n);
 }
 
 Sala & Sala::operator=(Sala *s){
@@ -314,19 +387,28 @@ Sala & Sala::operator=(Sala *s){
 			delete unidades[i];
 		unidades.clear();
 
+		for (int i = 0; i < piratas.size(); i++)
+			delete piratas[i];
+		piratas.clear();
+
+		for (int i = 0; i < xenomorfos.size(); i++)
+			delete xenomorfos[i];
+		xenomorfos.clear();
+
+		tipo = s->getTipo();
 		integridade = 100;
 		id_sala = s->getID();
 
 		for (int i = 0; i < s->unidades.size(); i++) 
 			unidades.push_back(s->unidades[i]);
 
-		s->unidades.clear();
+		for (int i = 0; i < s->piratas.size(); i++)
+			piratas.push_back(s->piratas[i]);
+
+		for (int i = 0; i < s->xenomorfos.size(); i++)
+			xenomorfos.push_back(s->xenomorfos[i]);
 	}
 	return *this;
-}
-
-Unidade * Sala::getUnidadePosicao(int posicao) const {
-	return unidades[posicao];
 }
 
 SalaPropulsor::SalaPropulsor(string tipo):Sala(tipo){
@@ -433,202 +515,100 @@ SalaSistemadeSegInterno::SalaSistemadeSegInterno(string tipo):Sala(tipo){
 }
 
 void SalaSistemadeSegInterno::salas_actuar_fim(Nave *n) {
-	int tripulante_encontrado=0;
-	
 	if (this->getIntegridade() == 100) { // só funciona se estiver sem dano nenhum
-
-		if (n->getSala(this->getID())->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-			for (unsigned int j = 0; j < n->getSala(this->getID())->countUnidades(); j++) {
-				for (unsigned int z = 0; z < n->getSala(this->getID())->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-					if (n->getSala(this->getID())->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao"){
-						tripulante_encontrado = 1;
-						break;
-					}
-				}
-
-				if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-					n->getSala(this->getID())->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-				}
-				else
-				{
-					tripulante_encontrado = 0;
-				}
-			}
+		// Distribui dano na Sala Sistema de Seguranca Interna
+		for (unsigned int i = 0; i < n->getSala(getID())->countPiratas(); i++) {
+			n->getSala(getID())->getPirataPosicao(i)->LevaDano(1);
 		}
+		for (unsigned int i = 0; i < n->getSala(getID())->countXenomorfo(); i++) {
+			n->getSala(getID())->getXenomorfoPosicao(i)->LevaDano(1);
+		}
+
 		for (int i = 1; i <= 12; i++) {
 			int sala_seg_interna = n->getSala(i)->getID();
 
 			if (sala_seg_interna == 2 || sala_seg_interna == 3) {
 				sala_seg_interna++; //sala a direita
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 				}
 
-
 				sala_seg_interna -= 2; //sala da esquerda a começar a partir da sala a direita da sala de segurança interna
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 				}
 
 				sala_seg_interna += 4; //sala de baixo a começar da sala à esquerda da sala de segurnaça interna
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
 				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
+				}
+
 				sala_seg_interna = n->getSala(i)->getID(); // volta a colocar o id da sala de segurança ao original, para não entrar em conflito com as restantes restrições
 			}
-
-			if (sala_seg_interna == 10 || sala_seg_interna == 11) {
+			else if (sala_seg_interna == 10 || sala_seg_interna == 11) {
 				sala_seg_interna -= 5; //sala de cima a começar da sala de segurnaça interna são menos 5 unidades
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 				}
 
 				sala_seg_interna += 4; //sala de esquerda a começar da sala a cima da sala segurança interna são mais 4 unidades
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 				}
 
 				sala_seg_interna += 2; //sala de direita a começar da sala à esquerda da sala segurança interna são mais 2 unidades
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
 				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
+				}
+
 				sala_seg_interna = n->getSala(i)->getID();
 			}
-
-			if (sala_seg_interna == 12 || sala_seg_interna == 4) {
+			else if (sala_seg_interna == 12 || sala_seg_interna == 4) {
 				sala_seg_interna--; //sala a esquerda
-				if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-					for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-						for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-							if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-								tripulante_encontrado = 1;
-						}
-
-						if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-							n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-						}
-						else
-						{
-							tripulante_encontrado = 0;
-						}
-					}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+					n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+				}
+				for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+					n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 				}
 
 				sala_seg_interna = n->getSala(i)->getID();
+
 				if (sala_seg_interna == 4) {
 					sala_seg_interna += 3;
 					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-						for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-							for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-									tripulante_encontrado = 1;
-							}
-
-							if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-								n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-							}
-							else
-							{
-								tripulante_encontrado = 0;
-							}
+						for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+							n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+						}
+						for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+							n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 						}
 					}
-				}
-				else { // ele na sala 12 tem que dar dano na sala de cima que fica a menos 5 unidades da sala em que está
+				}else { // ele na sala 12 tem que dar dano na sala de cima que fica a menos 5 unidades da sala em que está
 					sala_seg_interna -= 5;
-					if (n->getSala(sala_seg_interna)->getOperada() == false) { //AQUI DISTRIBUI DANO AOS DA SALA SEGURANÇA INTERNA
-						for (unsigned int j = 0; j < n->getSala(sala_seg_interna)->countUnidades(); j++) {
-							for (unsigned int z = 0; z < n->getSala(sala_seg_interna)->getUnidadePosicao(j)->countCaracteristicas(); z++) {
-								if (n->getSala(sala_seg_interna)->getUnidadePosicao(j)->getCaracteristicaPosicao(z)->getTipoCaracterisca() == "Tripulacao")
-									tripulante_encontrado = 1;
-							}
-
-							if (tripulante_encontrado == 0) { //NÃO É TRIPULANTE
-								n->getSala(sala_seg_interna)->getUnidadePosicao(j)->LevaDano(1); //AQUI ESTOU A CONSIDERAR TODOS OS INIMIGOS NA SALA E NÃO SÓ OS QUE LEVARAM DANO DOS TRIPULANTES
-							}
-							else
-							{
-								tripulante_encontrado = 0;
-							}
-						}
+					for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countPiratas(); i++) {
+						n->getSala(sala_seg_interna)->getPirataPosicao(i)->LevaDano(1);
+					}
+					for (unsigned int i = 0; i < n->getSala(sala_seg_interna)->countXenomorfo(); i++) {
+						n->getSala(sala_seg_interna)->getXenomorfoPosicao(i)->LevaDano(1);
 					}
 				}
 			}
@@ -653,30 +633,14 @@ SalaArmas::SalaArmas(string tipo):Sala(tipo){
 
 void SalaArmas::salas_actuar_fim(Nave *n) {
 	bool pode_armar = false;
-	int id_unidade = 0;
 
 	for (unsigned int i = 0; i < countUnidades(); i++) {
-		for (unsigned int j = 0; j < getUnidadePosicao(i)->countCaracteristicas(); j++) {
-			string tipo_car = getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca();
-			cout << "i " << i << "j " << j << endl;
-			if (tipo_car == "Tripulacao") {
-				pode_armar = true;
-				id_unidade = getUnidadePosicao(i)->getID_Unidade();
-				cout << id_unidade;
-			}
-			else if (tipo_car == "Armado") { // Já se encontra armado
-				pode_armar = false;
-			}
+		if (getUnidadePosicao(i)->getCaracteristicaTipo("Armado") != NULL)
+			continue;
+		else {
+			getUnidadePosicao(i)->setCaracteristica(new Armado(1));
+			cout << "Unidade " << i << " armada" << endl;
 		}
-	}
-
-	cout << "Acabei o ciclo armado" << endl;
-
-	if (pode_armar == true) {
-		// ESTOIRA AQUI POR CAUSA DA ADIÇÃO DE CARACTERISTICA NAO SEI PORQUE ??????????
-		getUnidadePosicao(id_unidade)->setCaracteristica(new Armado(1));
-		cout << "Unidade " << id_unidade << " armada" << endl;
-		system("pause");
 	}
 }
 

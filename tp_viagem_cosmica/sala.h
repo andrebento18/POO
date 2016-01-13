@@ -7,13 +7,14 @@ class Sala {
 	int id_sala;
 	static int conta_salas;
 	int integridade;
-	/*int dano;*/
 	bool operada;
 	int oxigenio;
 	bool fogo;
 	bool brecha;
 	bool curto_circuito;
 	vector <Unidade*> unidades;
+	vector <Unidade*> piratas;
+	vector <Unidade*> xenomorfos;
 public:
 	Sala(string tipo);
 	Sala(const Sala *s);
@@ -49,11 +50,20 @@ public:
 	void setCurtoCircuito(bool valor);
 	
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
+
 	void remover_Unidade(Unidade *unidade_a_remover);
 
 	unsigned int countUnidades()const;
 	Unidade *getUnidade(int id_unidade)const;
 	Unidade *getUnidadePosicao(int pos_unidade)const;
+
+	unsigned int countPiratas()const;
+	Unidade *getPirata(int id_pirata)const;
+	Unidade *getPirataPosicao(int pos_pirata)const;
+
+	unsigned int countXenomorfo()const;
+	Unidade *getXenomorfo(int id_xenomorfo)const;
+	Unidade *getXenomorfoPosicao(int pos_xenomorfo)const;
 
 	virtual void salas_actuar_inicio(Nave *n);
 	virtual void salas_actuar_fim(Nave *n);

@@ -148,6 +148,7 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	setCaracteristica(new Tripulacao());
 
 	setCaracteristica(new Mutantis_Mutandis(90));
+	setCaracteristica(new Casulo(90));
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
@@ -169,7 +170,7 @@ Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	setCaracteristica(new Xenomorfo(3));
 	setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
-	setCaracteristica(new Casulo(80));//Casulo(20));
+	setCaracteristica(new Casulo(20));
 	setCaracteristica(new Exoesqueleto(3));
 }
 
@@ -183,6 +184,24 @@ CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo, Unidade *u):Unidade(tipo, 
 	u->getOndeEstou()->adicionar_Unidade(this);
 	// Remover a unidade da sala
 	u->getOndeEstou()->remover_Unidade(u);
+}
+
+void CasulodeGeigermorfo::actua_unidade_incio(Nave * n){
+	if (turno == 3) {
+		Unidade *p = new Geigermorfo("Geigermorfo");
+		getOndeEstou()->adicionar_Unidade(p);
+		getOndeEstou()->remover_Unidade(this);
+	}
+	else
+		turno++;
+}
+
+void CasulodeGeigermorfo::actua_unidade_fim(Nave *n) {
+	if (getPV() <= 0) {
+		getOndeEstou()->adicionar_Unidade(unidade_aprisionada);
+		cout << "????????????????" << unidade_aprisionada->getID_Unidade();
+		system("pause");
+	}
 }
 
 Blob::Blob(string tipo):Unidade(tipo, 8){

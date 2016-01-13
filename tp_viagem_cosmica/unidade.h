@@ -41,8 +41,8 @@ public:
 	Caracteristica *getCaracteristicaTipo(string tipo);
 	unsigned int countCaracteristicas()const;
 
-	void actua_inicio(Nave *n);
-	void actua_fim(Nave *n);
+	virtual void actua_inicio(Nave *n);
+	virtual void actua_fim(Nave *n);
 };
 
 class MembroTripulacao : public Unidade {
@@ -75,8 +75,12 @@ public:
 
 class CasulodeGeigermorfo :public Unidade {
 	Unidade *unidade_aprisionada;
+	int turno;
 public:
 	CasulodeGeigermorfo(string tipo, Unidade *u);
+
+	void actua_unidade_incio(Nave *n);
+	void actua_unidade_fim(Nave *n);
 };
 
 class Blob :public Unidade {
