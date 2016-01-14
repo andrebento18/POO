@@ -102,7 +102,7 @@ void interface_nave(Nave *nave, int turnos, int nvl, Consola c) {
 				cout << (char)192 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)217 << '\n';
 			// linhas verticais propulsores
 			if((i == 80 || i == 99) && ((j > 5 && j < 11) || (j > 19 && j < 25)))
-				cout << (char)179;
+				cout << (char)179;//
 			// linhas verticais centro ESQ
 			if ((i == 100 || i == 120 || i == 140) && ((j > 5 && j < 11) || (j > 12 && j < 18) || (j > 19 && j < 25)))
 				cout << (char)179;

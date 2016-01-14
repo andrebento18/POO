@@ -186,8 +186,8 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 		if (unidade_a_remover->getOndeEstou() == this) {
 			for (auto p = unidades.begin(); p < unidades.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
-					unidades.erase(p);
 					unidade_a_remover->setOndeEstou(NULL);
+					unidades.erase(p);
 					break;
 				}
 			if (unidades.size() == 0)
@@ -198,8 +198,8 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 		if (unidade_a_remover->getOndeEstou() == this) {
 			for (auto p = piratas.begin(); p < piratas.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
-					piratas.erase(p);
 					unidade_a_remover->setOndeEstou(NULL);
+					piratas.erase(p);
 					break;
 				}
 		}
@@ -208,8 +208,8 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 		if (unidade_a_remover->getOndeEstou() == this) {
 			for (auto p = xenomorfos.begin(); p < xenomorfos.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
-					xenomorfos.erase(p);
 					unidade_a_remover->setOndeEstou(NULL);
+					xenomorfos.erase(p);
 					break;
 				}
 		}

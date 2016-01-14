@@ -110,7 +110,13 @@ Exoesqueleto::Exoesqueleto(int cap_exoesqueleto):Caracteristica("Exoesqueleto") 
 }
 
 void Exoesqueleto::actua_car_inicio(Unidade * u, Nave * n){
-	u->aumentaPV(cap_exoesqueleto);
+	bool existe_inimigos = false;
+	if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countXenomorfo() != 0))
+		existe_inimigos = true;
+	else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countUnidades() != 0))
+		existe_inimigos = true;
+	if(existe_inimigos == true)
+		u->aumentaPV(cap_exoesqueleto);
 }
 
 // FALTA IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
@@ -346,7 +352,7 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 	if (random(1, 100) < prob_movimento) {
 		// Sortear o movimento "cima", "baixo", "esquerda", "direita"
 		bool moveu = false;
-		do {
+		//do {
 			string comando_direcao;
 			switch (random(1, 4)) {
 			case 1: comando_direcao = "cima";
@@ -358,12 +364,16 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 			case 4: comando_direcao = "direita";
 				break;
 			}
-			if (n->check_mov_sala(u->getID_Unidade(), comando_direcao) == true) {
-				moveu = true;
+			cout << "COMD>" << comando_direcao << endl;
+			system("pause");
+
+			//if (
+				n->check_mov_sala(u->getID_Unidade(), comando_direcao);// == true) {
+				//moveu = true;
 				cout << "Unidade " << u->getID_Unidade() + 1 << " movida para " << comando_direcao << endl;
 				system("pause");
-			}
-		} while (moveu != true);
+			/*}
+		} while (moveu != true);*/
 	}
 }
 

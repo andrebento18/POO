@@ -227,21 +227,17 @@ void Nave::setDistancia(int dist_somar) {
 }
 
 void Nave::inicio_turno() {
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 5; j++)
-			if (salas[i][j] != NULL) {
-				salas[i][j]->unidades_actuar_inicio(this);
-				salas[i][j]->salas_actuar_inicio(this);
-			}
+	for (int i = 1; i < 13; i++) {
+		getSala(i)->unidades_actuar_inicio(this);
+		getSala(i)->salas_actuar_inicio(this);
+	}
 }
 
 void Nave::fim_turno() {
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 5; j++)
-			if (salas[i][j] != NULL) {
-				salas[i][j]->unidades_actuar_fim(this);
-				salas[i][j]->salas_actuar_fim(this);
-			}
+	for (int i = 1; i < 13; i++) {
+		getSala(i)->unidades_actuar_fim(this);
+		getSala(i)->salas_actuar_fim(this);
+	}
 }
 
 bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
@@ -466,18 +462,16 @@ void Nave::evento() {
 			int alien_random = random(1, 3);
 			int sala_random = random(1, 12);
 			if (alien_random == 1) {
-				Unidade *p = new Geigermorfo("Geigermorfo");
-				getSala(sala_random)->adicionar_Unidade(p);
+				getSala(sala_random)->adicionar_Unidade(new Geigermorfo("Geigermorfo"));
 			}
 			else if (alien_random == 2) {
-				Unidade *p = new Blob("Blob");
-				getSala(sala_random)->adicionar_Unidade(p);
+				getSala(sala_random)->adicionar_Unidade(new Blob("Blob"));
 			}
 			else if (alien_random == 3) {
-				Unidade *p = new Mxyzypykwi("Mxyzypykwi");
-				getSala(sala_random)->adicionar_Unidade(p);
+				getSala(sala_random)->adicionar_Unidade(new Mxyzypykwi("Mxyzypykwi"));
 			}
 			cout << endl << "Fomos invadidos por um ser alienigena comandante" << endl;
+			cout << "Sala_random " << sala_random << " alien random " << alien_random << endl;
 			break;
 		}
 		
