@@ -90,7 +90,7 @@ void Misterioso::actua_car_fim(Unidade *u, Nave *n){
 	else if (count_turnos == 1) {
 		int sala_escolhida = random(1, 12);
 		u->getOndeEstou()->remover_Unidade(u);
-		u->mover_unidade(u->getID_Unidade(), u->getOndeEstou(), n->getSala(sala_escolhida));
+		u->mover_unidade(u->getOndeEstou(), n->getSala(sala_escolhida));
 		int indeciso = random(1, 2);
 	}
 }
@@ -104,52 +104,14 @@ void Regenerador::actua_car_inicio(Unidade *u, Nave *n) {
 	u->aumentaPV(cap_regenerar);
 }
 
-// FALATA IMPLEMENTAR "BEM" ESTA ????????????????????
 Exoesqueleto::Exoesqueleto(int cap_exoesqueleto):Caracteristica("Exoesqueleto") {
 	this->cap_exoesqueleto = cap_exoesqueleto;
-	cap_exoesqueleto_inicial = cap_exoesqueleto;
 	cout << "Esta unidade esta protegida por um exoesqueleto " << this->cap_exoesqueleto << " pontos de capacidade" << endl;
 }
 
 void Exoesqueleto::actua_car_inicio(Unidade * u, Nave * n){
-	setExoesqueleto(cap_exoesqueleto_inicial);
+	u->aumentaPV(cap_exoesqueleto);
 }
-
-bool Exoesqueleto::verifica_exoesqueleto(Sala *s, int id_unidade) {
-	for (unsigned int i = 0; i < s->getUnidade(id_unidade)->countCaracteristicas(); i++) {
-			string tipo_car = s->getUnidadePosicao(id_unidade)->getCaracteristicaPosicao(i)->getTipoCaracterisca();
-			if (tipo_car == "Exoesqueleto") {
-				return true;
-			}
-	}
-	return false;
-}
-
-void Exoesqueleto::reduzExoesqueleto(int valor_reduzir) {
-	if (cap_exoesqueleto - valor_reduzir <= 0)
-		cap_exoesqueleto = 0;
-	else
-		cap_exoesqueleto -= valor_reduzir;
-}
-
-int Exoesqueleto::getExoesqueleto()const {
-	return cap_exoesqueleto;
-}
-
-void Exoesqueleto::setExoesqueleto(int cap_exoesqueleto){
-	this->cap_exoesqueleto = cap_exoesqueleto;
-}
-
-void Exoesqueleto::LevaDano(Unidade *u, int dano_recebido){
-	if (cap_exoesqueleto - dano_recebido <= 0) {
-		cap_exoesqueleto = 0;
-		u->LevaDano(dano_recebido - cap_exoesqueleto);
-	}
-	else {
-		cap_exoesqueleto -= dano_recebido;
-	}
-}
-// **********************************************************
 
 // FALTA IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
 Robotico::Robotico(void):Caracteristica("Robotico"){
@@ -165,21 +127,12 @@ Reparador::Reparador(int cap_reparar) : Caracteristica("Reparador") {
 void Reparador::actua_car_fim(Unidade *u, Nave *n) {
 	bool existe_inimigos = false;
 	if (u->getOndeEstou()->getTipo() != "Propulsor Adicional" && u->getOndeEstou()->getTipo() != "Propulsor" && u->getOndeEstou()->getIntegridade() < 100) {
-		// FALTA VERIFICAR SE A UNDIADE ESTÁ EM COMBATE ?????????????????????????
-		/*
-		for (unsigned int i = 0; i < u->getOndeEstou()->countUnidades(); i++) {
-			for (unsigned int j = 0; j < u->countCaracteristicas(); j++) {
-				if (u->getOndeEstou()->getUnidadePosicao(i)->getCaracteristicaPosicao(j)->getTipoCaracterisca() != "Tripulacao") {
-					existe_inimigos = true;
-					cout << "Passei";
-				}
-			}
-		}
-		*/
-		
+		if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countXenomorfo() != 0))
+			existe_inimigos = true;
+		else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countUnidades() != 0))
+			existe_inimigos = true;
+
 		if (existe_inimigos == false)
-			u->getOndeEstou()->aumentaIntergridade(cap_reparar);
-		if (u->getNome() == "Blob")
 			u->getOndeEstou()->aumentaIntergridade(cap_reparar);
 	}
 }
@@ -195,20 +148,20 @@ void Combatente::setCapCombate(int arma){
 
 void Combatente::actua_car_fim(Unidade *u, Nave *n) {
 	int	id_inimigo = 0;
-	int escolhe_alvo = random(0, 1);
 
 	Sala *s = u->getOndeEstou();
 
 	// Atacar Piratas
-	if (s->countPiratas() != 0 && escolhe_alvo == 0) {
-		id_inimigo = random(0, s->countPiratas());
-		s->getPirata(id_inimigo)->LevaDano(capacidade_combate);
+	if (s->countPiratas() > 0) {
+		id_inimigo = random(0, s->countPiratas() - 1);
+		s->getPirataPosicao(id_inimigo)->LevaDano(capacidade_combate);
+		return;
 	}
-	
 	// Atacar Xenomorfos
-	if (s->countXenomorfo() != 0 && escolhe_alvo == 1) {
-		id_inimigo = random(0, s->countXenomorfo());
-		s->getXenomorfo(id_inimigo)->LevaDano(capacidade_combate);
+	else if (s->countXenomorfo() > 0) {
+		id_inimigo = random(0, s->countXenomorfo() - 1);
+		s->getXenomorfoPosicao(id_inimigo)->LevaDano(capacidade_combate);
+		return;
 	}
 }
 
@@ -219,20 +172,20 @@ Xenomorfo::Xenomorfo(int cap_dano):Caracteristica("Xenomorfo") {
 
 void Xenomorfo::actua_car_fim(Unidade *u, Nave *n) {
 	int	id_inimigo = 0;
-	int escolhe_alvo = random(0, 1);
 
 	Sala *s = u->getOndeEstou();
 
 	// Atacar Unidades
-	if (s->countUnidades() != 0 && escolhe_alvo == 0) {
-		id_inimigo = random(0, s->countUnidades());
-		s->getUnidade(id_inimigo)->LevaDano(cap_dano);
+	if (s->countUnidades() > 0) {
+		id_inimigo = random(0, s->countUnidades() - 1);
+		s->getUnidadePosicao(id_inimigo)->LevaDano(cap_dano);
+		return;
 	}
-
 	// Atacar Piratas
-	if (s->countPiratas() != 0 && escolhe_alvo == 1) {
-		id_inimigo = random(0, s->countPiratas());
-		s->getPirata(id_inimigo)->LevaDano(cap_dano);
+	else if (s->countPiratas() > 0) {
+		id_inimigo = random(0, s->countPiratas() - 1);
+		s->getPirataPosicao(id_inimigo)->LevaDano(cap_dano);
+		return;
 	}
 }
 
@@ -266,7 +219,7 @@ void Casulo::actua_car_fim(Unidade * u, Nave * n){
 			}
 
 		}
-	} while (comeu == 0);
+	} while (comeu != 1);
 }
 
 
@@ -344,13 +297,16 @@ Operador::Operador(void) :Caracteristica("Operador") {
 	cout << "Esta unidade e capaz de operar salas" << endl;
 }
 
-// ***************************************************
 void Operador::actua_car_inicio(Unidade *u, Nave *n) {
-	// FALATA VERIFICAR SE ESTÁ EM COMBATE ???????? (NAO VAI LÁ SÓ COM O FACTO DE A SALA NAO ESTAR OPERADA)
-	if (u->getOndeEstou()->getIntegridade() == 100)
+	bool existe_inimigos = false;
+	if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countXenomorfo() != 0))
+		existe_inimigos = true;
+	else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countUnidades() != 0))
+		existe_inimigos = true;
+	
+	if (u->getOndeEstou()->getIntegridade() == 100 && existe_inimigos == false)
 		u->getOndeEstou()->setOperada(true);
 }
-// ***************************************************
 
 Tripulacao::Tripulacao(void):Caracteristica("Tripulacao") {
 	cout << "Faco parte da tripulacao da nave" << endl;
@@ -362,19 +318,20 @@ Inimigo::Inimigo(int x, int y):dano_unidade(x), dano_sala(y), Caracteristica("In
 
 void Inimigo::actua_car_inicio(Unidade *u, Nave *n) {
 	int	id_inimigo = 0;
-	int escolhe_alvo = random(0, 1);
 
 	Sala *s = u->getOndeEstou();
 
 	// Atacar Tripulacao
-	if (s->countUnidades() != 0 && escolhe_alvo == 0) {
-		id_inimigo = random(0, s->countUnidades());
-		s->getUnidade(id_inimigo)->LevaDano(dano_unidade);
+	if (s->countUnidades() > 0) {
+		id_inimigo = random(0, s->countUnidades() - 1);
+		s->getUnidadePosicao(id_inimigo)->LevaDano(dano_unidade);
+		return;
 	}
 	// Atacar Xenomorfos
-	else if (s->countXenomorfo() != 0 && escolhe_alvo == 1) {
-		id_inimigo = random(0, s->countXenomorfo());
-		s->getXenomorfo(id_inimigo)->LevaDano(dano_unidade);
+	else if (s->countXenomorfo() > 0) {
+		id_inimigo = random(0, s->countXenomorfo() - 1);
+		s->getXenomorfoPosicao(id_inimigo - 1)->LevaDano(dano_unidade);
+		return;
 	}
 	// Não existe enimigo
 	else
@@ -386,9 +343,11 @@ Move::Move(int pmovimento):Caracteristica("Move"), prob_movimento(pmovimento) {
 }
 
 void Move::actua_car_inicio(Unidade *u, Nave *n) {
-	if (random(0, 99) < prob_movimento) {
+	if (random(1, 100) < prob_movimento) {
 		// Sortear o movimento "cima", "baixo", "esquerda", "direita"
-		string comando_direcao;
+		bool moveu = false;
+		do {
+			string comando_direcao;
 			switch (random(1, 4)) {
 			case 1: comando_direcao = "cima";
 				break;
@@ -399,9 +358,12 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 			case 4: comando_direcao = "direita";
 				break;
 			}
-			cout << u->getID_Unidade() << ", " << comando_direcao << endl;
-			system("pause");
-			n->check_mov_sala(u->getID_Unidade(), comando_direcao);
+			if (n->check_mov_sala(u->getID_Unidade(), comando_direcao) == true) {
+				moveu = true;
+				cout << "Unidade " << u->getID_Unidade() + 1 << " movida para " << comando_direcao << endl;
+				system("pause");
+			}
+		} while (moveu != true);
 	}
 }
 

@@ -68,6 +68,7 @@ void Sala::reduzIntegridade(int valor_reduzir){
 		integridade = 0;
 	else
 		integridade -= valor_reduzir;
+	setOperada(false);
 }
 
 bool Sala::getOperada()const {
@@ -144,15 +145,11 @@ string Sala::toString()const {
 	else
 		os << "Sala: " << getID() << "   " << getTipo() << endl;
 	
-	if (unidades.size() != 0) {
+	if (unidades.size() != 0 || piratas.size() != 0 || xenomorfos.size() != 0) {
 		for (unsigned int i = 0; i < unidades.size(); i++)
 			os << "\t->" << unidades[i]->toString() << endl;
-	}
-	else if (piratas.size() != 0) {
 		for (unsigned int i = 0; i < piratas.size(); i++)
 			os << "\t->" << piratas[i]->toString() << endl;
-	}
-	else if (xenomorfos.size() != 0) {
 		for (unsigned int i = 0; i < xenomorfos.size(); i++)
 			os << "\t->" << xenomorfos[i]->toString() << endl;
 	}
@@ -190,6 +187,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 			for (auto p = unidades.begin(); p < unidades.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 					unidades.erase(p);
+					unidade_a_remover->setOndeEstou(NULL);
 					break;
 				}
 			if (unidades.size() == 0)
@@ -201,6 +199,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 			for (auto p = piratas.begin(); p < piratas.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 					piratas.erase(p);
+					unidade_a_remover->setOndeEstou(NULL);
 					break;
 				}
 		}
@@ -210,6 +209,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 			for (auto p = xenomorfos.begin(); p < xenomorfos.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 					xenomorfos.erase(p);
+					unidade_a_remover->setOndeEstou(NULL);
 					break;
 				}
 		}
@@ -266,9 +266,14 @@ Unidade *Sala::getXenomorfoPosicao(int pos_xenomorfo)const {
 
 void Sala::salas_actuar_inicio(Nave *n) {
 	// Dano causado pelo Fogo às Unidades na sala
-	if (getFogo() == true) 
-		for (unsigned int i = 0; i < unidades.size(); i++) 
+	if (getFogo() == true) {
+		for (unsigned int i = 0; i < unidades.size(); i++)
 			unidades[i]->LevaDano(2);
+		for (unsigned int i = 0; i < piratas.size(); i++)
+			piratas[i]->LevaDano(2);
+		for (unsigned int i = 0; i < xenomorfos.size(); i++)
+			xenomorfos[i]->LevaDano(2);
+	}
 }
 
 void Sala::salas_actuar_fim(Nave *n) {
@@ -376,9 +381,9 @@ void Sala::unidades_actuar_fim(Nave *n) {
 	for (unsigned int i = 0; i < unidades.size(); i++)
 		unidades[i]->actua_fim(n);
 	for (unsigned int i = 0; i < piratas.size(); i++)
-		piratas[i]->actua_inicio(n);
+		piratas[i]->actua_fim(n);
 	for (unsigned int i = 0; i < xenomorfos.size(); i++)
-		xenomorfos[i]->actua_inicio(n);
+		xenomorfos[i]->actua_fim(n);
 }
 
 Sala & Sala::operator=(Sala *s){

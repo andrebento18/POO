@@ -28,7 +28,7 @@ Unidade::~Unidade() {
 string Unidade::toString() {
 	ostringstream os;
 	if(getCaracteristicaTipo("Exoesqueleto") != NULL)
-		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV() << ", exoesq: " << getCaracteristicaTipo("Exoesqueleto")->getExoesqueleto();
+		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv + exoesq: " << getPV();
 	else
 		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV();
 	return os.str();
@@ -62,7 +62,7 @@ void Unidade::LevaDano(int dano_recebido){
 	ponto_vida -= dano_recebido;
 	if (getPV() <= 0) {
 		getOndeEstou()->remover_Unidade(this);
-		cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << endl;
+		cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << endl << "Unidade removida" << endl;
 		system("pause");
 	}
 }
@@ -87,10 +87,9 @@ void Unidade::setOndeEstava(Sala *s) {
 	ondestava = s;
 }
 
-void Unidade::mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova) {
-	this->setOndeEstava(sala_antiga);
+void Unidade::mover_unidade(Sala *sala_antiga, Sala *sala_nova) {
+	setOndeEstava(sala_antiga);
 	sala_antiga->remover_Unidade(this);
-	setOndeEstou(NULL);
 	sala_nova->adicionar_Unidade(this);
 }
 
@@ -133,7 +132,7 @@ void Unidade::actua_fim(Nave *n) {
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
 	cout << endl << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
-	setCaracteristica(new Reparador(1));
+	setCaracteristica(new Reparador(3));
 	setCaracteristica(new Combatente(1));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
@@ -146,9 +145,6 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	setCaracteristica(new Combatente(2));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
-
-	setCaracteristica(new Mutantis_Mutandis(90));
-	setCaracteristica(new Casulo(90));
 }
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
@@ -170,7 +166,7 @@ Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	setCaracteristica(new Xenomorfo(3));
 	setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
-	setCaracteristica(new Casulo(20));
+	//setCaracteristica(new Casulo(20));
 	setCaracteristica(new Exoesqueleto(3));
 }
 
@@ -220,6 +216,6 @@ Mxyzypykwi::Mxyzypykwi(string tipo):Unidade(tipo, 8){
 	setCaracteristica(new Xenomorfo(0));
 	setCaracteristica(new Hipnotizador(15));
 	setCaracteristica(new Move(30));
-	setCaracteristica(new Mutantis_Mutandis(10));
+	//setCaracteristica(new Mutantis_Mutandis(10));
 	setCaracteristica(new Respira());
 }

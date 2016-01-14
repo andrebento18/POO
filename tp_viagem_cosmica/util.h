@@ -1,4 +1,4 @@
 #pragma once
 int random(int min, int max) {
-	return min + rand() % (max - min + 1);
+	return min + rand() % (int)(max - min + 1);
 }

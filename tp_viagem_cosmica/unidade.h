@@ -33,7 +33,7 @@ public:
 	Sala * getOndeEstava() const;
 	void setOndeEstou(Sala *s);
 	void setOndeEstava(Sala * s);
-	void mover_unidade(int id_unidade, Sala *sala_antiga, Sala *sala_nova);
+	void mover_unidade(Sala *sala_antiga, Sala *sala_nova);
 	
 	void setCaracteristica(Caracteristica *p);
 	Caracteristica *getCaracteristica(Caracteristica *p);
