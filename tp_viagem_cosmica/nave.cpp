@@ -183,25 +183,20 @@ int Nave::verifica_saudeNave() const {
 	return verifica_saude;
 }
 
-int Nave::countTripulacao()const {
+int Nave::countTripulacao() {
 	int quant_trip = 0;
-	for (int i = 1; i <= 12; i++) {
+	for (int i = 1; i < 13; i++) {
 		quant_trip += getSala(i)->countUnidades();
 	}
 	return quant_trip;
 }
 
-Sala *Nave::getSala(int id_sala)const {
+Sala *Nave::getSala(int id_sala) {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++) 
 			if (salas[i][j] != NULL && salas[i][j]->getID() == id_sala){
 				return salas[i][j];
-				break;
 			}
-}
-
-Sala * Nave::getSalaMatriz(int i, int j) const {
-	return salas[i][j];
 }
 
 string Nave::getSalas()const {
@@ -247,19 +242,19 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
 			if (salas[i][j] != NULL) {
-				if (salas[i][j]->countUnidades() != 0) {
+				if (salas[i][j]->countUnidades() > 0) {
 					if (salas[i][j]->getUnidade(id_unidade) != NULL) {
 						tipo_unidade = 1;
 						id_sala = salas[i][j]->getID();
 					}
 				}
-				else if (salas[i][j]->countPiratas() != 0) {
+				else if (salas[i][j]->countPiratas() > 0) {
 					if (salas[i][j]->getPirata(id_unidade) != NULL) {
 						tipo_unidade = 2;
 						id_sala = salas[i][j]->getID();
 					}
 				}
-				else if (salas[i][j]->countXenomorfo() != 0) {
+				else if (salas[i][j]->countXenomorfo() > 0) {
 					if (salas[i][j]->getXenomorfo(id_unidade) != NULL) {
 						tipo_unidade = 3;
 						id_sala = salas[i][j]->getID();
@@ -385,7 +380,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(3, 3);
+	int x = random(1, 4);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos

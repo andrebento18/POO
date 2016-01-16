@@ -255,7 +255,7 @@ void viagem(Nave *nave, double nvl, Consola c) {
 					system("pause");
 				}
 				else {
-					if ((nave->check_mov_sala(id_unidade - 1, dir_mov)) == true) {
+					if ((nave->check_mov_sala(id_unidade - 1, dir_mov)) != NULL) {
 						unidades_movidas[n_unidades_mov] = id_unidade;
 						n_unidades_mov++;
 						cout << "Unidade: " << id_unidade << " movida para " << dir_mov << " com sucesso comandante!" << endl;

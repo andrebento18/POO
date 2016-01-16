@@ -53,17 +53,17 @@ public:
 
 	void remover_Unidade(Unidade *unidade_a_remover);
 
-	unsigned int countUnidades()const;
-	Unidade *getUnidade(int id_unidade)const;
-	Unidade *getUnidadePosicao(int pos_unidade)const;
+	int countUnidades()const;
+	Unidade *getUnidade(int id_unidade);
+	Unidade *getUnidadePosicao(int pos_unidade);
 
-	unsigned int countPiratas()const;
-	Unidade *getPirata(int id_pirata)const;
-	Unidade *getPirataPosicao(int pos_pirata)const;
+	int countPiratas()const;
+	Unidade *getPirata(int id_pirata);
+	Unidade *getPirataPosicao(int pos_pirata);
 
-	unsigned int countXenomorfo()const;
-	Unidade *getXenomorfo(int id_xenomorfo)const;
-	Unidade *getXenomorfoPosicao(int pos_xenomorfo)const;
+	int countXenomorfo()const;
+	Unidade *getXenomorfo(int id_xenomorfo);
+	Unidade *getXenomorfoPosicao(int pos_xenomorfo);
 
 	virtual void salas_actuar_inicio(Nave *n);
 	virtual void salas_actuar_fim(Nave *n);

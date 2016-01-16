@@ -8,14 +8,12 @@ public:
 	~Nave();
 	
 	int verifica_saudeNave()const;
-	int countTripulacao()const;
+	int countTripulacao();
 
 	int getDistancia()const;
 	void setDistancia(int dist_somar);
 	
-	Sala *getSala(int id_sala)const;
-	Sala *getSalaMatriz(int i, int j)const;
-
+	Sala *getSala(int id_sala);
 	string getSalas()const;
 
 	void inicio_turno();

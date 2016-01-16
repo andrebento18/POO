@@ -29,8 +29,8 @@ public:
 
 	int getID_Unidade()const;
 	
-	Sala *getOndeEstou()const;
-	Sala * getOndeEstava() const;
+	Sala *getOndeEstou();
+	Sala * getOndeEstava();
 	void setOndeEstou(Sala *s);
 	void setOndeEstava(Sala * s);
 	void mover_unidade(Sala *sala_antiga, Sala *sala_nova);

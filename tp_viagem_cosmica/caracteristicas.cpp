@@ -22,7 +22,7 @@ Respira::Respira(void) :Caracteristica("Respira") {
 }
 
 void Respira::actua_car_inicio(Unidade * u, Nave *n){
-	if (u->getOndeEstou()->getOxigenio() <= 0)
+	if (u->getOndeEstou()->getOxigenio() == 0)
 		u->LevaDano(1);
 	else
 		u->getOndeEstou()->reduzOxigenio(respira);
@@ -40,7 +40,7 @@ Toxico::Toxico(int nvl_toxicd) :Caracteristica("Toxico"), dano_toxico(nvl_toxicd
 	cout << "Este ser e toxico" << endl;
 }
 
-void Toxico::actua_car_inicio(Unidade * u, Nave * n){
+void Toxico::actua_car_inicio(Unidade * u, Nave * n) {
 	Sala *p = u->getOndeEstou();
 	// Unidades
 	for (unsigned int i = 0; i < p->countUnidades(); i++)
@@ -51,7 +51,9 @@ void Toxico::actua_car_inicio(Unidade * u, Nave * n){
 	// Xenomorfos
 	for (unsigned int i = 0; i < p->countXenomorfo(); i++) {
 		// Verifica se a unidade a provocar dano é tóxica
-		if (p->getUnidadePosicao(i)->getCaracteristicaTipo("Toxico") == NULL) 
+		if (p->getUnidadePosicao(i)->getCaracteristicaTipo("Toxico") != NULL)
+			break;
+		else
 			p->getUnidadePosicao(i)->LevaDano(dano_toxico);
 	}
 }
@@ -105,18 +107,25 @@ void Regenerador::actua_car_inicio(Unidade *u, Nave *n) {
 }
 
 Exoesqueleto::Exoesqueleto(int cap_exoesqueleto):Caracteristica("Exoesqueleto") {
+	bool existe_inimigos = false;
 	this->cap_exoesqueleto = cap_exoesqueleto;
 	cout << "Esta unidade esta protegida por um exoesqueleto " << this->cap_exoesqueleto << " pontos de capacidade" << endl;
 }
 
 void Exoesqueleto::actua_car_inicio(Unidade * u, Nave * n){
-	bool existe_inimigos = false;
-	if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countXenomorfo() != 0))
+	if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() > 0 || u->getOndeEstou()->countXenomorfo() > 0))
 		existe_inimigos = true;
-	else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() != 0 || u->getOndeEstou()->countUnidades() != 0))
+	else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() > 0 || u->getOndeEstou()->countUnidades() > 0))
 		existe_inimigos = true;
 	if(existe_inimigos == true)
 		u->aumentaPV(cap_exoesqueleto);
+}
+
+void Exoesqueleto::actua_car_fim(Unidade *u, Nave *n) {
+	if (existe_inimigos == true) {
+		u->LevaDano(cap_exoesqueleto);
+		existe_inimigos = false;
+	}
 }
 
 // FALTA IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
@@ -351,7 +360,6 @@ Move::Move(int pmovimento):Caracteristica("Move"), prob_movimento(pmovimento) {
 void Move::actua_car_inicio(Unidade *u, Nave *n) {
 	if (random(1, 100) < prob_movimento) {
 		// Sortear o movimento "cima", "baixo", "esquerda", "direita"
-		bool moveu = false;
 		//do {
 			string comando_direcao;
 			switch (random(1, 4)) {
@@ -367,13 +375,15 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 			cout << "COMD>" << comando_direcao << endl;
 			system("pause");
 
-			//if (
-				n->check_mov_sala(u->getID_Unidade(), comando_direcao);// == true) {
-				//moveu = true;
+			/*if (*/
+			n->check_mov_sala(u->getID_Unidade(), comando_direcao); /* == true) {
 				cout << "Unidade " << u->getID_Unidade() + 1 << " movida para " << comando_direcao << endl;
 				system("pause");
-			/*}
-		} while (moveu != true);*/
+				*/
+			/*	return;
+			}
+		} while (1);
+		*/
 	}
 }
 

@@ -68,11 +68,12 @@ public:
 
 class Exoesqueleto : public Caracteristica{
 	int cap_exoesqueleto;
-	int cap_exoesqueleto_inicial;
+	bool existe_inimigos;
 public:
 	Exoesqueleto(int cap_exoesqueleto);
 	
 	void actua_car_inicio(Unidade *u, Nave *n);
+	void actua_car_fim(Unidade *u, Nave *n);
 };
 
 // Talvez arranjar outra maneira de implementar isto...

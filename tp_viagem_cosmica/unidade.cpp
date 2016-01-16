@@ -71,11 +71,11 @@ int Unidade::getID_Unidade() const{
 		return id_unidade;
 }
 
-Sala * Unidade::getOndeEstou()const{
+Sala *Unidade::getOndeEstou(){
 	return ondestou;
 }
 
-Sala * Unidade::getOndeEstava()const{
+Sala *Unidade::getOndeEstava(){
 	return ondestava;
 }
 
@@ -90,6 +90,7 @@ void Unidade::setOndeEstava(Sala *s) {
 void Unidade::mover_unidade(Sala *sala_antiga, Sala *sala_nova) {
 	setOndeEstava(sala_antiga);
 	sala_antiga->remover_Unidade(this);
+	setOndeEstou(NULL);
 	sala_nova->adicionar_Unidade(this);
 }
 
@@ -104,11 +105,11 @@ Caracteristica *Unidade::getCaracteristica(Caracteristica *p) {
 		return nullptr;
 }
 
-Caracteristica * Unidade::getCaracteristicaPosicao(int posicao){
+Caracteristica *Unidade::getCaracteristicaPosicao(int posicao){
 	return vect_car[posicao];
 }
 
-Caracteristica * Unidade::getCaracteristicaTipo(string tipo){
+Caracteristica *Unidade::getCaracteristicaTipo(string tipo){
 	for (unsigned int i = 0; i < vect_car.size(); i++)
 		if (vect_car[i]->getTipoCaracterisca() == tipo)
 			return vect_car[i];
@@ -120,13 +121,13 @@ unsigned int Unidade::countCaracteristicas() const{
 }
 
 void Unidade::actua_inicio(Nave *n){
-	for (unsigned int i = 0; i < vect_car.size(); i++)
-		vect_car[i]->actua_car_inicio(this, n);
+	for (auto ptr_car = vect_car.begin(); ptr_car < vect_car.end(); ptr_car++)
+		(*ptr_car)->actua_car_inicio(this, n);
 }
 
 void Unidade::actua_fim(Nave *n) {
-	for (unsigned int i = 0; i < vect_car.size(); i++) 
-		vect_car[i]->actua_car_fim(this, n);
+	for (auto ptr_car = vect_car.begin(); ptr_car < vect_car.end(); ptr_car++)
+		(*ptr_car)->actua_car_fim(this, n);
 }
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
@@ -141,7 +142,7 @@ MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	cout << endl << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
-	setCaracteristica(new Exoesqueleto(1));
+	//setCaracteristica(new Exoesqueleto(1));
 	setCaracteristica(new Combatente(2));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
@@ -149,7 +150,7 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
 	cout << endl << tipo << " criado" << endl;
-	setCaracteristica(new Exoesqueleto(2));
+	//setCaracteristica(new Exoesqueleto(2));
 	setCaracteristica(new Combatente(3));
 	setCaracteristica(new Tripulacao());
 }
@@ -164,16 +165,16 @@ Pirata::Pirata(string tipo) :Unidade(tipo, 4) {
 Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	cout << tipo << " criado" << endl;
 	setCaracteristica(new Xenomorfo(3));
-	setCaracteristica(new Misterioso());
+	//setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
 	//setCaracteristica(new Casulo(20));
-	setCaracteristica(new Exoesqueleto(3));
+	//setCaracteristica(new Exoesqueleto(3));
 }
 
 CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo, Unidade *u):Unidade(tipo, 6){
 	cout << tipo << " criado" << endl;
 	setCaracteristica(new Xenomorfo(0));
-	setCaracteristica(new Exoesqueleto(1));
+	//setCaracteristica(new Exoesqueleto(1));
 	// Aprisionar a unidade
 	unidade_aprisionada = u;
 	// Set localização do Casulo na mesma sala da unidade
