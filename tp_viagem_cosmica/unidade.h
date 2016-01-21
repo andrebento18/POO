@@ -34,6 +34,7 @@ public:
 	void setOndeEstou(Sala *s);
 	void setOndeEstava(Sala * s);
 	void mover_unidade(Sala *sala_antiga, Sala *sala_nova);
+	void mata_unidade();
 	
 	void setCaracteristica(Caracteristica *p);
 	Caracteristica *getCaracteristica(Caracteristica *p);

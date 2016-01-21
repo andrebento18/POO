@@ -52,6 +52,7 @@ public:
 	void adicionar_Unidade(Unidade *unidade_a_adicionar);
 
 	void remover_Unidade(Unidade *unidade_a_remover);
+	void mata_Unidade(Unidade *unidade_a_remover);
 
 	int countUnidades()const;
 	Unidade *getUnidade(int id_unidade);

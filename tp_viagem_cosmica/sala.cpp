@@ -197,6 +197,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 				setOperada(false);
 		}
 		else if (unidade_a_remover->getCaracteristicaTipo("Inimigo") != NULL) {
+			
 			for (auto p = piratas.begin(); p < piratas.end(); p++)
 				if ((*p)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 					unidade_a_remover->setOndeEstou(NULL);
@@ -205,6 +206,7 @@ void Sala::remover_Unidade(Unidade *unidade_a_remover) {
 				}
 		}
 		else if (unidade_a_remover->getCaracteristicaTipo("Xenomorfo") != NULL) {
+			
 			for (auto ptr_xen = xenomorfos.begin(); ptr_xen < xenomorfos.end(); ptr_xen++)
 				if ((*ptr_xen)->getID_Unidade() == unidade_a_remover->getID_Unidade()) {
 					unidade_a_remover->setOndeEstou(NULL);
@@ -377,20 +379,27 @@ void Sala::salas_actuar_fim(Nave *n) {
 }
 
 void Sala::unidades_actuar_inicio(Nave *n) {
-	for (auto ptr_unid = unidades.begin(); ptr_unid < unidades.end(); ptr_unid++)
+	vector<Unidade *> copia = unidades;
+	for (auto ptr_unid = copia.begin(); ptr_unid < copia.end(); ptr_unid++)
 		(*ptr_unid)->actua_inicio(n);
-	for (auto ptr_pir = piratas.begin(); ptr_pir < piratas.end(); ptr_pir++)
+	copia = piratas;
+	for (auto ptr_pir = copia.begin(); ptr_pir < copia.end(); ptr_pir++)
 		(*ptr_pir)->actua_inicio(n);
-	for (auto ptr_xen = xenomorfos.begin(); ptr_xen < xenomorfos.end(); ptr_xen++)
+	
+	copia = xenomorfos;
+	for (auto ptr_xen = copia.begin(); ptr_xen < copia.end(); ptr_xen++)
 		(*ptr_xen)->actua_inicio(n);
 }
 
 void Sala::unidades_actuar_fim(Nave *n) {
-	for (auto ptr_unid = unidades.begin(); ptr_unid < unidades.end(); ptr_unid++)
+	vector<Unidade *> copia = unidades;
+	for (auto ptr_unid = copia.begin(); ptr_unid < copia.end(); ptr_unid++)
 		(*ptr_unid)->actua_fim(n);
-	for (auto ptr_pir = piratas.begin(); ptr_pir < piratas.end(); ptr_pir++)
+	copia = piratas;
+	for (auto ptr_pir = copia.begin(); ptr_pir < copia.end(); ptr_pir++)
 		(*ptr_pir)->actua_fim(n);
-	for (auto ptr_xen = xenomorfos.begin(); ptr_xen < xenomorfos.end(); ptr_xen++)
+	copia = xenomorfos;
+	for (auto ptr_xen = copia.begin(); ptr_xen < copia.end(); ptr_xen++)
 		(*ptr_xen)->actua_fim(n);
 }
 

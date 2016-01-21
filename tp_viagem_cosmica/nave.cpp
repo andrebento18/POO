@@ -20,8 +20,8 @@
 int random(int min, int max);
 
 Nave::Nave() {
-	//Consola c;
-	Consola c("comandos.txt");
+	Consola c;
+	//Consola c("comandos.txt");
 	cout << "Vamos preparar a nave para a viagem..." << endl;
 	int contador = 1;
 	bool ck_aloj_cap = false;
@@ -380,7 +380,7 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(1, 4);
+	int x = random(3, 3);
 	switch (x) {
 		case 1: {
 			//Evento Chuva de meteoritos
@@ -454,7 +454,7 @@ void Nave::evento() {
 
 		case 3: {
 			cout << "\tATAQUE XENOMORFO" << endl;
-			int alien_random = random(1, 3);
+			int alien_random = random(2, 2);
 			int sala_random = random(1, 12);
 			if (alien_random == 1) {
 				getSala(sala_random)->adicionar_Unidade(new Geigermorfo("Geigermorfo"));
