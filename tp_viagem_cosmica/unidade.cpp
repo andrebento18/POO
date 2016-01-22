@@ -23,6 +23,7 @@ Unidade::~Unidade() {
 	cout << "Unidade " << getNome() << ", " << getID_Unidade() <<  " destruida" << endl;
 	for (unsigned int i = 0; i < vect_car.size(); i++)
 		delete vect_car[i];
+	cout << "Ultima caracteristica eliminada\n";
 }
 
 string Unidade::toString() {
@@ -61,8 +62,8 @@ void Unidade::aumentaPV(int valor_aumentar){
 void Unidade::LevaDano(int dano_recebido){
 	ponto_vida -= dano_recebido;
 	if (getPV() <= 0) {
-		getOndeEstou()->remover_Unidade(this);
-		cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << endl << "Unidade removida" << endl;
+		//getOndeEstou()->remover_Unidade(this); agora é no fim do actua características
+		cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << "pontos de vida" << endl << "Unidade removida" << endl;
 		system("pause");
 	}
 }
@@ -94,6 +95,10 @@ void Unidade::mover_unidade(Sala *sala_antiga, Sala *sala_nova) {
 	sala_nova->adicionar_Unidade(this);
 }
 
+void Unidade::mata_unidade(){
+	delete this;
+}
+
 void Unidade::setCaracteristica(Caracteristica *p) {
 	vect_car.push_back(p);
 }
@@ -121,13 +126,25 @@ unsigned int Unidade::countCaracteristicas() const{
 }
 
 void Unidade::actua_inicio(Nave *n){
-	for (auto ptr_car = vect_car.begin(); ptr_car < vect_car.end(); ptr_car++)
+	vector<Caracteristica *> copia;
+	copia = vect_car;
+	for (auto ptr_car = copia.begin(); ptr_car < copia.end(); ptr_car++)
 		(*ptr_car)->actua_car_inicio(this, n);
+	if (getPV() <= 0) {
+		this->getOndeEstou()->remover_Unidade(this);
+		mata_unidade();
+	}
 }
 
 void Unidade::actua_fim(Nave *n) {
-	for (auto ptr_car = vect_car.begin(); ptr_car < vect_car.end(); ptr_car++)
+	vector<Caracteristica *> copia;
+	copia = vect_car;
+	for (auto ptr_car = copia.begin(); ptr_car < copia.end(); ptr_car++)
 		(*ptr_car)->actua_car_fim(this, n);
+	if (getPV() <= 0) {
+		this->getOndeEstou()->remover_Unidade(this);
+		mata_unidade();
+	}
 }
 
 MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
@@ -206,7 +223,7 @@ Blob::Blob(string tipo):Unidade(tipo, 8){
 	setCaracteristica(new Xenomorfo(0));
 	setCaracteristica(new Regenerador(2));
 	setCaracteristica(new Flamejante());
-	setCaracteristica(new Toxico(2)); // NAO DIZ NADA NO ENUNCIADO SOBRE A TOXICIDADE DO BLOB QUANTO É ??????????
+	//setCaracteristica(new Toxico(2)); // NAO DIZ NADA NO ENUNCIADO SOBRE A TOXICIDADE DO BLOB QUANTO É ??????????
 	setCaracteristica(new Reparador(6));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Move(15));
