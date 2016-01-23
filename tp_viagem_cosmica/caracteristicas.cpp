@@ -43,19 +43,35 @@ Toxico::Toxico(int nvl_toxicd) :Caracteristica("Toxico"), dano_toxico(nvl_toxicd
 void Toxico::actua_car_inicio(Unidade * u, Nave * n) {
 	Sala *p = u->getOndeEstou();
 	// Unidades
-	for (unsigned int i = 0; i < p->countUnidades(); i++)
-		p->getUnidadePosicao(i)->LevaDano(dano_toxico);
-	// Piratas
-	for (unsigned int i = 0; i < p->countPiratas(); i++)
-		p->getPirataPosicao(i)->LevaDano(dano_toxico);
-	// Xenomorfos
-	for (unsigned int i = 0; i < p->countXenomorfo(); i++) {
-		// Verifica se a unidade a provocar dano é tóxica
-		if (p->getUnidadePosicao(i)->getCaracteristicaTipo("Toxico") != NULL)
-			break;
-		else
+	cout << "Unidades que o toxico contou -> ";
+	cout << p->countUnidades() << endl;
+	if (p->countUnidades() > 0) {
+		for (unsigned int i = 0; i < p->countUnidades() - 1; i++) {
 			p->getUnidadePosicao(i)->LevaDano(dano_toxico);
+			cout << "Estou a dar dano à unidade" << i << endl;
+		}
 	}
+	// Piratas
+	cout << "Piratas que o toxico contou ->";
+	cout << p->countPiratas() << endl;
+	if (p->countPiratas() > 0) {
+		for (unsigned int i = 0; i < p->countPiratas() - 1; i++) {
+			p->getPirataPosicao(i)->LevaDano(dano_toxico);
+			cout << "Estou a dar dano à unidade" << i << endl;
+		}
+	}		
+	// Xenomorfos
+	cout << "Xenomorfos que o toxico contou ->";
+	cout << p->countXenomorfo() << endl;
+	if (p->countXenomorfo() > 0)
+		for (unsigned int i = 0; i < p->countXenomorfo() - 1; i++) {
+			// Verifica se a unidade a provocar dano é tóxica
+			if (p->getUnidadePosicao(i)->getCaracteristicaTipo("Toxico") != NULL)
+				break;
+			else
+				p->getUnidadePosicao(i)->LevaDano(dano_toxico);
+			cout << "Estou a dar dano à unidade" << i << endl;
+		}
 }
 
 Indeciso::Indeciso(void):Caracteristica("Indeciso") {

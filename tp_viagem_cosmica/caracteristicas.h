@@ -38,7 +38,7 @@ class Toxico : public Caracteristica {
 public:
 	Toxico(int nvl_toxicd);
 
-	void actua_car_inicio(Unidade *u, Nave *n = nullptr);
+	void actua_car_inicio(Unidade *u, Nave *n);
 };
 
 class Indeciso : public Caracteristica {
