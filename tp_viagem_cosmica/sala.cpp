@@ -403,7 +403,7 @@ void Sala::unidades_actuar_fim(Nave *n) {
 		(*ptr_xen)->actua_fim(n);
 }
 
-Sala & Sala::operator=(Sala *s){
+Sala &Sala::operator=(Sala *s){
 	if (this == s) {
 		for (int i = 0; i < unidades.size(); i++)
 			delete unidades[i];
@@ -469,7 +469,9 @@ SalaControlodeEscudo::SalaControlodeEscudo(string tipo):Sala(tipo) {
 }
 
 void SalaControlodeEscudo::salas_actuar_fim(Nave * n){
-	if (getOperada() == true)
+	if (getOperada() == true && escudo + 5 >= 100)
+		escudo = 100;
+	else if (getOperada() == true)
 		escudo += 5;
 }
 
@@ -502,33 +504,30 @@ SalaAutoReparador::SalaAutoReparador(string tipo):Sala(tipo) {
 
 void SalaAutoReparador::salas_actuar_fim(Nave *n) {
 	if (getIntegridade() == 100) {
-		// FALTA IMPLEMENTAR O AUTO-REPARADOR ????????????????????????????
-		/*
-		if ((n->getSala(this->getID() + 1)) != NULL) {
+		if ((n->getSala(this->getID() + 1)) != NULL && this->getID() + 1 <= 12) {
 			if ((n->getSala(this->getID() + 1))->getIntegridade() < 100) {
 				(n->getSala(this->getID() + 1))->aumentaIntergridade(5);
-				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+				cout << "Sala " << n->getSala(this->getID() + 1)->getTipo() << " reparada usando o Auto-Reparador" << endl;
 			}
-		}/*
-		else if ((n->getSala(getID() - 1)) != NULL) {
+		}
+		else if ((n->getSala(getID() - 1)) != NULL && this->getID() - 1 >= 1) {
 			if ((n->getSala(getID() - 1))->getIntegridade() < 100) {
 				(n->getSala(getID() - 1))->aumentaIntergridade(5);
-				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+				cout << "Sala " << n->getSala(this->getID() - 1)->getTipo() << " reparada usando o Auto-Reparador" << endl;
 			}
 		}
-		else if ((n->getSala(getID() + 5)) != NULL) {
+		else if ((n->getSala(getID() + 5)) != NULL && this->getID() + 5 <= 12) {
 			if ((n->getSala(getID() + 5))->getIntegridade() < 100) {
 				(n->getSala(getID() + 5))->aumentaIntergridade(5);
-				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+				cout << "Sala " << n->getSala(this->getID() + 5)->getTipo() << " reparada usando o Auto-Reparador" << endl;
 			}
 		}
-		else if ((n->getSala(getID() - 5)) != NULL) {
+		else if ((n->getSala(getID() - 5)) != NULL && this->getID() - 5 >= 1) {
 			if ((n->getSala(getID() - 5))->getIntegridade() < 100) {
 				(n->getSala(getID() - 5))->aumentaIntergridade(5);
-				cout << "Salas reparadas usando o Auto-Reparador" << endl;
+				cout << "Sala " << n->getSala(this->getID() - 5)->getTipo() << " reparada usando o Auto-Reparador" << endl;
 			}
-		}*/
-		//////////////////////////////////////////////////////////////////
+		}
 	}
 }
 
@@ -672,4 +671,5 @@ SalaAlojamentosdoCapitao::SalaAlojamentosdoCapitao(string tipo):Sala(tipo){
 
 SalaOficinaRobotica::SalaOficinaRobotica(string tipo):Sala(tipo){
 	cout << "Oficina de Robotica adicionada" << endl;
+	setCurtoCircuito(true);
 }

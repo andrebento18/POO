@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <locale.h>
 #include <time.h>
 #include <windows.h>
 #include <MMSystem.h>
@@ -252,14 +253,14 @@ void viagem(Nave *nave, double nvl, Consola c) {
 
 				if (pode_mover == false) {
 					cout << "Impossivel mover a unidade " << id_unidade << " para " << dir_mov << " comandante!" << endl;
-					system("pause");
+					c.getch();
 				}
 				else {
 					if ((nave->check_mov_sala(id_unidade - 1, dir_mov)) != NULL) {
 						unidades_movidas[n_unidades_mov] = id_unidade;
 						n_unidades_mov++;
 						cout << "Unidade: " << id_unidade << " movida para " << dir_mov << " com sucesso comandante!" << endl;
-						system("pause");
+						c.getch();
 					}
 				}
 				pode_mover = true;

@@ -28,10 +28,15 @@ Unidade::~Unidade() {
 
 string Unidade::toString() {
 	ostringstream os;
-	if(getCaracteristicaTipo("Exoesqueleto") != NULL)
-		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv + exoesq: " << getPV();
-	else
-		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV();
+	if (getPV() <= 0) {
+		os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << " morta!";
+	}
+	else {
+		if (getCaracteristicaTipo("Exoesqueleto") != NULL)
+			os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv + exoesq: " << getPV();
+		else
+			os << "Unidade " << getNome() << ", id: " << getID_Unidade() + 1 << ", pv: " << getPV();
+	}
 	return os.str();
 }
 
@@ -64,7 +69,7 @@ void Unidade::LevaDano(int dano_recebido){
 	if (getPV() <= 0) {
 		//getOndeEstou()->remover_Unidade(this); agora é no fim do actua características
 		//cout << "Unidade " << getNome() << ", " << getID_Unidade() << " ficou com " << getPV() << "pontos de vida" << endl << "Unidade removida" << endl;
-		cout << "A unidade levou dano\n";
+		cout << "A unidade " << getNome() << " morreu\n";
 		system("pause");
 	}
 }
@@ -174,7 +179,7 @@ MembroTripulacao::MembroTripulacao(string tipo):Unidade(tipo, 5){
 Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 	cout << endl << tipo << " criado" << endl;
 	setCaracteristica(new Respira());
-	//setCaracteristica(new Exoesqueleto(1));
+	setCaracteristica(new Exoesqueleto(1));
 	setCaracteristica(new Combatente(2));
 	setCaracteristica(new Operador());
 	setCaracteristica(new Tripulacao());
@@ -182,9 +187,10 @@ Capitao::Capitao(string tipo) : Unidade(tipo, 6) {
 
 Robot::Robot(string tipo) : Unidade(tipo, 8) {
 	cout << endl << tipo << " criado" << endl;
-	//setCaracteristica(new Exoesqueleto(2));
+	setCaracteristica(new Exoesqueleto(2));
 	setCaracteristica(new Combatente(3));
 	setCaracteristica(new Tripulacao());
+	setCaracteristica(new Robotico());
 }
 
 Pirata::Pirata(string tipo) :Unidade(tipo, 4) {
@@ -200,13 +206,13 @@ Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	//setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
 	//setCaracteristica(new Casulo(20));
-	//setCaracteristica(new Exoesqueleto(3));
+	setCaracteristica(new Exoesqueleto(3));
 }
 
 CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo, Unidade *u):Unidade(tipo, 6){
 	cout << tipo << " criado" << endl;
 	setCaracteristica(new Xenomorfo(0));
-	//setCaracteristica(new Exoesqueleto(1));
+	setCaracteristica(new Exoesqueleto(1));
 	// Aprisionar a unidade
 	unidade_aprisionada = u;
 	// Set localização do Casulo na mesma sala da unidade

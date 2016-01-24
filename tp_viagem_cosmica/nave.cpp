@@ -19,9 +19,10 @@
 
 int random(int min, int max);
 
+//Consola c;
+Consola c("comandos.txt");
+
 Nave::Nave() {
-	Consola c;
-	//Consola c("comandos.txt");
 	cout << "Vamos preparar a nave para a viagem..." << endl;
 	int contador = 1;
 	bool ck_aloj_cap = false;
@@ -239,7 +240,7 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 	// Obter id_sala onde se encontra a unidade
 	int id_sala = 0;
 	int tipo_unidade = 0;
-	int nao_pode_mxer_robo = 0;
+	bool nao_pode_mexer_robo = 0;
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 5; j++)
@@ -248,6 +249,11 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 					if (salas[i][j]->getUnidade(id_unidade) != NULL) {
 						tipo_unidade = 1;
 						id_sala = salas[i][j]->getID();
+						if (getSala(id_sala)->getUnidade(id_unidade)->getCaracteristicaTipo("Robotico") != NULL && getSala(id_sala)->getCurtoCircuito() == true) {
+							cout << "Comandante a unidade " << id_unidade + 1 << " e do tipo robot e nao se pode mover porque a sala esta em curto-circuito" << endl;
+							c.getch();
+							return false;
+						}
 					}
 				}
 				else if (salas[i][j]->countPiratas() > 0) {
@@ -263,96 +269,89 @@ bool Nave::check_mov_sala(int id_unidade, string comando_direcao) {
 					}
 				}
 			}
-	if (getSala(id_sala)->getUnidadePosicao(id_unidade)->getCaracteristicaTipo("Robótico") != NULL)
-		if (getSala(id_sala)->getCurtoCircuito() == true)
-			nao_pode_mxer_robo = 1;
 
-	if (nao_pode_mxer_robo == 0) {
-		// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
-		for (int i = 0; i <= 2; i++)
-			for (int j = 0; j <= 4; j++)
-				if (salas[i][j] != NULL)
-					if (salas[i][j]->getID() == id_sala) {
-						if (comando_direcao == "cima") {
-							if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
-								return false;
-							}
-							else {
-								if (tipo_unidade == 1) {
-									salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
-									return true;
-								}
-								else if (tipo_unidade == 2) {
-									salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
-									return true;
-								}
-								else if (tipo_unidade == 3) {
-									salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
-									return true;
-								}
-							}
+	// Verificar a possibilidade de movimento e efectuá-lo caso seja possível
+	for (int i = 0; i <= 2; i++)
+		for (int j = 0; j <= 4; j++)
+			if (salas[i][j] != NULL)
+				if (salas[i][j]->getID() == id_sala) {
+					if (comando_direcao == "cima") {
+						if (i == 0 || i == 1 && j == 4 || i == 2 && j == 0) {
+							return false;
 						}
-						else if (comando_direcao == "baixo") {
-							if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
-								return false;
+						else {
+							if (tipo_unidade == 1) {
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
+								return true;
 							}
-							else {
-								if (tipo_unidade == 1) {
-									salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
-									return true;
-								}
-								else if (tipo_unidade == 2) {
-									salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
-									return true;
-								}
-								else if (tipo_unidade == 3) {
-									salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
-									return true;
-								}
+							else if (tipo_unidade == 2) {
+								salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
+								return true;
 							}
-						}
-						else if (comando_direcao == "direita") {
-							if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
-								return false;
-							}
-							else {
-								if (tipo_unidade == 1) {
-									salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
-									return true;
-								}
-								else if (tipo_unidade == 2) {
-									salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
-									return true;
-								}
-								else if (tipo_unidade == 3) {
-									salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
-									return true;
-								}
-							}
-						}
-						else if (comando_direcao == "esquerda") {
-							if (j == 0 || j == 1 && i == 1) {
-								return false;
-							}
-							else {
-								if (tipo_unidade == 1) {
-									salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
-									return true;
-								}
-								else if (tipo_unidade == 2) {
-									salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
-									return true;
-								}
-								else if (tipo_unidade == 3) {
-									salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
-									return true;
-								}
+							else if (tipo_unidade == 3) {
+								salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i - 1][j]);
+								return true;
 							}
 						}
 					}
-	}
-	else
-		return false;
+					else if (comando_direcao == "baixo") {
+						if (i == 2 || i == 0 && j == 0 || i == 1 && j == 4) {
+							return false;
+						}
+						else {
+							if (tipo_unidade == 1) {
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
+								return true;
+							}
+							else if (tipo_unidade == 2) {
+								salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
+								return true;
+							}
+							else if (tipo_unidade == 3) {
+								salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i + 1][j]);
+								return true;
+							}
+						}
+					}
+					else if (comando_direcao == "direita") {
+						if (j == 4 || j == 3 && i == 0 || j == 3 && i == 2) {
+							return false;
+						}
+						else {
+							if (tipo_unidade == 1) {
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
+								return true;
+							}
+							else if (tipo_unidade == 2) {
+								salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
+								return true;
+							}
+							else if (tipo_unidade == 3) {
+								salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i][j + 1]);
+								return true;
+							}
+						}
+					}
+					else if (comando_direcao == "esquerda") {
+						if (j == 0 || j == 1 && i == 1) {
+							return false;
+						}
+						else {
+							if (tipo_unidade == 1) {
+								salas[i][j]->getUnidade(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
+								return true;
+							}
+							else if (tipo_unidade == 2) {
+								salas[i][j]->getPirata(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
+								return true;
+							}
+							else if (tipo_unidade == 3) {
+								salas[i][j]->getXenomorfo(id_unidade)->mover_unidade(salas[i][j], salas[i][j - 1]);
+								return true;
+							}
+						}
+					}
+				}
 }
 
 void dano_meteoritos(Nave *n, int n_meteoritos) {
@@ -389,10 +388,9 @@ void dano_piratas(Nave *n, int dano_ataque_piratas) {
 }
 
 void Nave::evento() {
-	int x = random(3, 3);
+	int x = random(1, 1);
 	switch (x) {
 		case 1: {
-			//Evento Chuva de meteoritos
 			cout << "\tCHUVA DE METEORITOS" << endl << endl;
 			//Check quantos raio laser operados existem na nave
 			int raio_laser_oper = 0;
@@ -411,6 +409,7 @@ void Nave::evento() {
 							if (prob == 1)
 								n_meteoritos -= 1;
 						}
+						cout << "Raio-Laser usado para destruir " << n_ciclos << " meteoritos" << endl;
 					}
 				}
 				dano_meteoritos(this, n_meteoritos);
@@ -447,8 +446,10 @@ void Nave::evento() {
 					raio_laser_oper += 1;
 
 			// Retaliação da Nave ou invasão dos Piratas
-			if (raio_laser_oper > 0)
+			if (raio_laser_oper > 0) {
+				cout << "Comandante, o raio laser foi usado para impedir que os piratas entrassem na nossa nave!" << endl;
 				break;
+			}
 			else {
 				int n_piratas = random(3, 5);
 				int sala_random = random(1, 12);
@@ -463,13 +464,13 @@ void Nave::evento() {
 
 		case 3: {
 			cout << "\tATAQUE XENOMORFO" << endl;
-			int alien_random = random(2, 2);
+			int alien_random = random(1, 3);
 			int sala_random = random(1, 12);
 			if (alien_random == 1) {
 				getSala(sala_random)->adicionar_Unidade(new Geigermorfo("Geigermorfo"));
 			}
 			else if (alien_random == 2) {
-				getSala(/*sala_random*/ 8)->adicionar_Unidade(new Blob("Blob"));
+				getSala(sala_random)->adicionar_Unidade(new Blob("Blob"));
 			}
 			else if (alien_random == 3) {
 				getSala(sala_random)->adicionar_Unidade(new Mxyzypykwi("Mxyzypykwi"));

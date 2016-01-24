@@ -46,6 +46,7 @@ public:
 	virtual void actua_fim(Nave *n);
 };
 
+// Unidades
 class MembroTripulacao : public Unidade {
 public:
 	MembroTripulacao(string tipo);

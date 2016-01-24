@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 Consola::Consola(string nome_fich)  {
+	// Ler os comandos do ficheiro
 	if (nome_fich != "")
 		entrada = new ifstream(nome_fich);
 	else

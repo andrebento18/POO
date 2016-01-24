@@ -16,6 +16,12 @@ public:
 
 	// virtual Combatente
 	virtual void setCapCombate(int arma) {};
+
+	bool operator==(Caracteristica *c) {
+		if (getTipoCaracterisca() == c->getTipoCaracterisca())
+			return true;
+		return false;
+	}
 };
 
 class Respira : public Caracteristica {

@@ -129,26 +129,16 @@ Exoesqueleto::Exoesqueleto(int cap_exoesqueleto):Caracteristica("Exoesqueleto") 
 }
 
 void Exoesqueleto::actua_car_inicio(Unidade * u, Nave * n){
-	if (u->getCaracteristicaTipo("Tripulacao") != NULL && (u->getOndeEstou()->countPiratas() > 0 || u->getOndeEstou()->countXenomorfo() > 0))
-		existe_inimigos = true;
-	else if (u->getCaracteristicaTipo("Xenomorfo") != NULL && (u->getOndeEstou()->countPiratas() > 0 || u->getOndeEstou()->countUnidades() > 0))
-		existe_inimigos = true;
-	if(existe_inimigos == true)
-		u->aumentaPV(cap_exoesqueleto);
+	//u->aumentaPV(cap_exoesqueleto);
 }
 
 void Exoesqueleto::actua_car_fim(Unidade *u, Nave *n) {
-	if (existe_inimigos == true) {
-		u->LevaDano(cap_exoesqueleto);
-		existe_inimigos = false;
-	}
+	//u->LevaDano(cap_exoesqueleto);
 }
 
-// FALTA IMPLEMENTAR O FACTO DE NÃO SE PODER MOVER QUANDO ESTA NUMA SALA COM CURTO-CIRCUITO ???????????
 Robotico::Robotico(void):Caracteristica("Robotico"){
 	cout << "Esta unidade e do tipo robotico" << endl;
 }
-// ***********************************************
 
 Reparador::Reparador(int cap_reparar) : Caracteristica("Reparador") {
 	this->cap_reparar = cap_reparar;
@@ -181,6 +171,11 @@ void Combatente::actua_car_fim(Unidade *u, Nave *n) {
 	int	id_inimigo = 0;
 
 	Sala *s = u->getOndeEstou();
+
+	// Caso seja robotico e a sala esteja em curto-circuito
+	if (u->getCaracteristicaTipo("Robotico") != NULL && u->getOndeEstou()->getCurtoCircuito() == true) {
+		return;
+	}
 
 	// Atacar Piratas
 	if (s->countPiratas() > 0) {
