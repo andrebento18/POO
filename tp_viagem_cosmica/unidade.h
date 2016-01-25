@@ -81,8 +81,8 @@ class CasulodeGeigermorfo :public Unidade {
 public:
 	CasulodeGeigermorfo(string tipo, Unidade *u);
 
-	void actua_unidade_incio(Nave *n);
-	void actua_unidade_fim(Nave *n);
+	void actua_incio(Nave *n);
+	void actua_fim(Nave *n);
 };
 
 class Blob :public Unidade {

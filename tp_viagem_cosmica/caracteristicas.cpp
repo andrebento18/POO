@@ -83,6 +83,8 @@ void Indeciso::actua_car_inicio(Unidade * u, Nave * n){
 
 	if (x == 1 && ignora_actua_inicio == false) {
 		ignora_actua_inicio = true;
+		cout << "UNIDADE HIPNOTIZADA"; system("pause");
+		return;
 	}
 	else if (ignora_actua_inicio == true) {
 		ignora_actua_inicio = false;
@@ -101,15 +103,16 @@ Misterioso::Misterioso(void):Caracteristica("Misterioso") {
 }
 
 void Misterioso::actua_car_fim(Unidade *u, Nave *n){
+	// Funciona bem mas não repõe não desaparece a unidade durante um turno
 	int x = random(1, 4);
 	if (x == 1 && count_turnos == 0) {
 		count_turnos = 1;
+		return;
 	}
 	else if (count_turnos == 1) {
 		int sala_escolhida = random(1, 12);
-		u->getOndeEstou()->remover_Unidade(u);
 		u->mover_unidade(u->getOndeEstou(), n->getSala(sala_escolhida));
-		int indeciso = random(1, 2);
+		count_turnos--;
 	}
 }
 
@@ -219,35 +222,34 @@ Casulo::Casulo(int prob):Caracteristica("Casulo"), prob_casulo(prob){
 	cout << "Esta unidade é capaz de aprisionar os membros da tripulacao" << endl;
 }
 
-void Casulo::actua_car_fim(Unidade * u, Nave * n){
+void Casulo::actua_car_fim(Unidade * u, Nave * n) {
 	Sala *s = u->getOndeEstou();
 	int comeu = 0;
 
-	do {
-		int escolhe_alvo = random(0, 1);
-		if (escolhe_alvo == 0) {
-			// Casulo em Tripulacao
-			for (unsigned int i = 0; i < s->countUnidades(); i++) {
-				if (random(0, 99) <= prob_casulo) {
-					new CasulodeGeigermorfo("Casulo de Geigermorfo", s->getUnidadePosicao(i));
-					comeu = 1;
-					return;
+	if (s->countUnidades() > 0 || s->countPiratas() > 0) {
+		do {
+			int escolhe_alvo = random(0, 1);
+			if (escolhe_alvo == 0) {
+				// Casulo em Tripulacao
+				for (unsigned int i = 0; i < s->countUnidades(); i++) {
+					if (random(0, 99) <= prob_casulo) {
+						new CasulodeGeigermorfo("Casulo de Geigermorfo", s->getUnidadePosicao(i));
+						return;
+					}
 				}
 			}
-		}
-		else if (escolhe_alvo == 1) {
-			for (unsigned int i = 0; i < s->countPiratas(); i++) {
-				if (random(0, 99) <= prob_casulo) {
-					new CasulodeGeigermorfo("Casulo de Geigermorfo", s->getPirataPosicao(i));
-					comeu = 1;
-					return;
+			else if (escolhe_alvo == 1) {
+				for (unsigned int i = 0; i < s->countPiratas(); i++) {
+					if (random(0, 99) <= prob_casulo) {
+						new CasulodeGeigermorfo("Casulo de Geigermorfo", s->getPirataPosicao(i));
+						return;
+					}
 				}
-			}
 
-		}
-	} while (comeu != 1);
+			}
+		} while (1);
+	}
 }
-
 
 Mutantis_Mutandis::Mutantis_Mutandis(int prob) :Caracteristica("Mutantis_Mutandis") {
 	this->prob = prob;
@@ -313,9 +315,9 @@ Hipnotizador::Hipnotizador(int prob_hip):Caracteristica("Hipnotizador"){
 
 void Hipnotizador::actua_car_inicio(Unidade *u, Nave *n) {
 	Sala *s = u->getOndeEstou();
-	for (unsigned int i = 0; i < s->countUnidades(); i++) {
-		s->getUnidadePosicao(i)->setCaracteristica(new Indeciso());
-		break;
+	
+	if (random(1, 100) <= prob_hip && s->countUnidades() > 0) {
+		s->getUnidadePosicao(random(0, s->countUnidades() - 1))->setCaracteristica(new Indeciso());
 	}
 }
 
@@ -383,18 +385,16 @@ void Move::actua_car_inicio(Unidade *u, Nave *n) {
 			case 4: comando_direcao = "direita";
 				break;
 			}
-			cout << "COMD>" << comando_direcao << endl;
-			system("pause");
+			//cout << "COMD>" << comando_direcao << endl;
+			//system("pause");
 
-			/*if (*/
-			n->check_mov_sala(u->getID_Unidade(), comando_direcao); /* == true) {
-				cout << "Unidade " << u->getID_Unidade() + 1 << " movida para " << comando_direcao << endl;
-				system("pause");
-				*/
-			/*	return;
-			}
-		} while (1);
-		*/
+			//if (
+			n->check_mov_sala(u->getID_Unidade(), comando_direcao);// == true) {
+				//cout << "Unidade " << u->getID_Unidade() + 1 << " movida para " << comando_direcao << endl;
+				//system("pause");
+				//return;
+			//}
+		//} while (1);
 	}
 }
 

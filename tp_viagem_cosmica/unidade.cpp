@@ -203,9 +203,9 @@ Pirata::Pirata(string tipo) :Unidade(tipo, 4) {
 Geigermorfo::Geigermorfo(string tipo) :Unidade(tipo, 4) {
 	cout << tipo << " criado" << endl;
 	setCaracteristica(new Xenomorfo(3));
-	//setCaracteristica(new Misterioso());
+	setCaracteristica(new Misterioso());
 	setCaracteristica(new Move(50));
-	//setCaracteristica(new Casulo(20));
+	setCaracteristica(new Casulo(20));
 	setCaracteristica(new Exoesqueleto(3));
 }
 
@@ -219,19 +219,24 @@ CasulodeGeigermorfo::CasulodeGeigermorfo(string tipo, Unidade *u):Unidade(tipo, 
 	u->getOndeEstou()->adicionar_Unidade(this);
 	// Remover a unidade da sala
 	u->getOndeEstou()->remover_Unidade(u);
+	// Seta o turno
+	turno = 0;
 }
 
-void CasulodeGeigermorfo::actua_unidade_incio(Nave * n){
+void CasulodeGeigermorfo::actua_incio(Nave * n){
+	cout << "turno: " << turno; system("pause");
 	if (turno == 3) {
 		Unidade *p = new Geigermorfo("Geigermorfo");
 		getOndeEstou()->adicionar_Unidade(p);
 		getOndeEstou()->remover_Unidade(this);
 	}
-	else
+	else {
 		turno++;
+	}
 }
 
-void CasulodeGeigermorfo::actua_unidade_fim(Nave *n) {
+void CasulodeGeigermorfo::actua_fim(Nave *n) {
+	cout << "turno: " << turno; system("pause");
 	if (getPV() <= 0) {
 		getOndeEstou()->adicionar_Unidade(unidade_aprisionada);
 		cout << "????????????????" << unidade_aprisionada->getID_Unidade();
@@ -255,6 +260,6 @@ Mxyzypykwi::Mxyzypykwi(string tipo):Unidade(tipo, 8){
 	setCaracteristica(new Xenomorfo(0));
 	setCaracteristica(new Hipnotizador(15));
 	setCaracteristica(new Move(30));
-	//setCaracteristica(new Mutantis_Mutandis(10));
+	setCaracteristica(new Mutantis_Mutandis(10));
 	setCaracteristica(new Respira());
 }
